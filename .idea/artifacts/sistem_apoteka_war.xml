@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="sistem-apoteka:war">
+    <output-path>$PROJECT_DIR$/sistem-apoteka/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>sistem-apoteka</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="sistem-apoteka-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="sistem-apoteka:war exploded" />
+    </root>
+  </artifact>
+</component>
