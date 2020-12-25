@@ -1,16 +1,17 @@
 package ftn.isa.sistemapoteka.Entity;
 
-import java.util.List;
+import java.util.Set;
 
 public class Pharmacy {
     private Integer id;
     private String name;
     private String address;
     private String description;
-    private List<Appointment> freeDermatologistAppointments;
-    private List<Dermatolgist> dermatologists;
-    private List<Pharmacist> pharmacists;
-    private List<Drug> drugs;
-
+    private Set<Appointment> freeDermatologistAppointments;
+    private Set<Dermatolgist> dermatologists;
+    private Set<Pharmacist> pharmacists;
+    private Set<Drug> drugs;
+    private Double avgRating;
+    private Set<Discount> discounts;
 
 }
