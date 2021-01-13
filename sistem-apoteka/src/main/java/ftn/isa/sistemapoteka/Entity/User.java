@@ -1,6 +1,7 @@
 package ftn.isa.sistemapoteka.Entity;
 
 import org.springframework.data.annotation.Id;
+
 import javax.persistence.Entity;
 
 @Entity
