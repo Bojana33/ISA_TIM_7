@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import javax.persistence.Entity;
 
 @Entity
-public class User {
+public class RegisteredUser {
 
     @Id
     private Long id;

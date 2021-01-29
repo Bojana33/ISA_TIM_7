@@ -1,13 +1,13 @@
 package ftn.isa.sistemapoteka.Repository;
 
 
-import ftn.isa.sistemapoteka.Entity.User;
+import ftn.isa.sistemapoteka.Entity.RegisteredUser;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Long>{
+public interface UserRepository extends JpaRepository<RegisteredUser,Long>{
 
     //List<User> findAll();
-    User findByEmailAndPassword(String email, String password);
+    RegisteredUser findByEmailAndPassword(String email, String password);
 }
