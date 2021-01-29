@@ -1,22 +1,38 @@
 package ftn.isa.sistemapoteka.Entity;
 
-import org.springframework.data.annotation.Id;
-
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class RegisteredUser {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class RegisteredUser implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String name;
+
+    @Column
     private String lastname;
+
+    @Column
     private String email;
+
+    @Column
     private String password;
+
+    @Column
     private String residence;
+
+    @Column
     private String city;
+
+    @Column
     private String state;
+
+    @Column
     private String phoneNumber;
 
     public String getName() {
@@ -82,5 +98,13 @@ public class RegisteredUser {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

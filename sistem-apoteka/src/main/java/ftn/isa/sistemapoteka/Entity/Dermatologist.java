@@ -1,4 +1,9 @@
 package ftn.isa.sistemapoteka.Entity;
 
-public class Dermatologist {
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("dermatologist")
+public class Dermatologist extends RegisteredUser{
 }

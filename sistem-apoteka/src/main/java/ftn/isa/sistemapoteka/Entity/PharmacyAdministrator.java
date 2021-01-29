@@ -1,4 +1,4 @@
 package ftn.isa.sistemapoteka.Entity;
 
-public class PharmacyAdministrator {
+public class PharmacyAdministrator extends RegisteredUser{
 }
