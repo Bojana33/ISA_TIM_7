@@ -22,9 +22,13 @@ public class Appointment implements Serializable {
     @Column
     private LocalDateTime dateTime;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dermatologist_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "dermatologist_id", nullable = false)
     private Dermatologist dermatologist;
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
 
     public Long getId() {
         return id;

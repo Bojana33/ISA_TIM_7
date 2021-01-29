@@ -1,11 +1,13 @@
 package ftn.isa.sistemapoteka.Entity;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("dermatologist")
-@Table(name = "dermatologists")
 public class Dermatologist extends RegisteredUser{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 }
