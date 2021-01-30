@@ -9,17 +9,38 @@ public class Patient extends RegisteredUser{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "id")
     private Long id;
 
     @Column
     private Float loyaltyPoints;
 
-    @OneToMany(targetEntity = Drug.class)
+    @ManyToMany(targetEntity = Drug.class)
+    @JoinTable(name = "Allergies", joinColumns = @JoinColumn(name = "PatientId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "DrugId", referencedColumnName = "id"))
     private Set<Drug> allergies = new HashSet<>();
 
-    @OneToMany(targetEntity = Appointment.class)
+    @OneToMany(mappedBy = "Patient",targetEntity = Appointment.class)
     private Set<Appointment> appointments = new HashSet<>();
+
+    @OneToMany(mappedBy = "Patient",targetEntity = Consultation.class)
+    private Set<Consultation> consultations = new HashSet<>();
+
+    @OneToMany(mappedBy = "Patient", targetEntity = Complaint.class)
+    private Set<Complaint> complaints = new HashSet<>();
+
+    @OneToMany(mappedBy = "Patient",targetEntity = eRecipe.class)
+    private Set<eRecipe> eRecipes = new HashSet<>();
+
+    @OneToMany(mappedBy = "Patient", targetEntity = DrugReservation.class)
+    private Set<DrugReservation> drugReservations = new HashSet<>();
+
+    @Column
+    private UserCategory userCategory;
+
+    @ManyToMany
+    @JoinTable(name = "Subscriptions", joinColumns = @JoinColumn(name = "Patient_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "Pharmacy_id", referencedColumnName = "id"))
+    private Set<Pharmacy> subscriptions = new HashSet<>();
 
     @Override
     public Long getId() {
@@ -38,5 +59,9 @@ public class Patient extends RegisteredUser{
     public void setAppointments(Set<Appointment> appointments) {
         this.appointments = appointments;
     }
+
+    public Patient() {
+    }
+
 
 }
