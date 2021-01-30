@@ -21,7 +21,7 @@ public class Pharmacy implements Serializable {
     @Column
     private Float rating;
 
-    @OneToMany(mappedBy = "dermatologists", cascade = CascadeType.ALL)
+    @ManyToMany
     private Set<Dermatologist> dermatologists = new HashSet<>();
 
     @OneToMany(mappedBy = "pharmacists", cascade = CascadeType.ALL)
