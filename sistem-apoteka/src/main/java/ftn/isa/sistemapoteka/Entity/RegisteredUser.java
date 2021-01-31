@@ -1,5 +1,7 @@
 package ftn.isa.sistemapoteka.Entity;
 
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
