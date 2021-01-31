@@ -5,13 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("dermatologist")
+@DiscriminatorValue("Dermatologist")
 public class Dermatologist extends RegisteredUser{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
 
     @OneToMany(mappedBy = "Dermatologist", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Appointment> appointments = new HashSet<>();

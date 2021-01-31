@@ -5,18 +5,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@DiscriminatorValue("Patient")
 public class Patient extends RegisteredUser{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column
     private Float loyaltyPoints;
 
     @ManyToMany(targetEntity = Drug.class)
-    @JoinTable(name = "Allergies", joinColumns = @JoinColumn(name = "PatientId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "DrugId", referencedColumnName = "id"))
+    @JoinTable(name = "Allergies", joinColumns = @JoinColumn(name = "Patient_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "Drug_id", referencedColumnName = "id"))
     private Set<Drug> allergies = new HashSet<>();
 
     @OneToMany(mappedBy = "Patient",targetEntity = Appointment.class)
@@ -42,15 +39,6 @@ public class Patient extends RegisteredUser{
             , inverseJoinColumns = @JoinColumn(name = "Pharmacy_id", referencedColumnName = "id"))
     private Set<Pharmacy> subscriptions = new HashSet<>();
 
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Set<Appointment> getAppointments() {
         return appointments;

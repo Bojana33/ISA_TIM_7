@@ -1,13 +1,12 @@
 package ftn.isa.sistemapoteka.Entity;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Pharmacist {
+@DiscriminatorValue("Pharmacist")
+public class Pharmacist extends RegisteredUser{
 
-    @Id
-    @GeneratedValue
-    private Long id;
 }
