@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface UserRepository extends JpaRepository<RegisteredUser,Long>{
+public interface RegisteredUserRepository extends JpaRepository<RegisteredUser,Long>{
 
     //List<User> findAll();
     RegisteredUser findByEmailAndPassword(String email, String password);
