@@ -16,6 +16,19 @@ public class Dermatologist extends RegisteredUser{
             , inverseJoinColumns = @JoinColumn(name = "PharmacyId", referencedColumnName = "id"))
     private Set<Pharmacy> pharmacies = new HashSet<>();
 
+    public Set<Appointment> getAppointments() {
+        return appointments;
+    }
 
+    public void setAppointments(Set<Appointment> appointments) {
+        this.appointments = appointments;
+    }
 
+    public Set<Pharmacy> getPharmacies() {
+        return pharmacies;
+    }
+
+    public void setPharmacies(Set<Pharmacy> pharmacies) {
+        this.pharmacies = pharmacies;
+    }
 }

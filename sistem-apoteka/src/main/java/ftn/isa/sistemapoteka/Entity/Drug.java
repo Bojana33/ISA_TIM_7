@@ -3,6 +3,7 @@ package ftn.isa.sistemapoteka.Entity;
 import org.springframework.security.access.prepost.PreInvocationAuthorizationAdviceVoter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,11 @@ import java.util.Set;
 public class Drug {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column
+    @NotEmpty(message = "This field can not be empty!")
     private Long code;
 
     @Column
@@ -54,6 +59,14 @@ public class Drug {
 
     @Column
     private DrugShape drugShape;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getCode() {
         return code;

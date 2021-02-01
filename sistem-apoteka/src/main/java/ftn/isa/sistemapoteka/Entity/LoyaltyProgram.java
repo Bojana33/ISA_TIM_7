@@ -42,5 +42,75 @@ public class LoyaltyProgram {
     @OneToMany(mappedBy = "LoyaltyProgram", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Patient> patients = new HashSet<>();
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public float getConsultationPoints() {
+        return consultationPoints;
+    }
+
+    public void setConsultationPoints(float consultationPoints) {
+        this.consultationPoints = consultationPoints;
+    }
+
+    public float getAppointmentPoints() {
+        return appointmentPoints;
+    }
+
+    public void setAppointmentPoints(float appointmentPoints) {
+        this.appointmentPoints = appointmentPoints;
+    }
+
+    public float getRegularPoints() {
+        return regularPoints;
+    }
+
+    public void setRegularPoints(float regularPoints) {
+        this.regularPoints = regularPoints;
+    }
+
+    public float getSilverPoints() {
+        return silverPoints;
+    }
+
+    public void setSilverPoints(float silverPoints) {
+        this.silverPoints = silverPoints;
+    }
+
+    public float getGoldPoints() {
+        return goldPoints;
+    }
+
+    public void setGoldPoints(float goldPoints) {
+        this.goldPoints = goldPoints;
+    }
+
+    public Set<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(Set<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public Set<Consultation> getConsultations() {
+        return consultations;
+    }
+
+    public void setConsultations(Set<Consultation> consultations) {
+        this.consultations = consultations;
+    }
+
+    public Set<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(Set<Patient> patients) {
+        this.patients = patients;
+    }
 }
