@@ -3,6 +3,7 @@ package ftn.isa.sistemapoteka.Entity;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Entity
@@ -16,15 +17,19 @@ public class RegisteredUser implements Serializable {
     private Long id;
 
     @Column
+    @NotEmpty(message = "This field can not be empty")
     private String name;
 
     @Column
+    @NotEmpty(message = "This field can not be empty")
     private String lastname;
 
     @Column
+    @NotEmpty(message = "This field can not be empty")
     private String email;
 
     @Column
+    @NotEmpty(message = "This field can not be empty")
     private String password;
 
     @Column
