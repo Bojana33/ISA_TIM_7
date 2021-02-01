@@ -2,13 +2,17 @@ package ftn.isa.sistemapoteka.Controller;
 
 import ftn.isa.sistemapoteka.Service.DrugReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequestMapping("drugReservations")
 public class DrugReservationController {
 
-    @Autowired
     private DrugReservationService drugReservationService;
+
+    @Autowired
+    public DrugReservationController(DrugReservationService drugReservationService){
+        this.drugReservationService = drugReservationService;
+    }
 }

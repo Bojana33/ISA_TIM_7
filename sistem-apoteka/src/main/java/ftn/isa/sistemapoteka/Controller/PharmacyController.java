@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("pharmacies")
 public class PharmacyController {
 
-    @Autowired
     private PharmacyService pharmacyService;
+
+    @Autowired
+    public PharmacyController(PharmacyService pharmacyService){
+        this.pharmacyService = pharmacyService;
+    }
 }

@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("offers")
 public class OfferController {
 
-    @Autowired
     private OfferService offerService;
+
+    @Autowired
+    public OfferController(OfferService offerService){
+        this.offerService = offerService;
+    }
 }

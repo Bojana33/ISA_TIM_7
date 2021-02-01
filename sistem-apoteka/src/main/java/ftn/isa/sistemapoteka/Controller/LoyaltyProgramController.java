@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("loyaltyPrograms")
 public class LoyaltyProgramController {
 
-    @Autowired
     private LoyaltyProgramService loyaltyProgramService;
+
+    @Autowired
+    public LoyaltyProgramController(LoyaltyProgramService loyaltyProgramService){
+        this.loyaltyProgramService = loyaltyProgramService;
+    }
 }
