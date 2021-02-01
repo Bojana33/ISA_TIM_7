@@ -51,7 +51,9 @@ public class Drug {
     @Column
     private float price;
 
-    @OneToMany(targetEntity = Drug.class)
+    @ManyToMany(targetEntity = Drug.class)
+    @JoinTable(name = "ReplacementDrugs", joinColumns = @JoinColumn(name = "DrugId", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "ReplacementDrugId", referencedColumnName = "id"))
     private Set<Drug> replacementDrugs = new HashSet<>();
 
     @Column

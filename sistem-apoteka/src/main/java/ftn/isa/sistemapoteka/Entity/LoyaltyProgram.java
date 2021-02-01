@@ -33,6 +33,16 @@ public class LoyaltyProgram {
     @NotEmpty(message = "This field can not be empty")
     private float goldPoints;
 
+    @Column
+    private int discountRegular;
+
+    @Column
+    private int discountSilver;
+
+    @Column
+    private int discountGold;
+
+
     @OneToMany(mappedBy = "LoyaltyProgram", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Appointment> appointments = new HashSet<>();
 
@@ -112,5 +122,29 @@ public class LoyaltyProgram {
 
     public void setPatients(Set<Patient> patients) {
         this.patients = patients;
+    }
+
+    public int getDiscountRegular() {
+        return discountRegular;
+    }
+
+    public void setDiscountRegular(int discountRegular) {
+        this.discountRegular = discountRegular;
+    }
+
+    public int getDiscountSilver() {
+        return discountSilver;
+    }
+
+    public void setDiscountSilver(int discountSilver) {
+        this.discountSilver = discountSilver;
+    }
+
+    public int getDiscountGold() {
+        return discountGold;
+    }
+
+    public void setDiscountGold(int discountGold) {
+        this.discountGold = discountGold;
     }
 }
