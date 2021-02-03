@@ -2,12 +2,13 @@ package ftn.isa.sistemapoteka.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class OrderForm {
+public class OrderForm implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +29,8 @@ public class OrderForm {
     @OneToMany(mappedBy = "OrderForm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Offer> offers = new HashSet<>();
 
+    public OrderForm() {
+    }
 
     public Long getId() {
         return id;

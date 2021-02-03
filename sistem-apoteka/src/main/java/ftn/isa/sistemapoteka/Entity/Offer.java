@@ -2,10 +2,11 @@ package ftn.isa.sistemapoteka.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-public class Offer {
+public class Offer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +21,11 @@ public class Offer {
     private LocalDateTime deliver_due_date;
 
     @ManyToOne
-    @JoinColumn(name = "OrderFormId", nullable = false)
+    @JoinColumn(name = "OrderForm_id", nullable = false, referencedColumnName = "id")
     private OrderForm orderForm;
 
     @ManyToOne
-    @JoinColumn(name = "SupplierId", nullable = false)
+    @JoinColumn(name = "SupplierId", nullable = false, referencedColumnName = "id")
     private Supplier supplier;
 
     @Column
@@ -76,5 +77,8 @@ public class Offer {
 
     public void setOfferStatus(OfferStatus offerStatus) {
         this.offerStatus = offerStatus;
+    }
+
+    public Offer() {
     }
 }

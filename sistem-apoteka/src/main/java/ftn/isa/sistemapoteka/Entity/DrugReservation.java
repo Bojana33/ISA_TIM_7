@@ -1,10 +1,11 @@
 package ftn.isa.sistemapoteka.Entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-public class DrugReservation {
+public class DrugReservation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +19,9 @@ public class DrugReservation {
 
     @OneToOne(mappedBy = "Drug",cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     private Drug drug;
+
+    public DrugReservation() {
+    }
 
     public Long getId() {
         return id;

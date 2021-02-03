@@ -2,15 +2,15 @@ package ftn.isa.sistemapoteka.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class LoyaltyProgram {
+public class LoyaltyProgram implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
     @Column
@@ -51,6 +51,9 @@ public class LoyaltyProgram {
 
     @OneToMany(mappedBy = "LoyaltyProgram", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Patient> patients = new HashSet<>();
+
+    public LoyaltyProgram() {
+    }
 
     public Long getId() {
         return id;

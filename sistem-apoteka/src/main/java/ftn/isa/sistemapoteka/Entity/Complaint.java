@@ -1,9 +1,10 @@
 package ftn.isa.sistemapoteka.Entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Complaint {
+public class Complaint implements Serializable {
 
     @Id
     @GeneratedValue
@@ -12,7 +13,34 @@ public class Complaint {
     @Column
     private String text;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "patientId")
     private Patient patient;
+
+    public Complaint() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 }

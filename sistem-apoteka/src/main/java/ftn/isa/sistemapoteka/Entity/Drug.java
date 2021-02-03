@@ -4,11 +4,12 @@ import org.springframework.security.access.prepost.PreInvocationAuthorizationAdv
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Drug {
+public class Drug implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,6 +62,9 @@ public class Drug {
 
     @Column
     private DrugShape drugShape;
+
+    public Drug() {
+    }
 
     public Long getId() {
         return id;

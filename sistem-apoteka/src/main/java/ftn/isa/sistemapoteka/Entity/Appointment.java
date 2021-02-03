@@ -20,13 +20,16 @@ public class Appointment implements Serializable {
     @Column
     private LocalDateTime dateTime;
 
-    @ManyToOne
-    @JoinColumn(name = "dermatologist_id", nullable = false)
+    @ManyToOne(targetEntity = Dermatologist.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "dermatologist_id", nullable = false, referencedColumnName = "id")
     private Dermatologist dermatologist;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false)
+    @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id", nullable = false, referencedColumnName = "id")
     private Patient patient;
+
+    public Appointment() {
+    }
 
     public Long getId() {
         return id;
@@ -60,19 +63,4 @@ public class Appointment implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public Dermatologist getDermatologist() {
-        return dermatologist;
-    }
-
-    public void setDermatologist(Dermatologist dermatologist) {
-        this.dermatologist = dermatologist;
-    }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
 }

@@ -2,12 +2,13 @@ package ftn.isa.sistemapoteka.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class eRecipe {
+public class eRecipe implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,9 @@ public class eRecipe {
 
     @OneToMany(mappedBy = "eRecipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Drug> drugs = new HashSet<>();
+
+    public eRecipe() {
+    }
 
     public Long getId() {
         return id;
@@ -54,4 +58,6 @@ public class eRecipe {
     public void setDrugs(Set<Drug> drugs) {
         this.drugs = drugs;
     }
+
+
 }

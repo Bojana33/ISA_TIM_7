@@ -38,8 +38,8 @@ public class Patient extends RegisteredUser{
     private int discount;
 
     @ManyToMany
-    @JoinTable(name = "Subscriptions", joinColumns = @JoinColumn(name = "Patient_id", referencedColumnName = "id")
-            , inverseJoinColumns = @JoinColumn(name = "Pharmacy_id", referencedColumnName = "id"))
+    @JoinTable(name = "Subscriptions", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))
     private Set<Pharmacy> subscriptions = new HashSet<>();
 
 

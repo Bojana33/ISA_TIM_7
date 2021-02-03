@@ -21,7 +21,7 @@ public class Pharmacy implements Serializable {
     @Column
     private Float rating;
 
-    @ManyToMany
+    @ManyToMany(targetEntity = Dermatologist.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Dermatologist> dermatologists = new HashSet<>();
 
     @OneToMany(mappedBy = "pharmacists", cascade = CascadeType.ALL)
@@ -35,6 +35,9 @@ public class Pharmacy implements Serializable {
 
     @OneToMany(mappedBy = "drugs", cascade = CascadeType.ALL)
     private Set<Drug> drugs = new HashSet<>();
+
+    public Pharmacy() {
+    }
 
     public Long getId() {
         return id;

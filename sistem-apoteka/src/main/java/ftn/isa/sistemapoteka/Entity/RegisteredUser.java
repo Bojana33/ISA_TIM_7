@@ -40,8 +40,13 @@ public class RegisteredUser implements Serializable {
     @Column
     private String state;
 
+    public RegisteredUser() {
+    }
+
     @Column
     private String phoneNumber;
+
+
 
     public String getName() {
         return name;
@@ -114,5 +119,20 @@ public class RegisteredUser implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "RegisteredUser{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", residence='" + residence + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }
