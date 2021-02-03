@@ -52,6 +52,7 @@ public class Patient extends RegisteredUser{
     }
 
     public Patient() {
+        super();
     }
 
     public Float getLoyaltyPoints() {

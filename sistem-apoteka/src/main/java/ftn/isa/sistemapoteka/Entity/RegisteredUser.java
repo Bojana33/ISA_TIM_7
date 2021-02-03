@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "User_Type")
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "user_type")
 public class RegisteredUser implements Serializable {
 
     @Id
@@ -40,13 +40,23 @@ public class RegisteredUser implements Serializable {
     @Column
     private String state;
 
-    public RegisteredUser() {
-    }
-
     @Column
     private String phoneNumber;
 
 
+    public RegisteredUser() {
+    }
+
+    public RegisteredUser(@NotEmpty(message = "This field can not be empty") String name, @NotEmpty(message = "This field can not be empty") String lastname, @NotEmpty(message = "This field can not be empty") String email, @NotEmpty(message = "This field can not be empty") String password, String residence, String city, String state, String phoneNumber) {
+        this.name = name;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.residence = residence;
+        this.city = city;
+        this.state = state;
+        this.phoneNumber = phoneNumber;
+    }
 
     public String getName() {
         return name;

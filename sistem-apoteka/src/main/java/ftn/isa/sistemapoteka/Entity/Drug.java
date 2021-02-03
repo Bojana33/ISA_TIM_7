@@ -66,6 +66,23 @@ public class Drug implements Serializable {
     public Drug() {
     }
 
+    public Drug(@NotEmpty(message = "This field can not be empty!") Long code, String name, String contraindications, String structure, int dailyIntake, Boolean reserved, String producer, Boolean onPrescription, String additionalNote, float loyaltyPoints, int quantity, float price, DrugType drugType, DrugShape drugShape) {
+        this.code = code;
+        this.name = name;
+        this.contraindications = contraindications;
+        this.structure = structure;
+        this.dailyIntake = dailyIntake;
+        this.reserved = reserved;
+        this.producer = producer;
+        this.onPrescription = onPrescription;
+        this.additionalNote = additionalNote;
+        this.loyaltyPoints = loyaltyPoints;
+        this.quantity = quantity;
+        this.price = price;
+        this.drugType = drugType;
+        this.drugShape = drugShape;
+    }
+
     public Long getId() {
         return id;
     }

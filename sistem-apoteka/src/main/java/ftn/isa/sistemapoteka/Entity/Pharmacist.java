@@ -16,4 +16,8 @@ public class Pharmacist extends RegisteredUser{
     public void setPharmacy(Pharmacy pharmacy) {
         this.pharmacy = pharmacy;
     }
+
+    public Pharmacist() {
+        super();
+    }
 }

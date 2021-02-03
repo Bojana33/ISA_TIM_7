@@ -6,7 +6,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
-@DiscriminatorValue("PharmacyAdministrator")
+@DiscriminatorValue("pharmacy_administrator")
 public class PharmacyAdministrator extends RegisteredUser{
 
     @ManyToOne(targetEntity = Pharmacy.class)
@@ -18,5 +18,9 @@ public class PharmacyAdministrator extends RegisteredUser{
 
     public void setPharmacy(Pharmacy pharmacy) {
         this.pharmacy = pharmacy;
+    }
+
+    public PharmacyAdministrator() {
+        super();
     }
 }
