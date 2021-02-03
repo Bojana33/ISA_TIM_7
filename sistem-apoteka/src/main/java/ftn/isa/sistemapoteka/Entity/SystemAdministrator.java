@@ -8,6 +8,6 @@ import java.util.Set;
 @DiscriminatorValue("SystemAdministrator")
 public class SystemAdministrator extends RegisteredUser{
 
-    @OneToMany(mappedBy = "SystemAdministrator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<LoyaltyProgram> loyaltyPrograms = new HashSet<>();
 }

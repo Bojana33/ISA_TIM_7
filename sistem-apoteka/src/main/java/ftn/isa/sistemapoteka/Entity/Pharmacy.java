@@ -24,16 +24,18 @@ public class Pharmacy implements Serializable {
     @ManyToMany(targetEntity = Dermatologist.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Dermatologist> dermatologists = new HashSet<>();
 
-    @OneToMany(mappedBy = "pharmacists", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
     private Set<Pharmacist> pharmacists = new HashSet<>();
 
-    @OneToMany(mappedBy = "subscriptionedPatients", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "Subscriptions", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))
     private Set<Patient> subscriptionedPatients = new HashSet<>();
 
-    @OneToMany(mappedBy = "pharmacyAdministrators", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
     private Set<PharmacyAdministrator> pharmacyAdministrators = new HashSet<>();
 
-    @OneToMany(mappedBy = "drugs", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<Drug> drugs = new HashSet<>();
 
     public Pharmacy() {

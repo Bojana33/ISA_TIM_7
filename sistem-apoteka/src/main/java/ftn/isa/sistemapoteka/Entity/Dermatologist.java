@@ -8,7 +8,7 @@ import java.util.Set;
 @DiscriminatorValue("Dermatologist")
 public class Dermatologist extends RegisteredUser{
 
-    @OneToMany(mappedBy = "Dermatologist", targetEntity = Appointment.class ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "dermatologist", targetEntity = Appointment.class ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Appointment> appointments = new HashSet<>();
 
     @ManyToMany(targetEntity = Pharmacy.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)

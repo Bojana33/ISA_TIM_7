@@ -14,7 +14,7 @@ public class OrderForm implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "OrderForm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @NotEmpty(message = "You must choose at least one drug")
     private Set<Drug> drugs = new HashSet<>();
 
@@ -26,7 +26,7 @@ public class OrderForm implements Serializable {
     @NotEmpty(message = "You must fill this field")
     private LocalDateTime offerDueDate;
 
-    @OneToMany(mappedBy = "OrderForm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Offer> offers = new HashSet<>();
 
     public OrderForm() {

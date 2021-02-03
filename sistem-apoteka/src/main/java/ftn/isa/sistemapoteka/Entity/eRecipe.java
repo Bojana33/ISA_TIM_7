@@ -21,8 +21,12 @@ public class eRecipe implements Serializable {
     @Column
     private LocalDateTime dateOfIssue;
 
-    @OneToMany(mappedBy = "eRecipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Drug> drugs = new HashSet<>();
+
+    @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id", nullable = false, referencedColumnName = "id")
+    private Patient patient;
 
     public eRecipe() {
     }

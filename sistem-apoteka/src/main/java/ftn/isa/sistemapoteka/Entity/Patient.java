@@ -16,19 +16,19 @@ public class Patient extends RegisteredUser{
             inverseJoinColumns = @JoinColumn(name = "Drug_id", referencedColumnName = "id"))
     private Set<Drug> allergies = new HashSet<>();
 
-    @OneToMany(mappedBy = "Patient",targetEntity = Appointment.class)
+    @OneToMany(mappedBy = "patient",targetEntity = Appointment.class)
     private Set<Appointment> appointments = new HashSet<>();
 
-    @OneToMany(mappedBy = "Patient",targetEntity = Consultation.class)
+    @OneToMany(mappedBy = "patient",targetEntity = Consultation.class)
     private Set<Consultation> consultations = new HashSet<>();
 
-    @OneToMany(mappedBy = "Patient", targetEntity = Complaint.class)
+    @OneToMany(mappedBy = "patient", targetEntity = Complaint.class)
     private Set<Complaint> complaints = new HashSet<>();
 
-    @OneToMany(mappedBy = "Patient",targetEntity = eRecipe.class)
+    @OneToMany(mappedBy = "patient",targetEntity = eRecipe.class)
     private Set<eRecipe> eRecipes = new HashSet<>();
 
-    @OneToMany(mappedBy = "Patient", targetEntity = DrugReservation.class)
+    @OneToMany(mappedBy = "patient", targetEntity = DrugReservation.class)
     private Set<DrugReservation> drugReservations = new HashSet<>();
 
     @Column
