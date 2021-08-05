@@ -1,0 +1,23 @@
+package ftn.isa.sistemapoteka.model;
+
+import javax.persistence.*;
+
+@Entity
+@DiscriminatorValue("Pharmacist")
+public class Pharmacist extends User {
+
+    @ManyToOne(targetEntity = Pharmacy.class)
+    private Pharmacy pharmacy;
+
+    public Pharmacy getPharmacy() {
+        return pharmacy;
+    }
+
+    public void setPharmacy(Pharmacy pharmacy) {
+        this.pharmacy = pharmacy;
+    }
+
+    public Pharmacist() {
+        super();
+    }
+}
