@@ -22,4 +22,16 @@ public class DrugServiceImpl implements DrugService {
     public Collection<Drug> findAllDrugs() {
         return drugRepository.findAll();
     }
+
+    @Override
+    public Drug saveDrug(Drug drug) {
+        drug.getReplacementDrugs();
+        this.drugRepository.save(drug);
+        return drug;
+    }
+
+    @Override
+    public Drug findByCode(Long code) {
+        return this.drugRepository.findByCode(code);
+    }
 }

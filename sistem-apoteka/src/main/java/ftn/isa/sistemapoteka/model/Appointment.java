@@ -1,9 +1,18 @@
 package ftn.isa.sistemapoteka.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Appointment implements Serializable {
 
@@ -12,10 +21,10 @@ public class Appointment implements Serializable {
     private Long id;
 
     @Column
-    private Float loyaltyPoints;
+    private Double loyaltyPoints;
 
     @Column
-    private Float price;
+    private Double price;
 
     @Column
     private LocalDateTime dateTime;
@@ -27,40 +36,5 @@ public class Appointment implements Serializable {
     @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id", nullable = false, referencedColumnName = "id")
     private Patient patient;
-
-    public Appointment() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Float getLoyaltyPoints() {
-        return loyaltyPoints;
-    }
-
-    public void setLoyaltyPoints(Float loyaltyPoints) {
-        this.loyaltyPoints = loyaltyPoints;
-    }
-
-    public Float getPrice() {
-        return price;
-    }
-
-    public void setPrice(Float price) {
-        this.price = price;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
 
 }

@@ -1,5 +1,6 @@
 package ftn.isa.sistemapoteka.controller;
 
+import ftn.isa.sistemapoteka.model.PharmacyAdministrator;
 import ftn.isa.sistemapoteka.model.User;
 import ftn.isa.sistemapoteka.model.UserRequest;
 import ftn.isa.sistemapoteka.model.UserTokenState;
@@ -110,7 +111,7 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/change-password", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('PATIENT') or hasRole('SYS_ADMIN') or hasRole('PHARMACIST') or hasRole('PHARMACY_ADMIN') or hasRole('DERMATOLOGIST')")
+    @PreAuthorize("hasAnyRole('PATIENT','SYS_ADMIN','PHARMACIST','PHARMACY_ADMIN','DERMATOLOGIST','SUPPLIER')")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
         userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
 

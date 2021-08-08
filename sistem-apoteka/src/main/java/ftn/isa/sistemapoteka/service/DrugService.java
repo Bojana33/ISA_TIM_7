@@ -6,4 +6,6 @@ import java.util.Collection;
 
 public interface DrugService {
     Collection<Drug> findAllDrugs();
+    Drug saveDrug(Drug drug);
+    Drug findByCode(Long code);
 }

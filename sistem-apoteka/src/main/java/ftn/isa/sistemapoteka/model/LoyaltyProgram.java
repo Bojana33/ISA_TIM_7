@@ -1,12 +1,18 @@
 package ftn.isa.sistemapoteka.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoyaltyProgram implements Serializable {
 
     @Id
@@ -14,140 +20,27 @@ public class LoyaltyProgram implements Serializable {
     private Long id;
 
     @Column
-    @NotEmpty(message = "This field can not be empty")
-    private float consultationPoints;
+    private Double consultationPoints;
 
     @Column
-    @NotEmpty(message = "This field can not be empty")
-    private float appointmentPoints;
+    private Double appointmentPoints;
 
     @Column
-    @NotEmpty(message = "This field can not be empty")
-    private float regularPoints;
+    private Double regularPoints;
 
     @Column
-    @NotEmpty(message = "This field can not be empty")
-    private float silverPoints;
+    private Double silverPoints;
 
     @Column
-    @NotEmpty(message = "This field can not be empty")
-    private float goldPoints;
+    private Double goldPoints;
 
     @Column
-    private int discountRegular;
+    private Integer discountRegular;
 
     @Column
-    private int discountSilver;
+    private Integer discountSilver;
 
     @Column
-    private int discountGold;
+    private Integer discountGold;
 
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Appointment> appointments = new HashSet<>();
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Consultation> consultations = new HashSet<>();
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Patient> patients = new HashSet<>();
-
-    public LoyaltyProgram() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public float getConsultationPoints() {
-        return consultationPoints;
-    }
-
-    public void setConsultationPoints(float consultationPoints) {
-        this.consultationPoints = consultationPoints;
-    }
-
-    public float getAppointmentPoints() {
-        return appointmentPoints;
-    }
-
-    public void setAppointmentPoints(float appointmentPoints) {
-        this.appointmentPoints = appointmentPoints;
-    }
-
-    public float getRegularPoints() {
-        return regularPoints;
-    }
-
-    public void setRegularPoints(float regularPoints) {
-        this.regularPoints = regularPoints;
-    }
-
-    public float getSilverPoints() {
-        return silverPoints;
-    }
-
-    public void setSilverPoints(float silverPoints) {
-        this.silverPoints = silverPoints;
-    }
-
-    public float getGoldPoints() {
-        return goldPoints;
-    }
-
-    public void setGoldPoints(float goldPoints) {
-        this.goldPoints = goldPoints;
-    }
-
-    public Set<Appointment> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(Set<Appointment> appointments) {
-        this.appointments = appointments;
-    }
-
-    public Set<Consultation> getConsultations() {
-        return consultations;
-    }
-
-    public void setConsultations(Set<Consultation> consultations) {
-        this.consultations = consultations;
-    }
-
-    public Set<Patient> getPatients() {
-        return patients;
-    }
-
-    public void setPatients(Set<Patient> patients) {
-        this.patients = patients;
-    }
-
-    public int getDiscountRegular() {
-        return discountRegular;
-    }
-
-    public void setDiscountRegular(int discountRegular) {
-        this.discountRegular = discountRegular;
-    }
-
-    public int getDiscountSilver() {
-        return discountSilver;
-    }
-
-    public void setDiscountSilver(int discountSilver) {
-        this.discountSilver = discountSilver;
-    }
-
-    public int getDiscountGold() {
-        return discountGold;
-    }
-
-    public void setDiscountGold(int discountGold) {
-        this.discountGold = discountGold;
-    }
 }

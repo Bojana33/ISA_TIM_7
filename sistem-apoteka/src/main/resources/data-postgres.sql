@@ -1,10 +1,11 @@
-INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type) VALUES ('Bojana', 'Todorovic', 'bojana@gmail.com', 'bojana', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'system_adminstrator');
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled) VALUES ('Bojana', 'Todorovic', 'bojana@gmail.com', '$2a$10$EkMSBxxgMXrRULnSNPfm0u/sGvs8mXOkoqt8uNmRlHNA3ucAuFDxK', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'system_administrator', true);
 
 INSERT into authority(name) values ('ROLE_SYS_ADMIN');
 INSERT into authority(name) values ('ROLE_PATIENT');
 INSERT into authority(name) values ('ROLE_PHARMACY_ADMIN');
 INSERT into authority(name) values ('ROLE_PHARMACIST');
 INSERT into authority(name) values ('ROLE_DERMATOLOGIST');
+INSERT into authority(name) values ('ROLE_SUPPLIER');
 
 INSERT into user_authority(user_id, authority_id) values (1,1);
 

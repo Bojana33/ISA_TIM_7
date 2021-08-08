@@ -59,7 +59,7 @@ public class User implements UserDetails {
     private String phoneNumber;
 
     @Column
-    private boolean enabled = false;
+    private Boolean enabled = false;
 
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
@@ -69,7 +69,6 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
     private List<Authority> authorities;
-
 
     @Override
     public String getUsername() {
@@ -131,5 +130,18 @@ public class User implements UserDetails {
         this.city = city;
         this.state = state;
         this.phoneNumber = phoneNumber;
+    }
+
+    public User(@NotEmpty(message = "This field can not be empty") String firstName, @NotEmpty(message = "This field can not be empty") String lastName, @NotEmpty(message = "This field can not be empty") String email, @NotEmpty(message = "This field can not be empty") String password, String residence, String city, String state, String phoneNumber, Boolean enabled, List<Authority> authorities) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.residence = residence;
+        this.city = city;
+        this.state = state;
+        this.phoneNumber = phoneNumber;
+        this.enabled = enabled;
+        this.authorities = authorities;
     }
 }
