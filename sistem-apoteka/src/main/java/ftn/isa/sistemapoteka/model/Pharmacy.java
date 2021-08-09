@@ -28,7 +28,10 @@ public class Pharmacy implements Serializable {
     private String address;
 
     @Column
-    private Double rating = 0.0;
+    private Double averageRating = 0.0;
+
+    @ElementCollection
+    private Set<Integer> ratings;
 
     @ManyToMany(targetEntity = Dermatologist.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Dermatologist> dermatologists = new HashSet<>();
@@ -47,9 +50,9 @@ public class Pharmacy implements Serializable {
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<Drug> drugs = new HashSet<>();
 
-    public Pharmacy(String name, String address, Double rating) {
+    public Pharmacy(String name, String address, Double averageRating) {
         this.name = name;
         this.address = address;
-        this.rating = rating;
+        this.averageRating = averageRating;
     }
 }

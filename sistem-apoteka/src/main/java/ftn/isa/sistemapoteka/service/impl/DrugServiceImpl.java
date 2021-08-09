@@ -25,7 +25,6 @@ public class DrugServiceImpl implements DrugService {
 
     @Override
     public Drug saveDrug(Drug drug) {
-        drug.getReplacementDrugs();
         this.drugRepository.save(drug);
         return drug;
     }

@@ -1,23 +1,28 @@
 package ftn.isa.sistemapoteka.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue("Pharmacist")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pharmacist extends User {
 
     @ManyToOne(targetEntity = Pharmacy.class)
     private Pharmacy pharmacy;
 
-    public Pharmacy getPharmacy() {
-        return pharmacy;
-    }
+    @Column
+    private Double averageRating;
 
-    public void setPharmacy(Pharmacy pharmacy) {
-        this.pharmacy = pharmacy;
-    }
+    @ElementCollection
+    private Set<Integer> ratings;
 
-    public Pharmacist() {
-        super();
-    }
 }
