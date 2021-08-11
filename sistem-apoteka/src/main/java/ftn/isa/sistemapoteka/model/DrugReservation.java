@@ -17,7 +17,7 @@ public class DrugReservation implements Serializable {
     @Column
     private LocalDateTime takingDrugDate;
 
-    @OneToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     private Drug drug;
 
     @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Git.iml" filepath="$PROJECT_DIR$/.idea/Git.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ISA_TIM_7.iml" filepath="$PROJECT_DIR$/.idea/ISA_TIM_7.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sistem-apoteka/sistem-apoteka.iml" filepath="$PROJECT_DIR$/sistem-apoteka/sistem-apoteka.iml" />
     </modules>
   </component>
 </project>
