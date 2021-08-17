@@ -16,4 +16,6 @@ public interface UserService {
     Supplier saveSupplier(Supplier supplier);
     SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator);
     Dermatologist saveDermatologist(Dermatologist dermatologist);
+
+    Pharmacist savePharmacist(Pharmacist pharmacist);
 }

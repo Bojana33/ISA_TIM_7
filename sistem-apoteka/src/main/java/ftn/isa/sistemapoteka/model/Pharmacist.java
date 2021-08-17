@@ -25,4 +25,6 @@ public class Pharmacist extends User {
     @ElementCollection
     private Set<Integer> ratings;
 
+
+
 }
