@@ -4,10 +4,8 @@ import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.repository.UserRepository;
 import ftn.isa.sistemapoteka.service.AuthorityService;
-import ftn.isa.sistemapoteka.service.PharmacyService;
 import ftn.isa.sistemapoteka.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +32,8 @@ public class UserServiceImpl implements UserService {
     private PharmacyServiceImpl pharmacyService;
 
     private LoyaltyProgramServiceImpl loyaltyProgramService;
+
+
 
     @Override
     public User findByEmail(String email) throws UsernameNotFoundException {
@@ -249,5 +249,18 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(dermatologist);
         return dermatologist;
     }
+
+    @Override
+    public Pharmacist savePharmacist(Pharmacist pharmacist) {
+        pharmacist.setEnabled(true);
+        pharmacist.setPassword(passwordEncoder.encode(pharmacist.getPassword()));
+
+        List<Authority> auth = authService.findByName("ROLE_PHARMACIST");
+        pharmacist.setAuthorities(auth);
+
+        this.userRepository.save(pharmacist);
+        return pharmacist;
+    }
+
 
 }
