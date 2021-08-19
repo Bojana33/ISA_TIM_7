@@ -39,6 +39,9 @@ public class Pharmacy implements Serializable {
     @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
     private Set<Pharmacist> pharmacists = new HashSet<>();
 
+    @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
+    private Set<OrderForm> orderForms = new HashSet<>();
+
     @ManyToMany
     @JoinTable(name = "Subscriptions", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id")
             , inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))

@@ -1,5 +1,9 @@
 package ftn.isa.sistemapoteka.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
@@ -8,6 +12,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Setter
+@Getter
+@AllArgsConstructor
 public class OrderForm implements Serializable {
 
     @Id
@@ -28,6 +35,9 @@ public class OrderForm implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Offer> offers = new HashSet<>();
+
+    @ManyToOne(targetEntity = Pharmacy.class)
+    private Pharmacy pharmacy;
 
     public OrderForm() {
     }
