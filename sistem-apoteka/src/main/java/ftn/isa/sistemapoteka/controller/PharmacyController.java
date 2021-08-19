@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.constraints.Positive;
 
@@ -25,10 +27,17 @@ public class PharmacyController {
         this.pharmacyServiceImpl = pharmacyServiceImpl;
     }
 
-    @PostMapping(value = "/registerPharmacy")
-    @PreAuthorize("hasRole('SYS_ADMIN')")
-    public Pharmacy registerPharmacy(@RequestBody Pharmacy pharmacy){
-        return this.pharmacyServiceImpl.save(pharmacy);
+    @GetMapping(value = "/registerPharmacy")
+    public ModelAndView registerPharmacyForm(Model model){
+        Pharmacy pharmacy = new Pharmacy();
+        model.addAttribute(pharmacy);
+        return new ModelAndView("registerPharmacy");
+    }
+
+    @PostMapping("/registerPharmacy/submit")
+    public ModelAndView registerPharmacySubmit(@ModelAttribute Pharmacy pharmacy) throws Exception{
+        this.pharmacyServiceImpl.save(pharmacy);
+        return new ModelAndView("redirect:/user/registerPharmacyAdmin/" + pharmacy.getId());
     }
 
 }

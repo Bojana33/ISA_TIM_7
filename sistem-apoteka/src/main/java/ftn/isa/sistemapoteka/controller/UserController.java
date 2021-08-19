@@ -5,11 +5,16 @@ import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.security.Principal;
 
 @RestController
+@RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
     private UserService userService;
@@ -19,19 +24,19 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     @PreAuthorize("hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN')")
     public User loadById(@PathVariable Long userId) {
         return this.userService.findById(userId);
     }
 
     @PostMapping(value = "/registerPharmacyAdmin/{pharmacyId}")
-    @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ResponseEntity<PharmacyAdministrator> registerPharmacyAdmin(@RequestBody PharmacyAdministrator user, @PathVariable Long pharmacyId){
+    public ModelAndView registerPharmacyAdmin(@RequestBody PharmacyAdministrator user, @PathVariable Long pharmacyId){
         if (this.userService.findByEmail(user.getEmail()) != null) {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }
-        return new ResponseEntity<>(this.userService.savePharmacyAdmin(user,pharmacyId), HttpStatus.CREATED);
+        this.userService.savePharmacyAdmin(user,pharmacyId);
+        return new ModelAndView("redirect:/auth/sys-admin/home");
     }
 
     @PostMapping(value = "/registerSupplier")
@@ -60,4 +65,5 @@ public class UserController {
         }
         return new ResponseEntity<>(this.userService.saveDermatologist(user), HttpStatus.CREATED);
     }
+
 }

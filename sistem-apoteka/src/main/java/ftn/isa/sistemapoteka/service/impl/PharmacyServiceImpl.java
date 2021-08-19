@@ -17,7 +17,10 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public Pharmacy save(Pharmacy pharmacy) {
+    public Pharmacy save(Pharmacy pharmacy) throws Exception {
+        if (this.pharmacyRepository.findByName(pharmacy.getName()) != null){
+            throw new Exception("Pharmacy with that name already exist!");
+        }
         return this.pharmacyRepository.save(pharmacy);
     }
 

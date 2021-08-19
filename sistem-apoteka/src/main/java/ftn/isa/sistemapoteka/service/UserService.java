@@ -1,5 +1,6 @@
 package ftn.isa.sistemapoteka.service;
 
+import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.model.*;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface UserService {
     Supplier saveSupplier(Supplier supplier);
     SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator);
     Dermatologist saveDermatologist(Dermatologist dermatologist);
+    User findByEmailAndPassword(String email, String password) throws Exception;
+    User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c);
 }
