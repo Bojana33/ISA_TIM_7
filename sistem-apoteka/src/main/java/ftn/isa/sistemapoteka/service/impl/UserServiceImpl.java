@@ -236,6 +236,7 @@ public class UserServiceImpl implements UserService {
     public SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator) {
         systemAdministrator.setEnabled(true);
         systemAdministrator.setPassword(systemAdministrator.getPassword());
+        systemAdministrator.setIsFirstLogin(true);
 
         List<Authority> auth = authService.findByName("ROLE_SYS_ADMIN");
         systemAdministrator.setAuthorities(auth);
@@ -247,6 +248,7 @@ public class UserServiceImpl implements UserService {
     public Dermatologist saveDermatologist(Dermatologist dermatologist) {
         dermatologist.setEnabled(true);
         dermatologist.setPassword(dermatologist.getPassword());
+        dermatologist.setIsFirstLogin(true);
 
         List<Authority> auth = authService.findByName("ROLE_DERMATOLOGIST");
         dermatologist.setAuthorities(auth);

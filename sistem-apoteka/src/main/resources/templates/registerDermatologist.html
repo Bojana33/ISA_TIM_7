@@ -14,12 +14,12 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <title>Register Pharmacy Admin</title>
+    <title>Register Dermatologist</title>
 </head>
 <div class="container">
     <div class="center-align blue lighten-5">
-        <h1>Register Pharmacy Admin</h1>
-        <form th:action="@{/user/registerPharmacyAdmin/__${pharmacyId}__/submit}" th:object="${pharmacyAdministrator}" method="post">
+        <h1>Register Dermatologist</h1>
+        <form th:action="@{/user/registerDermatologist/submit}" th:object="${dermatologist}" method="post">
             <br><label for="firstName">FirstName:</label>
             <input id="firstName" type="text" th:field="*{firstName}"/>
             <br><label for="lastName">LastName:</label>

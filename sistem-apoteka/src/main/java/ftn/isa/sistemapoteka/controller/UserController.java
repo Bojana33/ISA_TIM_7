@@ -64,20 +64,27 @@ public class UserController {
 
     @PostMapping(value = "/registerSystemAdmin")
     @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ResponseEntity<SystemAdministrator> registerPharmacyAdmin(@RequestBody SystemAdministrator user){
+    public ResponseEntity<SystemAdministrator> registerSystemAdmin(@RequestBody SystemAdministrator user){
         if (this.userService.findByEmail(user.getEmail()) != null) {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }
         return new ResponseEntity<>(this.userService.saveSystemAdmin(user), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/registerDermatologist")
-    @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ResponseEntity<Dermatologist> registerDermatologist(@RequestBody Dermatologist user){
+    @GetMapping("/registerDermatologist")
+    public ModelAndView regDermForm(Model model){
+        Dermatologist dermatologist = new Dermatologist();
+        model.addAttribute(dermatologist);
+        return new ModelAndView("registerDermatologist");
+    }
+
+    @PostMapping(value = "/registerDermatologist/submit")
+    public ModelAndView registerDermatologist(@ModelAttribute Dermatologist user){
         if (this.userService.findByEmail(user.getEmail()) != null) {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }
-        return new ResponseEntity<>(this.userService.saveDermatologist(user), HttpStatus.CREATED);
+        this.userService.saveDermatologist(user);
+        return new ModelAndView("redirect:/auth/sys-admin/home");
     }
 
 }
