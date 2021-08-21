@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <title>Register Pharmacy</title>
 </head>
 <body>
+    <div class="center-align yellow lighten-5" >
+        <h3>Register Pharmacy</h3>
+        <form th:action="@{/pharmacies/registerPharmacy/submit}" th:object="${pharmacy}" method="post">
+            <div class="form-group" th:align="center">
+                <label for="name">Pharmacy Name:</label>
+                <input id="name" type="text" th:field="*{name}">
+            </div>
+            <div class="form-group" th:align="center">
+                <label for="address">Pharmacy Address:</label>
+                <input id="address" type="text" th:field="*{address}">
+            </div>
+            <div class="form-group" th:align="center">
+                <button type="submit" class="btn btn-block btn-success">Submit</button>
+            </div>
+        </form>
+    </div>
 
 </body>
 </html>

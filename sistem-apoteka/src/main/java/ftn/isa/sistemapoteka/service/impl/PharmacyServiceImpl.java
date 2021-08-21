@@ -6,6 +6,8 @@ import ftn.isa.sistemapoteka.service.PharmacyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PharmacyServiceImpl implements PharmacyService {
 
@@ -27,5 +29,10 @@ public class PharmacyServiceImpl implements PharmacyService {
     @Override
     public Pharmacy findById(Long id) {
         return this.pharmacyRepository.getById(id);
+    }
+
+    @Override
+    public List<Pharmacy> findAll() {
+        return this.pharmacyRepository.findAll();
     }
 }

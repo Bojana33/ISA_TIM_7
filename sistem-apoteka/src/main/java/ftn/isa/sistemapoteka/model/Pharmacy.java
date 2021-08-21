@@ -50,9 +50,8 @@ public class Pharmacy implements Serializable {
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<Drug> drugs = new HashSet<>();
 
-    public Pharmacy(String name, String address, Double averageRating) {
+    public Pharmacy(String name, String address) {
         this.name = name;
         this.address = address;
-        this.averageRating = averageRating;
     }
 }

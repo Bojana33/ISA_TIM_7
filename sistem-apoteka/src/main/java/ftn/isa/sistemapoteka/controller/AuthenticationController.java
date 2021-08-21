@@ -24,13 +24,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.thymeleaf.model.IModel;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,15 +39,27 @@ public class AuthenticationController {
 
     private UserServiceImpl userService;
 
+    private TokenUtils tokenUtils;
+
+    private AuthenticationManager authenticationManager;
+
+    private CustomUserDetailsService userDetailsService;
+
 
     @Autowired
-    public AuthenticationController(UserServiceImpl userService){
+    public AuthenticationController(TokenUtils tokenUtils,
+                                    AuthenticationManager authenticationManager,
+                                    CustomUserDetailsService userDetailsService,
+                                    UserServiceImpl userService){
+        this.tokenUtils = tokenUtils;
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
         this.userService = userService;
     }
 
     @GetMapping("/login")
     public ModelAndView loginForm(Model model) {
-        User user = new User();
+        UserDTO user = new UserDTO();
         model.addAttribute("user", user);
         return new ModelAndView("login");
     }
@@ -55,9 +67,9 @@ public class AuthenticationController {
     //endpoint za logovanje
     @PostMapping("/login-submit")
     public ModelAndView login_submit(@Valid @ModelAttribute UserDTO user, HttpServletRequest request) throws Exception{
-        
+
         User u = this.userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
-        
+
         if (u.getEnabled()==false){
             throw new Exception("Your account is not activated, please check your email!");
         }
@@ -153,6 +165,7 @@ public class AuthenticationController {
 
         return new ModelAndView("redirect:/auth/home");
     }
+
 
     @GetMapping(path = "confirm")
     public String confirm(@RequestParam("token") String token){

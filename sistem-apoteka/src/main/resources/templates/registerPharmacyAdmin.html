@@ -19,7 +19,7 @@
 <div class="container">
     <div class="center-align blue lighten-5">
         <h1>Registration</h1>
-        <form th:action="@{/auth/signup/submit}" th:object="${userRequest}" method="post">
+        <form th:action="@{/user/registerPharmacyAdmin/__${pharmacyId}__/submit}" th:object="${pharmacyAdministrator}" method="post">
             <br><label for="firstName">FirstName:</label>
             <input id="firstName" type="text" th:field="*{firstName}"/>
             <br><label for="lastName">LastName:</label>
@@ -44,22 +44,6 @@
                 </div>
                 <p class="error-message"
                    th:each="error: ${#fields.errors('password')}"
-                   th:text="${error}">Validation error</p>
-            </div>
-            <div class="form-group"
-                 th:classappend="${#fields.hasErrors('confirmPassword')}? 'has-error':''">
-                <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="glyphicon glyphicon-lock"></i>
-                                        </span>
-                    <label>Confirm Password:</label>
-                    <input id="confirmPassword"
-                           class="form-control"
-                           type="password"
-                           th:field="*{confirmPassword}">
-                </div>
-                <p class="error-message"
-                   th:each="error: ${#fields.errors('confirmPassword')}"
                    th:text="${error}">Validation error</p>
             </div>
             <br><label for="residence">Residence:</label>

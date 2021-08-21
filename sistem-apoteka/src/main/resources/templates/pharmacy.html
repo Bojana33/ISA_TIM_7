@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head sec:authorize="hasRole('SYS_ADMIN')">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -14,15 +14,9 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <title>SysAdmin</title>
+    <title>Pharmacy</title>
 </head>
 <body>
-<h3 class="container center-align">System Admin Home</h3>
-<a th:href="${'/myPharmacy/auth/logout'}">Logout</a>
-<br>
-<a th:href="${'/myPharmacy/pharmacies/registerPharmacy'}">Register New Pharmacy</a>
-<br>
-<a th:href="${'/myPharmacy/pharmacies/allPharmacies'}">Pharmacies</a>
 
 </body>
 </html>

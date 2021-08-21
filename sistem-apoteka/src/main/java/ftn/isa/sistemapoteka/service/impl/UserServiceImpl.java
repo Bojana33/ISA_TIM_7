@@ -14,7 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.Console;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder;
+    //private PasswordEncoder passwordEncoder;
 
     private AuthorityService authService;
 
@@ -208,10 +210,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator, Long pharmId) {
+    public PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator) {
         pharmacyAdministrator.setEnabled(true);
-        pharmacyAdministrator.setPassword(passwordEncoder.encode(pharmacyAdministrator.getPassword()));
-        pharmacyAdministrator.setPharmacy(this.pharmacyService.findById(pharmId));
+        pharmacyAdministrator.setPassword(pharmacyAdministrator.getPassword());
+        pharmacyAdministrator.setIsFirstLogin(true);
 
         List<Authority> auth = authService.findByName("ROLE_PHARMACY_ADMIN");
         pharmacyAdministrator.setAuthorities(auth);
@@ -222,7 +224,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Supplier saveSupplier(Supplier supplier) {
         supplier.setEnabled(true);
-        supplier.setPassword(passwordEncoder.encode(supplier.getPassword()));
+        supplier.setPassword(supplier.getPassword());
 
         List<Authority> auth = authService.findByName("ROLE_SUPPLIER");
         supplier.setAuthorities(auth);
@@ -233,7 +235,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator) {
         systemAdministrator.setEnabled(true);
-        systemAdministrator.setPassword(passwordEncoder.encode(systemAdministrator.getPassword()));
+        systemAdministrator.setPassword(systemAdministrator.getPassword());
 
         List<Authority> auth = authService.findByName("ROLE_SYS_ADMIN");
         systemAdministrator.setAuthorities(auth);
@@ -244,7 +246,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Dermatologist saveDermatologist(Dermatologist dermatologist) {
         dermatologist.setEnabled(true);
-        dermatologist.setPassword(passwordEncoder.encode(dermatologist.getPassword()));
+        dermatologist.setPassword(dermatologist.getPassword());
 
         List<Authority> auth = authService.findByName("ROLE_DERMATOLOGIST");
         dermatologist.setAuthorities(auth);
@@ -268,5 +270,11 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-
+    public boolean isAuthorized(User user, String role){
+        List<Authority> auth = this.authService.findByName(role);
+        if (user.getAuthorities().equals(auth)){
+            return true;
+        }
+        return false;
+    }
 }

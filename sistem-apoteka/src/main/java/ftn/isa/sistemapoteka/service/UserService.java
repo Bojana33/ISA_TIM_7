@@ -13,7 +13,7 @@ public interface UserService {
     int enableUser(String email);
     String confirmToken(String token);
     String buildEmail(String name, String link);
-    PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator, Long pharmId);
+    PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator);
     Supplier saveSupplier(Supplier supplier);
     SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator);
     Dermatologist saveDermatologist(Dermatologist dermatologist);
