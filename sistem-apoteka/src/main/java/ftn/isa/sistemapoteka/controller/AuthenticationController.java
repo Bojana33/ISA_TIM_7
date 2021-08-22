@@ -132,7 +132,7 @@ public class AuthenticationController {
 
     @GetMapping("/home")
     public ModelAndView home(){
-        return new ModelAndView("home");
+        return new ModelAndView("home2");
     }
 
     @GetMapping("/logout")
