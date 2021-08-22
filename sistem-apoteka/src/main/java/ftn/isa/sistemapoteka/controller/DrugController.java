@@ -9,13 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/drugs")
@@ -28,9 +28,14 @@ public class DrugController {
         this.drugService = drugService;
     }
 
-    @GetMapping("/")
-    public ModelAndView getAllDrugs(Model model) {
-        model.addAttribute("drugs", this.drugService.findAllDrugs());
+    @GetMapping("/allDrugs")
+    public ModelAndView getAllDrugs(Model model, String keyword) {
+        if (keyword != null) {
+            model.addAttribute("drugs", this.drugService.findByName(keyword));
+        } else
+        {
+            model.addAttribute("drugs", this.drugService.findAllDrugs());
+        }
         return new ModelAndView("drugs");
     }
 

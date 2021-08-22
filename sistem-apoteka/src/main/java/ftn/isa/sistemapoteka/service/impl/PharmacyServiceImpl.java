@@ -35,4 +35,9 @@ public class PharmacyServiceImpl implements PharmacyService {
     public List<Pharmacy> findAll() {
         return this.pharmacyRepository.findAll();
     }
+
+    @Override
+    public List<Pharmacy> findByKeyword(String keyword) {
+        return this.pharmacyRepository.findByKeyword(keyword);
+    }
 }

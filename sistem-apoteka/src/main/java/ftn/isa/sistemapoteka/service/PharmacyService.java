@@ -12,4 +12,6 @@ public interface PharmacyService {
     Pharmacy findById(Long id);
 
     List<Pharmacy> findAll();
+
+    List<Pharmacy> findByKeyword(String keyword);
 }

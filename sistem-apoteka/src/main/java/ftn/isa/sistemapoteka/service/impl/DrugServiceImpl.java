@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class DrugServiceImpl implements DrugService {
@@ -32,5 +33,10 @@ public class DrugServiceImpl implements DrugService {
     @Override
     public Drug findByCode(Long code) {
         return this.drugRepository.findByCode(code);
+    }
+
+    @Override
+    public List<Drug> findByName(String name) {
+        return this.drugRepository.findByKeyword(name);
     }
 }
