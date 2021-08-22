@@ -42,12 +42,13 @@ public class OrderFormServiceImpl implements OrderFormService {
                 if(drugOF.getCode().equals(drugPH.getCode()))
                 {
                     found=true;
+                    break;
                 }
             }
             if(!found)
             {
                 drugOF.setQuantity(0);
-                drugService.addToPharmacy(drugOF, orderForm.getPharmacy().getId());
+                this.drugService.addToPharmacy(drugOF, orderForm.getPharmacy().getId());
                 System.out.println("Dodat lek");
                 System.out.println(drugOF.getCode());
 
@@ -72,7 +73,7 @@ public class OrderFormServiceImpl implements OrderFormService {
         offer.setOfferStatus(OfferStatus.ACCEPTED);
 
         Set<Offer> offers = offer.getOrderForm().getOffers();
-        offers.remove(offers);
+
         for (Offer o :
                 offers) {
             o.setOfferStatus(OfferStatus.REJECTED);
