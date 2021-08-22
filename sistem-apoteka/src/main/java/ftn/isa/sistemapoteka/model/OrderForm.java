@@ -39,6 +39,9 @@ public class OrderForm implements Serializable {
     @ManyToOne(targetEntity = Pharmacy.class)
     private Pharmacy pharmacy;
 
+    @ManyToOne(targetEntity = Pharmacy.class)
+    private PharmacyAdministrator creator;
+
     public OrderForm() {
     }
 
