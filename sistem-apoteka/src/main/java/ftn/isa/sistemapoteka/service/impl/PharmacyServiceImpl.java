@@ -92,5 +92,6 @@ public class PharmacyServiceImpl implements PharmacyService {
         this.pharmacyRepository.save(pharmacy);
         return pharmacist;
     }
+    //todo izvestaj o poslovanju apoteke i graficki prikazi
 }
 

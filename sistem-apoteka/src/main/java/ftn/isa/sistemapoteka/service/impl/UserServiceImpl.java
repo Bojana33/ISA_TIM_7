@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,18 +38,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) throws UsernameNotFoundException {
-        User u = userRepository.findByEmail(email);
-        return u;
+        return userRepository.findByEmail(email);
     }
 
     public User findById(Long id) throws AccessDeniedException {
-        User u = userRepository.findById(id).orElseGet(null);
-        return u;
+        return userRepository.findById(id).orElseGet(null);
     }
 
     public List<User> findAll() throws AccessDeniedException {
-        List<User> result = userRepository.findAll();
-        return result;
+        return userRepository.findAll();
     }
 
     @Override
@@ -249,6 +247,29 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(dermatologist);
         return dermatologist;
     }
+
+    @Override
+    public List<Dermatologist> showPharmacyDermatologists(Pharmacy pharmacy) {
+        Authority authority = new Authority();
+        authority.setName("ROLE_DERMATOLOGIST");
+        return this.userRepository.findUsersByAuthoritiesIsDermatologist(authority);
+    }
+
+    @Override
+    public List<Dermatologist> filterDermatologistByRating(Integer rating, Pharmacy pharmacy) {
+        List<Dermatologist> dermatologists = showPharmacyDermatologists(pharmacy);
+        List<Dermatologist> ret = new ArrayList<>();
+        Double r = Double.valueOf(rating);
+        for (Dermatologist d :
+                dermatologists) {
+            if (r + 0.5 > d.getAverageRating() && r - 0.5 < d.getAverageRating()) {
+
+                ret.add(d);
+            }
+        }
+        return ret;
+    }
+
 
     @Override
     public Pharmacist savePharmacist(Pharmacist pharmacist) {

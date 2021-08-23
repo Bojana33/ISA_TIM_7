@@ -1,7 +1,9 @@
 package ftn.isa.sistemapoteka.service.impl;
 
 import ftn.isa.sistemapoteka.model.Drug;
+import ftn.isa.sistemapoteka.model.DrugPricePeriod;
 import ftn.isa.sistemapoteka.model.Pharmacy;
+import ftn.isa.sistemapoteka.repository.DrugPricePeriodRepository;
 import ftn.isa.sistemapoteka.repository.DrugRepository;
 import ftn.isa.sistemapoteka.repository.PharmacyRepository;
 import ftn.isa.sistemapoteka.service.DrugService;
@@ -19,8 +21,10 @@ public class DrugServiceImpl implements DrugService {
 
     private PharmacyRepository pharmacyRepository;
 
+    private DrugPricePeriodRepository drugPricePeriodRepository;
+
     @Autowired
-    public DrugServiceImpl(DrugRepository drugRepository){
+    public DrugServiceImpl(DrugRepository drugRepository) {
         this.drugRepository = drugRepository;
     }
 
@@ -43,25 +47,42 @@ public class DrugServiceImpl implements DrugService {
     @Override
     public void deleteDrug(Long id) {
         Drug d = this.drugRepository.getById(id);
-        if(d.getReserved())
-        {
+        if (d.getReserved()) {
             throw new IllegalStateException("Drug is reserved");
-        }
-        else
-        {
+        } else {
             this.drugRepository.deleteById(id);
         }
     }
 
     @Override
+    public boolean addDrugPrice(DrugPricePeriod drugPricePeriod) {
+        if (drugPricePeriod.getPriceEnd().isBefore(drugPricePeriod.getPriceBeggining())) //provera da li je pocetak cene pre kraja
+        {
+            return false;
+        }
+        Set<DrugPricePeriod> drugPricePeriods = this.drugPricePeriodRepository.getAll();
+        boolean passed = true;
+        for (DrugPricePeriod d :
+                drugPricePeriods) {
+            if (drugPricePeriod.getPriceBeggining().isBefore(d.getPriceEnd())) //provera da li novi period pocinje nakon kraja postojeceg perioda
+            {
+                passed = drugPricePeriod.getPriceEnd().isBefore(d.getPriceBeggining()); //provera da li se novi period zavrsava pre nego sto postojeci pocinje
+                if (!passed) {
+                    return false;
+                }
+            }
+        }
+        this.drugPricePeriodRepository.save(drugPricePeriod);
+        return true;
+    }
+
+    @Override
     public void removeFromPharmacy(Long drugId, Long pharmacyId) {
         Drug drug = this.drugRepository.getById(drugId);//Dobavlja lek koji cemo ukloniti
-        if(drug.getReserved())//Ako je lek rezervisan ne uklanja ga iz apoteke
+        if (drug.getReserved())//Ako je lek rezervisan ne uklanja ga iz apoteke
         {
             throw new IllegalStateException("Drug is reserved");
-        }
-        else
-        {
+        } else {
             Pharmacy p = this.pharmacyRepository.getById(pharmacyId); //Dobavlja apoteku iz koje se uklanja lek
             Set<Drug> drugs = p.getDrugs();//Izmena liste lekova pri apoteci
             drugs.remove(drug);
@@ -108,7 +129,7 @@ public class DrugServiceImpl implements DrugService {
         drug.setReplacementDrugs(newDrug.getReplacementDrugs());
         drug.setLoyaltyPoints(newDrug.getLoyaltyPoints());
         drug.setQuantity(newDrug.getQuantity());
-        drug.setPrice(newDrug.getPrice());
+        drug.setDrugPricePeriods(newDrug.getDrugPricePeriods());
         addToPharmacy(drug, pharmacyId);
         return drug;
     }

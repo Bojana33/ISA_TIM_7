@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,8 +54,11 @@ public class Drug implements Serializable {
     @Column
     private Integer quantity;
 
-    @Column
+   /* @Column
     private Double price;
+*/
+   @OneToMany(mappedBy = "drug", cascade = CascadeType.ALL)
+   private Set<DrugPricePeriod> drugPricePeriods = new HashSet<>();
 
     @ElementCollection
     private Set<Long> replacementDrugs;
@@ -67,7 +69,7 @@ public class Drug implements Serializable {
     @Column
     private DrugShape drugShape;
 
-    public Drug(Long code, String name, String contraindications, String structure, int dailyIntake, Boolean reserved, String producer, Boolean onPrescription, String additionalNote, Integer loyaltyPoints, Integer quantity, Double price, DrugType drugType, DrugShape drugShape, Set<Long> replacementDrugs) {
+    public Drug(Long code, String name, String contraindications, String structure, int dailyIntake, Boolean reserved, String producer, Boolean onPrescription, String additionalNote, Integer loyaltyPoints, Integer quantity, Set<DrugPricePeriod> drugPricePeriods, DrugType drugType, DrugShape drugShape, Set<Long> replacementDrugs) {
         this.code = code;
         this.name = name;
         this.contraindications = contraindications;
@@ -79,7 +81,7 @@ public class Drug implements Serializable {
         this.additionalNote = additionalNote;
         this.loyaltyPoints = loyaltyPoints;
         this.quantity = quantity;
-        this.price = price;
+        this.drugPricePeriods = drugPricePeriods;
         this.drugType = drugType;
         this.drugShape = drugShape;
         this.replacementDrugs = replacementDrugs;
