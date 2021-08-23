@@ -1,4 +1,4 @@
-INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled) VALUES ('Bojana', 'Todorovic', 'bojana@gmail.com', '$2a$10$EkMSBxxgMXrRULnSNPfm0u/sGvs8mXOkoqt8uNmRlHNA3ucAuFDxK', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'system_administrator', true);
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login) VALUES ('Bojana', 'Todorovic', 'bojana@gmail.com', 'bojana', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'system_administrator', true, false);
 
 INSERT into authority(name) values ('ROLE_SYS_ADMIN');
 INSERT into authority(name) values ('ROLE_PATIENT');

@@ -1,5 +1,6 @@
 package ftn.isa.sistemapoteka.service.impl;
 
+import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.Console;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder;
+    //private PasswordEncoder passwordEncoder;
 
     private AuthorityService authService;
 
@@ -54,13 +56,14 @@ public class UserServiceImpl implements UserService {
         LoyaltyProgram loyaltyProgram = this.loyaltyProgramService.getLP(1L);
         Patient u = new Patient();
         u.setEmail(userRequest.getEmail());
-        u.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        u.setPassword(userRequest.getPassword());
         u.setFirstName(userRequest.getFirstName());
         u.setLastName(userRequest.getLastName());
         u.setCity(userRequest.getCity());
         u.setResidence(userRequest.getResidence());
         u.setState(userRequest.getState());
         u.setPhoneNumber(userRequest.getPhoneNumber());
+        u.setIsFirstLogin(true);
         u.setEnabled(false); //setujemo na true kada korisnik potvrdi registraciju preko emaila
 
         List<Authority> auth = authService.findByName("ROLE_PATIENT");
@@ -204,10 +207,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator, Long pharmId) {
+    public PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator) {
         pharmacyAdministrator.setEnabled(true);
-        pharmacyAdministrator.setPassword(passwordEncoder.encode(pharmacyAdministrator.getPassword()));
-        pharmacyAdministrator.setPharmacy(this.pharmacyService.findById(pharmId));
+        pharmacyAdministrator.setPassword(pharmacyAdministrator.getPassword());
+        pharmacyAdministrator.setIsFirstLogin(true);
 
         List<Authority> auth = authService.findByName("ROLE_PHARMACY_ADMIN");
         pharmacyAdministrator.setAuthorities(auth);
@@ -218,7 +221,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Supplier saveSupplier(Supplier supplier) {
         supplier.setEnabled(true);
-        supplier.setPassword(passwordEncoder.encode(supplier.getPassword()));
+        supplier.setPassword(supplier.getPassword());
 
         List<Authority> auth = authService.findByName("ROLE_SUPPLIER");
         supplier.setAuthorities(auth);
@@ -229,7 +232,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator) {
         systemAdministrator.setEnabled(true);
-        systemAdministrator.setPassword(passwordEncoder.encode(systemAdministrator.getPassword()));
+        systemAdministrator.setPassword(systemAdministrator.getPassword());
+        systemAdministrator.setIsFirstLogin(true);
 
         List<Authority> auth = authService.findByName("ROLE_SYS_ADMIN");
         systemAdministrator.setAuthorities(auth);
@@ -240,14 +244,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Dermatologist saveDermatologist(Dermatologist dermatologist) {
         dermatologist.setEnabled(true);
-        dermatologist.setPassword(passwordEncoder.encode(dermatologist.getPassword()));
+        dermatologist.setPassword(dermatologist.getPassword());
+        dermatologist.setIsFirstLogin(true);
 
         List<Authority> auth = authService.findByName("ROLE_DERMATOLOGIST");
         dermatologist.setAuthorities(auth);
         this.userRepository.save(dermatologist);
         return dermatologist;
     }
-
     @Override
     public List<Dermatologist> showPharmacyDermatologists(Pharmacy pharmacy) {
         Authority authority = new Authority();
@@ -282,6 +286,27 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(pharmacist);
         return pharmacist;
     }
+    @Override
+    public User findByEmailAndPassword(String email, String password) throws Exception {
+        User user = this.userRepository.findByEmailAndPassword(email,password);
+        if (user==null){
+            throw new Exception("User with this credentials doesn't exist.");
+        }
+        return user;
+    }
 
+    @Override
+    public User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c) {
+        user.setPassword(c.getNewPassword());
+        this.userRepository.save(user);
+        return user;
+    }
 
+    public boolean isAuthorized(User user, String role){
+        List<Authority> auth = this.authService.findByName(role);
+        if (user.getAuthorities().equals(auth)){
+            return true;
+        }
+        return false;
+    }
 }

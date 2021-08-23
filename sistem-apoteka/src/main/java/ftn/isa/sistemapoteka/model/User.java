@@ -30,20 +30,15 @@ public class User implements UserDetails {
     private Long id;
 
     @Column
-    @NotEmpty(message = "This field can not be empty")
     private String firstName;
 
     @Column
-    @NotEmpty(message = "This field can not be empty")
     private String lastName;
 
     @Column
-    @NotEmpty(message = "This field can not be empty")
     private String email;
 
     @Column(nullable = false)
-    @NotEmpty(message = "This field can not be empty")
-    //@JsonIgnore
     private String password;
 
     @Column
@@ -69,6 +64,9 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
     private List<Authority> authorities;
+
+    @Column
+    private Boolean isFirstLogin;
 
     @Override
     public String getUsername() {

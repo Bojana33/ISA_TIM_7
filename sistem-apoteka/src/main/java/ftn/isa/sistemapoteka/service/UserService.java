@@ -1,5 +1,6 @@
 package ftn.isa.sistemapoteka.service;
 
+import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.model.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public interface UserService {
     String confirmToken(String token);
 
     String buildEmail(String name, String link);
+    PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator);
 
     PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator, Long pharmId);
 
@@ -26,10 +28,12 @@ public interface UserService {
     SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator);
 
     Dermatologist saveDermatologist(Dermatologist dermatologist);
-
+    User findByEmailAndPassword(String email, String password) throws Exception;
+    User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c);
     List<Dermatologist> showPharmacyDermatologists(Pharmacy pharmacy);
 
     List<Dermatologist> filterDermatologistByRating(Integer rating, Pharmacy pharmacy);
 
     Pharmacist savePharmacist(Pharmacist pharmacist);
+
 }

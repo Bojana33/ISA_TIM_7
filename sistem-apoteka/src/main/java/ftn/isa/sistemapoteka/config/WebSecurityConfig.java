@@ -16,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -52,11 +53,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
-                .authorizeRequests().antMatchers("/auth/**").permitAll().antMatchers("/api/foo").permitAll()
+                .authorizeRequests().antMatchers("/auth/**").permitAll().antMatchers("/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService),
-                        BasicAuthenticationFilter.class);
+                        BasicAuthenticationFilter.class)
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
     }
 
