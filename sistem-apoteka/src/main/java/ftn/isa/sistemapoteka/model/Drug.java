@@ -29,6 +29,12 @@ public class Drug implements Serializable {
     private String name;
 
     @Column
+    private Double averageRating = 0.0;
+
+    @ElementCollection
+    private Set<Integer> ratings;
+
+    @Column
     private String contraindications;
 
     @Column
