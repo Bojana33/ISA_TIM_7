@@ -19,15 +19,15 @@
 <body>
     <div th:align="center" sec:authorize="hasRole('SYS_ADMIN')">
         <h4>Welcome Admin</h4>
-        <a th:href="${'myPharmacy/user/sys-admin/home'}">Home</a>
+        <a th:href="${'sys-admin/home'}">Home</a>
     </div>
     <div th:align="center" sec:authorize="hasRole('SUPPLIER')">
         <h4>Welcome Supplier</h4>
-        <a th:href="${'myPharmacy/user/supplier/home'}">Home</a>
+        <a th:href="${'supplier/home'}">Home</a>
     </div>
     <div th:align="center" sec:authorize="hasRole('PATIENT')">
         <h4>Welcome Patient</h4>
-        <a th:href="${'myPharmacy/user/patient/home'}">Home</a>
+        <a th:href="${'patient/home'}">Home</a>
     </div>
 
 </body>

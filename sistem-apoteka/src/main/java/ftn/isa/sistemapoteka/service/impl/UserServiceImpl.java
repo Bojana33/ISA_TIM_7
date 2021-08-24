@@ -63,7 +63,6 @@ public class UserServiceImpl implements UserService {
         u.setResidence(userRequest.getResidence());
         u.setState(userRequest.getState());
         u.setPhoneNumber(userRequest.getPhoneNumber());
-        u.setIsFirstLogin(true);
         u.setEnabled(false); //setujemo na true kada korisnik potvrdi registraciju preko emaila
 
         u.setUserRole(UserRole.PATIENT);

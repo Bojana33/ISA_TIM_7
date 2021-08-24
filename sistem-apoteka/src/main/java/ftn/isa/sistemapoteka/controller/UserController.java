@@ -5,6 +5,7 @@ import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.service.UserService;
 import ftn.isa.sistemapoteka.service.impl.PharmacyServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
@@ -26,7 +27,15 @@ public class UserController {
 
     @GetMapping("/index")
     @PreAuthorize("hasAnyRole('SYS_ADMIN','PATIENT','SUPPLIER')")
-    public ModelAndView indexPage(){
+    public ModelAndView indexPage(Authentication auth) throws Exception{
+        User u = this.userService.findByEmail(auth.getName());
+        if (u.getEnabled()==false){
+            throw new Exception("Your account is not activated, please check your email!");
+        }
+        if (u.getIsFirstLogin()){
+            u.setIsFirstLogin(false);
+            return new ModelAndView("redirect:/auth/change-password");
+        }
         return new ModelAndView("indexPage");
     }
 
@@ -71,7 +80,7 @@ public class UserController {
         }
         user.setPharmacy(this.pharmacyService.findById(pharmacyId));
         this.userService.savePharmacyAdmin(user);
-        return new ModelAndView("redirect:/auth/sys-admin/home");
+        return new ModelAndView("redirect:/user/sys-admin/home");
     }
 
     @GetMapping("/registerSupplier")
@@ -89,7 +98,7 @@ public class UserController {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }
         this.userService.saveSupplier(user);
-        return new ModelAndView("redirect:/auth/sys-admin/home");
+        return new ModelAndView("redirect:/user/sys-admin/home");
     }
 
     @GetMapping("/registerSystemAdmin")
@@ -107,7 +116,7 @@ public class UserController {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }
         this.userService.saveSystemAdmin(user);
-        return new ModelAndView("redirect:/auth/sys-admin/home");
+        return new ModelAndView("redirect:/user/sys-admin/home");
     }
 
     @GetMapping("/registerDermatologist")
@@ -125,7 +134,7 @@ public class UserController {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }
         this.userService.saveDermatologist(user);
-        return new ModelAndView("redirect:/auth/sys-admin/home");
+        return new ModelAndView("redirect:/user/sys-admin/home");
     }
 
 }

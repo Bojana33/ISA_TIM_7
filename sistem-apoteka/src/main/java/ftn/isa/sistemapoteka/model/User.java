@@ -58,7 +58,7 @@ public class User implements Serializable {
     UserRole userRole;
 
     @Column
-    private Boolean isFirstLogin;
+    private Boolean isFirstLogin = false;
 
 
     public User(@NotEmpty(message = "This field can not be empty") String firstName, @NotEmpty(message = "This field can not be empty") String username, @NotEmpty(message = "This field can not be empty") String lastName, @NotEmpty(message = "This field can not be empty") String email, @NotEmpty(message = "This field can not be empty") String password, String residence, String city, String state, String phoneNumber, boolean enabled, Timestamp lastPasswordResetDate) {
