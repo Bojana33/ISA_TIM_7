@@ -20,12 +20,12 @@
 <h1 class="container center-align">Login</h1>
 
 <div class="container">
-    <form th:action="@{/auth/login-submit}" th:object="${user}" method="post">
+    <form th:action="@{/auth/login}"  method="post">
 
         <br><label for="email">Email:</label>
-        <input id="email" type="email" th:field="*{email}"/>
+        <input id="email" type="email" name="email" />
         <br><label for="password">Password:</label>
-        <input id="password" type="password" th:field="*{password}"/>
+        <input id="password" type="password" name="password"/>
         <br>
         <input class="btn grey lighten-4 black-text" type="submit">
     </form>

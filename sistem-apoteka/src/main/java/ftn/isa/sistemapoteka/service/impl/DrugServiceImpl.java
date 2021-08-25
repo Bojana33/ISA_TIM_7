@@ -35,8 +35,15 @@ public class DrugServiceImpl implements DrugService {
 
     @Override
     public Drug saveDrug(Drug drug) {
-        this.drugRepository.save(drug);
-        return drug;
+        Drug d = new Drug();
+        d.setName(drug.getName());
+        d.setCode(drug.getCode());
+        d.setDrugType(drug.getDrugType());
+        d.setContraindications(drug.getContraindications());
+        d.setStructure(drug.getStructure());
+        d.setDailyIntake(drug.getDailyIntake());
+        this.drugRepository.save(d);
+        return d;
     }
 
     @Override
