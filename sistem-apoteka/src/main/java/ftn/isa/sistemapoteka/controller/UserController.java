@@ -3,6 +3,7 @@ package ftn.isa.sistemapoteka.controller;
 import ftn.isa.sistemapoteka.exception.ResourceConflictException;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.service.UserService;
+import ftn.isa.sistemapoteka.service.impl.LoyaltyProgramServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.PharmacyServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
 import org.springframework.security.core.Authentication;
@@ -18,11 +19,13 @@ public class UserController {
 
     private UserServiceImpl userService;
     private PharmacyServiceImpl pharmacyService;
+    private LoyaltyProgramServiceImpl loyaltyProgramService;
 
     @Autowired
-    public UserController(UserServiceImpl userService, PharmacyServiceImpl pharmacyService){
+    public UserController(UserServiceImpl userService, PharmacyServiceImpl pharmacyService, LoyaltyProgramServiceImpl loyaltyProgramService){
         this.pharmacyService = pharmacyService;
         this.userService = userService;
+        this.loyaltyProgramService = loyaltyProgramService;
     }
 
     @GetMapping("/index")
@@ -47,7 +50,9 @@ public class UserController {
 
     @GetMapping("/sys-admin/home")
     @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ModelAndView sysAdminHome(){
+    public ModelAndView sysAdminHome(Model model){
+        LoyaltyProgram loyaltyProgram = this.loyaltyProgramService.getLP(1L);
+        model.addAttribute("loyaltyProgram", loyaltyProgram);
         return new ModelAndView("sys-admin-home");
     }
 

@@ -17,7 +17,12 @@ public class LoyaltyProgramServiceImpl implements LoyaltyProgramService {
     }
 
     @Override
-    public LoyaltyProgram saveLP(LoyaltyProgram loyaltyProgram) throws Exception{
+    public LoyaltyProgram getLP(Long id) {
+        return this.loyaltyProgramRepository.getOne(id);
+    }
+
+    @Override
+    public LoyaltyProgram updateLP(LoyaltyProgram loyaltyProgram) throws Exception {
         if (loyaltyProgram.getGoldPoints() < loyaltyProgram.getSilverPoints() || loyaltyProgram.getGoldPoints() < loyaltyProgram.getRegularPoints()){
             throw new Exception("Gold points must be greater than silver and regular points");
         }
@@ -27,11 +32,15 @@ public class LoyaltyProgramServiceImpl implements LoyaltyProgramService {
         if (loyaltyProgram.getRegularPoints() > loyaltyProgram.getSilverPoints() || loyaltyProgram.getRegularPoints() > loyaltyProgram.getGoldPoints()){
             throw new Exception("Regular points must be less than silver and gold points");
         }
-        return this.loyaltyProgramRepository.save(loyaltyProgram);
-    }
-
-    @Override
-    public LoyaltyProgram getLP(Long id) {
-        return this.loyaltyProgramRepository.getOne(id);
+        LoyaltyProgram lp = this.loyaltyProgramRepository.getOne(1L);
+        lp.setAppointmentPoints(loyaltyProgram.getAppointmentPoints());
+        lp.setConsultationPoints(loyaltyProgram.getConsultationPoints());
+        lp.setDiscountGold(loyaltyProgram.getDiscountGold());
+        lp.setDiscountRegular(loyaltyProgram.getDiscountRegular());
+        lp.setDiscountSilver(loyaltyProgram.getDiscountSilver());
+        lp.setGoldPoints(loyaltyProgram.getGoldPoints());
+        lp.setRegularPoints(loyaltyProgram.getRegularPoints());
+        lp.setSilverPoints(loyaltyProgram.getSilverPoints());
+        return this.loyaltyProgramRepository.save(lp);
     }
 }
