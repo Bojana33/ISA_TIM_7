@@ -17,7 +17,12 @@
     <title>Patient</title>
 </head>
 <body>
-<h1 class="container center-align">Patient Home</h1>
+<div class="center-block">
+    <h1 class="container center-align">Patient Home</h1>
+    <a th:href="${'/myPharmacy/auth/logout'}">Logout</a>
+    <br>
+    <a th:href="${'/myPharmacy/drugs/'}">Drugs</a>
+</div>
 
 </body>
 </html>

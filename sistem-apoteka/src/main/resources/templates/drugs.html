@@ -21,7 +21,7 @@
 <h3>Drugs</h3>
 <br>
 <div class="row" sec:authorize="hasRole('SYS_ADMIN')">
-    <a>Add New Drug</a>
+    <a th:href="${'/myPharmacy/drugs/addDrug'}">Add New Drug</a>
 </div>
 <br>
 <div class="table">
