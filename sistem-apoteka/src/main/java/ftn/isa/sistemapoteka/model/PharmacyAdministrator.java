@@ -14,6 +14,9 @@ public class PharmacyAdministrator extends User {
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private Set<OrderForm> created = new HashSet<>();
 
+   /* @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
+    private Set<Days> vacationRequests = new HashSet<>();*/
+
     public Pharmacy getPharmacy() {
         return pharmacy;
     }

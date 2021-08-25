@@ -21,8 +21,15 @@ public class Days implements Serializable {
     private Long id;
 
     @ManyToOne(targetEntity = Pharmacist.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "dermatologist_id", referencedColumnName = "id")
+    private Dermatologist dermatologist;
+
+    @ManyToOne(targetEntity = Pharmacist.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "pharmacist_id", referencedColumnName = "id")
+    private Pharmacist pharmacist;
+
+    /*@ManyToOne(targetEntity = Pharmacy.class)
+    private PharmacyAdministrator admin;*/
 
     @Column
     private LocalDate beggining;
@@ -40,11 +47,13 @@ public class Days implements Serializable {
     private boolean vacationApproved;
 
     @Column
+    private boolean vacationReviewed;
+
+    @Column
     private LocalTime dayBeggining;
 
     @Column
     private LocalTime dayEnd;
-
 
 
 }

@@ -9,10 +9,8 @@ import ftn.isa.sistemapoteka.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.Console;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +22,6 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    //private PasswordEncoder passwordEncoder;
-
     private AuthorityService authService;
 
     private ConfirmationTokenServiceImpl confirmationTokenService;
@@ -35,7 +31,6 @@ public class UserServiceImpl implements UserService {
     private PharmacyServiceImpl pharmacyService;
 
     private LoyaltyProgramServiceImpl loyaltyProgramService;
-
 
 
     @Override
@@ -81,31 +76,31 @@ public class UserServiceImpl implements UserService {
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
         String link = "http://localhost:8081/myPharmacy/auth/confirm?token=" + token;
-        emailSender.send(userRequest.getEmail(),buildEmail(userRequest.getFirstName(),link));
+        emailSender.send(userRequest.getEmail(), buildEmail(userRequest.getFirstName(), link));
         return u;
     }
 
-    public UserCategory defineUserCategory(Patient patient,LoyaltyProgram loyaltyProgram){
-        if (patient.getLoyaltyPoints() >= loyaltyProgram.getRegularPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getSilverPoints()){
+    public UserCategory defineUserCategory(Patient patient, LoyaltyProgram loyaltyProgram) {
+        if (patient.getLoyaltyPoints() >= loyaltyProgram.getRegularPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getSilverPoints()) {
             return UserCategory.REGULAR;
         }
-        if (patient.getLoyaltyPoints() >= loyaltyProgram.getSilverPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getGoldPoints()){
+        if (patient.getLoyaltyPoints() >= loyaltyProgram.getSilverPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getGoldPoints()) {
             return UserCategory.SILVER;
         }
-        if (patient.getLoyaltyPoints() >=  loyaltyProgram.getGoldPoints()){
+        if (patient.getLoyaltyPoints() >= loyaltyProgram.getGoldPoints()) {
             return UserCategory.GOLD;
         }
         return null;
     }
 
-    public Integer discount(Patient patient, LoyaltyProgram loyaltyProgram){
-        if (patient.getUserCategory() == UserCategory.GOLD){
+    public Integer discount(Patient patient, LoyaltyProgram loyaltyProgram) {
+        if (patient.getUserCategory() == UserCategory.GOLD) {
             return loyaltyProgram.getDiscountGold();
         }
-        if (patient.getUserCategory() == UserCategory.SILVER){
+        if (patient.getUserCategory() == UserCategory.SILVER) {
             return loyaltyProgram.getDiscountSilver();
         }
-        if (patient.getUserCategory() == UserCategory.REGULAR){
+        if (patient.getUserCategory() == UserCategory.REGULAR) {
             return loyaltyProgram.getDiscountRegular();
         }
         return -1;
@@ -218,6 +213,7 @@ public class UserServiceImpl implements UserService {
         return pharmacyAdministrator;
     }
 
+
     @Override
     public Supplier saveSupplier(Supplier supplier) {
         supplier.setEnabled(true);
@@ -252,11 +248,19 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(dermatologist);
         return dermatologist;
     }
+
     @Override
     public List<Dermatologist> showPharmacyDermatologists(Pharmacy pharmacy) {
         Authority authority = new Authority();
         authority.setName("ROLE_DERMATOLOGIST");
         return this.userRepository.findUsersByAuthoritiesIsDermatologist(authority);
+    }
+
+    @Override
+    public List<Pharmacist> showPharmacyPharmacists(Pharmacy pharmacy) {
+        Authority authority = new Authority();
+        authority.setName("ROLE_PHARMACIST");
+        return this.userRepository.findUsersByAuthoritiesIsPharmacist(authority);
     }
 
     @Override
@@ -267,8 +271,55 @@ public class UserServiceImpl implements UserService {
         for (Dermatologist d :
                 dermatologists) {
             if (r + 0.5 > d.getAverageRating() && r - 0.5 < d.getAverageRating()) {
-
                 ret.add(d);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public List<Pharmacist> filterPharmacistByRating(Integer rating, Pharmacy pharmacy) {
+        List<Pharmacist> pharmacist = showPharmacyPharmacists(pharmacy);
+        List<Pharmacist> ret = new ArrayList<>();
+        Double r = Double.valueOf(rating);
+        for (Pharmacist d :
+                pharmacist) {
+            if (r + 0.5 > d.getAverageRating() && r - 0.5 < d.getAverageRating()) {
+                ret.add(d);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public List<Dermatologist> findDermatologistByNameOrSurname(String name, String surname, Pharmacy pharmacy) {
+        List<Dermatologist> dermatologists = showPharmacyDermatologists(pharmacy);
+        List<Dermatologist> matches = this.userRepository.findDermatologistsByFirstNameContainingAndLastNameContaining(name, surname);
+        List<Dermatologist> ret = new ArrayList<>();
+        for (Dermatologist d :
+                dermatologists) {
+            for (Dermatologist m :
+                    matches) {
+                if (d.getId().equals(m.getId())) {
+                    ret.add(d);
+                }
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public List<Pharmacist> findPharmacistByNameOrSurname(String name, String surname, Pharmacy pharmacy) {
+        List<Pharmacist> pharmacists = showPharmacyPharmacists(pharmacy);
+        List<Pharmacist> matches = this.userRepository.findPharmacistByFirstNameContainingAndLastNameContaining(name, surname);
+        List<Pharmacist> ret = new ArrayList<>();
+        for (Pharmacist d :
+                pharmacists) {
+            for (Pharmacist m :
+                    matches) {
+                if (d.getId().equals(m.getId())) {
+                    ret.add(d);
+                }
             }
         }
         return ret;
@@ -278,18 +329,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public Pharmacist savePharmacist(Pharmacist pharmacist) {
         pharmacist.setEnabled(true);
-        pharmacist.setPassword(passwordEncoder.encode(pharmacist.getPassword()));
-
+        pharmacist.setPassword(pharmacist.getPassword());
         List<Authority> auth = authService.findByName("ROLE_PHARMACIST");
         pharmacist.setAuthorities(auth);
 
         this.userRepository.save(pharmacist);
         return pharmacist;
     }
+
     @Override
     public User findByEmailAndPassword(String email, String password) throws Exception {
-        User user = this.userRepository.findByEmailAndPassword(email,password);
-        if (user==null){
+        User user = this.userRepository.findByEmailAndPassword(email, password);
+        if (user == null) {
             throw new Exception("User with this credentials doesn't exist.");
         }
         return user;
@@ -302,11 +353,8 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public boolean isAuthorized(User user, String role){
+    public boolean isAuthorized(User user, String role) {
         List<Authority> auth = this.authService.findByName(role);
-        if (user.getAuthorities().equals(auth)){
-            return true;
-        }
-        return false;
+        return user.getAuthorities().equals(auth);
     }
 }

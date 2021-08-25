@@ -19,20 +19,30 @@ public interface UserService {
     String confirmToken(String token);
 
     String buildEmail(String name, String link);
-    PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator);
 
-    PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator, Long pharmId);
+    PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator);
 
     Supplier saveSupplier(Supplier supplier);
 
     SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator);
 
     Dermatologist saveDermatologist(Dermatologist dermatologist);
+
     User findByEmailAndPassword(String email, String password) throws Exception;
+
     User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c);
+
     List<Dermatologist> showPharmacyDermatologists(Pharmacy pharmacy);
 
+    List<Pharmacist> showPharmacyPharmacists(Pharmacy pharmacy);
+
     List<Dermatologist> filterDermatologistByRating(Integer rating, Pharmacy pharmacy);
+
+    List<Pharmacist> filterPharmacistByRating(Integer rating, Pharmacy pharmacy);
+
+    List<Dermatologist> findDermatologistByNameOrSurname(String name, String surname, Pharmacy pharmacy);
+
+    List<Pharmacist> findPharmacistByNameOrSurname(String name, String surname, Pharmacy pharmacy);
 
     Pharmacist savePharmacist(Pharmacist pharmacist);
 

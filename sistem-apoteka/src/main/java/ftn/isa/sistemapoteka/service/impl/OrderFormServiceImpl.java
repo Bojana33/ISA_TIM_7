@@ -80,7 +80,7 @@ public class OrderFormServiceImpl implements OrderFormService {
         }
 
         emailSender.send(offer.getSupplier().getEmail(), buildEmail(offer.getOrderForm(), offer));
-        return null;
+        return offer;
     }
 
     @Override

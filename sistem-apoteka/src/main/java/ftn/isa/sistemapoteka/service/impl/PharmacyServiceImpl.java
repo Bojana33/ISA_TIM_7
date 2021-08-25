@@ -12,10 +12,9 @@ import ftn.isa.sistemapoteka.service.PharmacyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -51,11 +50,11 @@ public class PharmacyServiceImpl implements PharmacyService {
     public List<Pharmacy> findAll() {
         return this.pharmacyRepository.findAll();
     }
-}
+
 
     @Override
     public boolean removePharmacist(Pharmacy pharmacy, Pharmacist pharmacist) {
-        boolean ret = false;
+        boolean ret;
         if (this.consultationRepository.getConsultationsByPharmacist(pharmacist).size() > 0) {
             Set<Pharmacist> pharmacists = pharmacy.getPharmacists();
             ret = pharmacists.remove(pharmacist);
@@ -68,7 +67,7 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public List<Pharmacist> findPharmacistByName(Pharmacy pharmacy, String name) {
-        List<Pharmacist> pharmacists = null;
+        List<Pharmacist> pharmacists = new ArrayList<>();
         List<User> users = userRepository.findUserByFirstNameContaining(name);
         for (Pharmacist pharmacist :
                 pharmacy.getPharmacists()) {
@@ -88,7 +87,7 @@ public class PharmacyServiceImpl implements PharmacyService {
         pharmacy.setPharmacists(pharmacists);
 
         Days d = new Days();
-        d.setUser(pharmacist);
+        d.setPharmacist(pharmacist);
         d.setBeggining(beggining);
         d.setDayBeggining(dayBeggining);
         d.setDayEnd(dayEnd);
