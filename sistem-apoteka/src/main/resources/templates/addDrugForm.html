@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Add Drug</title>
+</head>
+<body>
+<div class="container">
+    <div class="center-align orange lighten-5">
+        <h1>Add Drug</h1>
+        <form th:action="@{/drugs/addDrug/submit}" th:object="${drug}" method="post">
+            <br><label for="name">Name:</label>
+            <input id="name" type="text" th:field="*{name}"/>
+            <br><label for="code">Code:</label>
+            <input id="code" type="number" th:field="*{code}"/>
+            <br><label for="producer">Producer:</label>
+            <input id="producer" type="text" th:field="*{producer}"/>
+            <br><label for="additionalNote">Additional Note:</label>
+            <input id="additionalNote" type="text" th:field="*{additionalNote}"/>
+            <br><label for="loyaltyPoints">Loyalty Points:</label>
+            <input id="loyaltyPoints" type="number" th:field="*{loyaltyPoints}"/>
+
+            <div class="form-group">
+                <label for="drugType">Type:</label>
+                <select class="form-control" id="drugType" th:field="*{drugType}">
+                    <option value="">Select a type</option>
+                    <option th:each="drugTypeOpt : ${T(ftn.isa.sistemapoteka.model.DrugType).values()}"
+                            th:value="${drugTypeOpt}"
+                            th:text="${drugTypeOpt.getDisplayName()}"></option>
+                </select>
+            </div>
+            <br>
+
+            <div class="form-group">
+                <label for="drugShape">Shape:</label>
+                <select class="form-control" id="drugShape" th:field="*{drugShape}">
+                    <option value="">Select a shape</option>
+                    <option th:each="drugShapeOpt : ${T(ftn.isa.sistemapoteka.model.DrugShape).values()}"
+                            th:value="${drugShapeOpt}"
+                            th:text="${drugShapeOpt.getDisplayName()}"></option>
+                </select>
+            </div>
+            <br>
+
+            <div class="radio">
+                <label>On Prescription:</label>
+                <input type="radio" th:field="*{onPrescription}" value="1" th:checked="checked">Yes
+                <input type="radio" th:field="*{onPrescription}" value="0">No
+            </div>
+
+            <br>
+            <h4>Drug Specification</h4>
+            <br><label for="contraindications">Contraindications:</label>
+            <input id="contraindications" type="text" th:field="*{contraindications}"/>
+            <br><label for="structure">Structure:</label>
+            <input id="structure" type="text" th:field="*{structure}"/>
+            <br><label for="state">Daily Intake:</label>
+            <input id="state" type="number" th:field="*{dailyIntake}"/>
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-success">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

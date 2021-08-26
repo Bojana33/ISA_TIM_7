@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head sec:authorize="hasRole('SYS_ADMIN')">
+<head>
     <meta charset="UTF-8">
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -25,6 +25,14 @@
 <a th:href="${'/myPharmacy/pharmacies/allPharmacies'}">Pharmacies</a>
 <br>
 <a th:href="${'/myPharmacy/user/registerDermatologist'}">Register New Dermatologist</a>
+<br>
+<a th:href="${'/myPharmacy/user/registerSupplier'}">Register New Supplier</a>
+<br>
+<a th:href="${'/myPharmacy/user/registerSystemAdmin'}">Register New System Administrator</a>
+<br>
+<a th:href="${'/myPharmacy/drugs/'}">Drugs</a>
+<br>
+<a>Loyalty Program</a>
 
 </body>
 </html>

@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     private LoyaltyProgramServiceImpl loyaltyProgramService;
 
     @Override
-    public User findByEmail(String email) throws UsernameNotFoundException {
+    public User findByEmail(String email) {
         User u = userRepository.findByEmail(email);
         return u;
     }
@@ -84,11 +84,11 @@ public class UserServiceImpl implements UserService {
         u.setResidence(userRequest.getResidence());
         u.setState(userRequest.getState());
         u.setPhoneNumber(userRequest.getPhoneNumber());
-        u.setIsFirstLogin(true);
         u.setEnabled(false); //setujemo na true kada korisnik potvrdi registraciju preko emaila
-        // TODO: Povezi pacijenta sa loyalty programom
+
         List<Authority> auth = authService.findByName("ROLE_PATIENT");
         u.setAuthorities(auth);
+        u.setUserRole(UserRole.PATIENT);
 
         u = this.userRepository.save(u);
 
@@ -233,8 +233,8 @@ public class UserServiceImpl implements UserService {
         pharmacyAdministrator.setPassword(pharmacyAdministrator.getPassword());
         pharmacyAdministrator.setIsFirstLogin(true);
 
-        List<Authority> auth = authService.findByName("ROLE_PHARMACY_ADMIN");
-        pharmacyAdministrator.setAuthorities(auth);
+        pharmacyAdministrator.setUserRole(UserRole.PHARMACY_ADMIN);
+
         this.userRepository.save(pharmacyAdministrator);
         return pharmacyAdministrator;
     }
@@ -243,9 +243,10 @@ public class UserServiceImpl implements UserService {
     public Supplier saveSupplier(Supplier supplier) {
         supplier.setEnabled(true);
         supplier.setPassword(supplier.getPassword());
+        supplier.setIsFirstLogin(true);
 
-        List<Authority> auth = authService.findByName("ROLE_SUPPLIER");
-        supplier.setAuthorities(auth);
+        supplier.setUserRole(UserRole.SUPPLIER);
+
         this.userRepository.save(supplier);
         return supplier;
     }
@@ -256,8 +257,8 @@ public class UserServiceImpl implements UserService {
         systemAdministrator.setPassword(systemAdministrator.getPassword());
         systemAdministrator.setIsFirstLogin(true);
 
-        List<Authority> auth = authService.findByName("ROLE_SYS_ADMIN");
-        systemAdministrator.setAuthorities(auth);
+        systemAdministrator.setUserRole(UserRole.SYS_ADMIN);
+
         this.userRepository.save(systemAdministrator);
         return systemAdministrator;
     }
@@ -268,8 +269,8 @@ public class UserServiceImpl implements UserService {
         dermatologist.setPassword(dermatologist.getPassword());
         dermatologist.setIsFirstLogin(true);
 
-        List<Authority> auth = authService.findByName("ROLE_DERMATOLOGIST");
-        dermatologist.setAuthorities(auth);
+        dermatologist.setUserRole(UserRole.DERMATOLOGIST);
+
         this.userRepository.save(dermatologist);
         return dermatologist;
     }
@@ -288,6 +289,14 @@ public class UserServiceImpl implements UserService {
         user.setPassword(c.getNewPassword());
         this.userRepository.save(user);
         return user;
+    }
+
+    public boolean isAuthorized(User user, String role){
+        List<Authority> auth = this.authService.findByName(role);
+        if (user.getAuthorities().equals(auth)){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -310,13 +319,5 @@ public class UserServiceImpl implements UserService {
     public Page<Patient> findPaginatedPatientDrugs(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum-1, pageSize);
         return this.patientRepository.findAll(pageable);
-    }
-
-    public boolean isAuthorized(User user, String role){
-        List<Authority> auth = this.authService.findByName(role);
-        if (user.getAuthorities().equals(auth)){
-            return true;
-        }
-        return false;
     }
 }

@@ -1,67 +1,44 @@
 package ftn.isa.sistemapoteka.config;
 
-import ftn.isa.sistemapoteka.service.impl.CustomUserDetailsService;
-import ftn.isa.sistemapoteka.security.TokenUtils;
-import ftn.isa.sistemapoteka.security.auth.RestAuthenticationEntryPoint;
-import ftn.isa.sistemapoteka.security.auth.TokenAuthenticationFilter;
+import ftn.isa.sistemapoteka.security.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Autowired
-    private TokenUtils tokenUtils;
+    private UserAuthenticationService authenticationService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
-                .authorizeRequests().antMatchers("/auth/**").permitAll().antMatchers("/**").permitAll()
-                .anyRequest().authenticated().and()
-                .cors().and()
-                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService),
-                        BasicAuthenticationFilter.class)
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+                .authorizeRequests()
+                    .antMatchers("/auth/**").permitAll()
+                    .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                    .loginPage("/auth/login")
+                    .permitAll()
+                    .usernameParameter("email")
+                    .passwordParameter("password")
+                    .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+                    .defaultSuccessUrl("/user/index", true).failureUrl("/auth/login")
+                    .and()
+                .logout().logoutSuccessUrl("/auth/home");
 
     }
 
-
-
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationService);
+    }
 }

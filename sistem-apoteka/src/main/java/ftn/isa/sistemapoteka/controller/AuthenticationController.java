@@ -3,12 +3,10 @@ package ftn.isa.sistemapoteka.controller;
 import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.dto.UserDTO;
 import ftn.isa.sistemapoteka.model.*;
-import ftn.isa.sistemapoteka.service.impl.CustomUserDetailsService;
 import ftn.isa.sistemapoteka.exception.ResourceConflictException;
-import ftn.isa.sistemapoteka.security.TokenUtils;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,21 +22,9 @@ public class AuthenticationController {
 
     private UserServiceImpl userService;
 
-    private TokenUtils tokenUtils;
-
-    private AuthenticationManager authenticationManager;
-
-    private CustomUserDetailsService userDetailsService;
-
 
     @Autowired
-    public AuthenticationController(TokenUtils tokenUtils,
-                                    AuthenticationManager authenticationManager,
-                                    CustomUserDetailsService userDetailsService,
-                                    UserServiceImpl userService){
-        this.tokenUtils = tokenUtils;
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
+    public AuthenticationController(UserServiceImpl userService){
         this.userService = userService;
     }
 
@@ -46,78 +32,68 @@ public class AuthenticationController {
     public ModelAndView loginForm(Model model) {
         UserDTO user = new UserDTO();
         model.addAttribute("user", user);
-        return new ModelAndView("views/login");
+        return new ModelAndView("login");
     }
 
-    //endpoint za logovanje
-    @PostMapping("/login-submit")
-    public ModelAndView login_submit(@Valid @ModelAttribute UserDTO user, HttpServletRequest request) throws Exception{
-
-        User u = this.userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
-
-        if (u.getEnabled()==false){
-            throw new Exception("Your account is not activated, please check your email!");
-        }
-
-        if (u == null) {
-            throw new Exception("User with this credentials doesn't exist.");
-        }
-
-        HttpSession session = request.getSession();
-        session.setAttribute("email", user.getEmail());
-
-        if (u.getIsFirstLogin()){
-            u.setIsFirstLogin(false);
-            return new ModelAndView("redirect:/auth/change-password");
-        }
-        if (u instanceof Patient){
-            return new ModelAndView("redirect:/profile/p/" + u.getId());
-        } else if(u instanceof SystemAdministrator){
-            return new ModelAndView("redirect:/auth/sys-admin/home");
-        } else {
-            return new ModelAndView("redirect:/auth/home");
-        }
-    }
+//    //endpoint za logovanje
+//    @PostMapping("/login-submit")
+//    public ModelAndView login_submit(@Valid @ModelAttribute UserDTO user, HttpServletRequest request) throws Exception{
+//
+//        User u = this.userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
+//
+//        if (u.getEnabled()==false){
+//            throw new Exception("Your account is not activated, please check your email!");
+//        }
+//
+//        if (u == null) {
+//            throw new Exception("User with this credentials doesn't exist.");
+//        }
+//
+//
+//        if (u.getIsFirstLogin()){
+//            u.setIsFirstLogin(false);
+//            return new ModelAndView("redirect:/auth/change-password");
+//        }
+//        if (u instanceof Patient){
+//            return new ModelAndView("redirect:/user/patient/home");
+//        } else if(u instanceof SystemAdministrator){
+//            return new ModelAndView("redirect:/user/sys-admin/home");
+//        } else if (u instanceof Supplier){
+//            return new ModelAndView("redirect:/user/supplier/home");
+//        }
+//        else {
+//            return new ModelAndView("redirect:/auth/home");
+//        }
+//    }
 
     @GetMapping("/change-password")
     public ModelAndView changePasswordForm(Model model){
         ChangePasswordAfterFirstLoginDTO changePasswordAfterFirstLoginDTO = new ChangePasswordAfterFirstLoginDTO();
         model.addAttribute(changePasswordAfterFirstLoginDTO);
-        return new ModelAndView("views/change-password");
+        return new ModelAndView("change-password");
     }
 
     @PostMapping("/change-password/submit")
-    public ModelAndView cps(@ModelAttribute("changePasswordAfterFirstLoginDTO")@Valid ChangePasswordAfterFirstLoginDTO changePasswordAfterFirstLoginDTO, HttpServletRequest request, BindingResult bindingResult){
+    public ModelAndView cps(@ModelAttribute("changePasswordAfterFirstLoginDTO")@Valid ChangePasswordAfterFirstLoginDTO changePasswordAfterFirstLoginDTO, Authentication auth, BindingResult bindingResult){
 
-        User user = this.userService.findByEmail(request.getSession().getAttribute("email").toString());
+        User user = this.userService.findByEmail(auth.getName());
         this.userService.changePasswordAfterFirstLogin(user,changePasswordAfterFirstLoginDTO);
         if (bindingResult.hasErrors()){
             return new ModelAndView("redirect:/auth/change-password");
         }
         if (user instanceof Patient){
-            return new ModelAndView("redirect:/auth/patient/home");
+            return new ModelAndView("redirect:/user/patient/home");
         } else if(user instanceof SystemAdministrator){
-            return new ModelAndView("redirect:/auth/sys-admin/home");
+            return new ModelAndView("redirect:/user/sys-admin/home");
         } else {
             return new ModelAndView("redirect:/auth/home");
         }
     }
 
-    @GetMapping("/sys-admin/home")
-    public ModelAndView sysAdminHome(HttpServletRequest request, Model model){
-        User user = this.userService.findByEmail(request.getSession().getAttribute("email").toString());
-        model.addAttribute(user);
-        return new ModelAndView("views/sys-admin-home");
-    }
-
-    @GetMapping("/patient/home")
-    public ModelAndView patientHome(){
-        return new ModelAndView("views/patient-home");
-    }
 
     @GetMapping("/home")
     public ModelAndView home(){
-        return new ModelAndView("views/home2");
+        return new ModelAndView("home");
     }
 
     @GetMapping("/logout")
@@ -132,7 +108,7 @@ public class AuthenticationController {
     public ModelAndView registrationForm(Model model){
         UserRequest userRequest = new UserRequest();
         model.addAttribute(userRequest);
-        return new ModelAndView("views/registration");
+        return new ModelAndView("registration");
     }
 
     @PostMapping("/signup/submit")
@@ -151,24 +127,9 @@ public class AuthenticationController {
         return new ModelAndView("redirect:/auth/home");
     }
 
-
     @GetMapping(path = "confirm")
     public String confirm(@RequestParam("token") String token){
         return userService.confirmToken(token);
     }
-//    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
-//    @PreAuthorize("hasAnyRole('PATIENT','SYS_ADMIN','PHARMACIST','PHARMACY_ADMIN','DERMATOLOGIST','SUPPLIER')")
-//    public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
-//        userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
-//
-//        Map<String, String> result = new HashMap<>();
-//        result.put("result", "success");
-//        return ResponseEntity.accepted().body(result);
-//    }
-//
-//    static class PasswordChanger {
-//        public String oldPassword;
-//        public String newPassword;
-//    }
 
 }

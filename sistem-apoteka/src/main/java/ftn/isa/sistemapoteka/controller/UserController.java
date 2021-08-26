@@ -2,16 +2,18 @@ package ftn.isa.sistemapoteka.controller;
 
 import ftn.isa.sistemapoteka.exception.ResourceConflictException;
 import ftn.isa.sistemapoteka.model.*;
+import ftn.isa.sistemapoteka.service.UserService;
 import ftn.isa.sistemapoteka.service.impl.PharmacyServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -24,6 +26,20 @@ public class UserController {
     public UserController(UserServiceImpl userService, PharmacyServiceImpl pharmacyService){
         this.pharmacyService = pharmacyService;
         this.userService = userService;
+    }
+
+    @GetMapping("/index")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN','PATIENT','SUPPLIER')")
+    public ModelAndView indexPage(Authentication auth) throws Exception{
+        User u = this.userService.findByEmail(auth.getName());
+        if (u.getEnabled()==false){
+            throw new Exception("Your account is not activated, please check your email!");
+        }
+        if (u.getIsFirstLogin()){
+            u.setIsFirstLogin(false);
+            return new ModelAndView("redirect:/auth/change-password");
+        }
+        return new ModelAndView("indexPage");
     }
 
     @GetMapping("/{userId}")
@@ -44,52 +60,8 @@ public class UserController {
         return new ModelAndView("views/patientProfile");
     }
 
-    /*@GetMapping("/{id}/loyaltyProgramDetails")
-    public ModelAndView showLoyaltyProgramDetails(@PathVariable Long id, Model model) throws Exception{
-        Patient patient = this.userService.findPatientById(id);
-        if(patient == null) { throw new Exception("Patient does not exist."); }
-
-        model.addAttribute("program", patient);
-
-        return new ModelAndView("views/showLoyaltyDetails");
-    }*/
-
-    @GetMapping("/allergyTriggers/{id}")
-    public ModelAndView showAllergies(@PathVariable Long id, Model model) throws Exception{
-        Patient patient = this.userService.findPatientById(id);
-        if(patient == null) { throw new Exception("Patient does not exist."); }
-
-        model.addAttribute("drugs", patient.getAllergies());
-
-        return new ModelAndView("views/showAllergies");
-    }
-
-    @GetMapping("/addAllergyTrigger/{id}")
-    public ModelAndView addAllergy(@PathVariable Long id, Model model) throws Exception {
-        Patient patient = this.userService.findPatientById(id);
-        if (patient == null) { throw new Exception("Patient with this id does not exist"); }
-        model.addAttribute("patient", patient);
-        model.addAttribute("drug");
-
-        return new ModelAndView("views/addAllergy");
-    }
-
-    @PostMapping("/addAllergyTrigger/{id}/submit")
-    public ModelAndView addAllergy(@PathVariable Long id, Model model, @ModelAttribute Patient patient,
-                                                                    @ModelAttribute Drug drug) throws Exception {
-        try {
-            // TODO: Napravi metod za dodavanje alergija
-            // da li to treba u drugom servisu?
-            //this.userService.addAllergyTriggerToPatient(patient, drug);
-            model.addAttribute("patient", patient);
-            model.addAttribute("drug", drug);
-            return new ModelAndView("redirect:/user/yourAllergies/" + patient.getId());
-        } catch (Exception e) {
-            return new ModelAndView("redirect:/auth/home");
-        }// TODO: napravi stranicu i get metodu
-    }
-
     @GetMapping("/registerPharmacyAdmin/{pharmacyId}")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
     public ModelAndView rpa(Model model, @PathVariable Long pharmacyId){
         PharmacyAdministrator pharmacyAdministrator = new PharmacyAdministrator();
         model.addAttribute(pharmacyAdministrator);
@@ -98,34 +70,54 @@ public class UserController {
     }
 
     @PostMapping(value = "/registerPharmacyAdmin/{pharmacyId}/submit")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
     public ModelAndView registerPharmacyAdmin(@ModelAttribute PharmacyAdministrator user, @PathVariable Long pharmacyId){
         if (this.userService.findByEmail(user.getEmail()) != null) {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }
         user.setPharmacy(this.pharmacyService.findById(pharmacyId));
         this.userService.savePharmacyAdmin(user);
-        return new ModelAndView("redirect:/auth/sys-admin/home");
+        return new ModelAndView("redirect:/user/sys-admin/home");
     }
 
-    @PostMapping(value = "/registerSupplier")
+    @GetMapping("/registerSupplier")
     @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ResponseEntity<Supplier> registerSupplier(@RequestBody Supplier user){
+    public ModelAndView regSupForm(Model model){
+        Supplier supplier = new Supplier();
+        model.addAttribute(supplier);
+        return new ModelAndView("registerSupplier");
+    }
+
+    @PostMapping(value = "/registerSupplier/submit")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    public ModelAndView registerSupplier(@ModelAttribute Supplier user){
         if (this.userService.findByEmail(user.getEmail()) != null) {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }
-        return new ResponseEntity<>(this.userService.saveSupplier(user), HttpStatus.CREATED);
+        this.userService.saveSupplier(user);
+        return new ModelAndView("redirect:/user/sys-admin/home");
     }
 
-    @PostMapping(value = "/registerSystemAdmin")
+    @GetMapping("/registerSystemAdmin")
     @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ResponseEntity<SystemAdministrator> registerSystemAdmin(@RequestBody SystemAdministrator user){
+    public ModelAndView regSysAdminForm(Model model){
+        SystemAdministrator systemAdministrator = new SystemAdministrator();
+        model.addAttribute(systemAdministrator);
+        return new ModelAndView("registerSystemAdmin");
+    }
+
+    @PostMapping(value = "/registerSystemAdmin/submit")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    public ModelAndView registerSystemAdmin(@ModelAttribute SystemAdministrator user){
         if (this.userService.findByEmail(user.getEmail()) != null) {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }
-        return new ResponseEntity<>(this.userService.saveSystemAdmin(user), HttpStatus.CREATED);
+        this.userService.saveSystemAdmin(user);
+        return new ModelAndView("redirect:/user/sys-admin/home");
     }
 
     @GetMapping("/registerDermatologist")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
     public ModelAndView regDermForm(Model model){
         Dermatologist dermatologist = new Dermatologist();
         model.addAttribute(dermatologist);
@@ -133,12 +125,32 @@ public class UserController {
     }
 
     @PostMapping(value = "/registerDermatologist/submit")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
     public ModelAndView registerDermatologist(@ModelAttribute Dermatologist user){
         if (this.userService.findByEmail(user.getEmail()) != null) {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }
         this.userService.saveDermatologist(user);
-        return new ModelAndView("redirect:/auth/sys-admin/home");
+        return new ModelAndView("redirect:/user/sys-admin/home");
     }
+
+    @GetMapping("/sys-admin/home")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    public ModelAndView sysAdminHome(){
+        return new ModelAndView("sys-admin-home");
+    }
+
+    @PreAuthorize("hasRole('PATIENT')")
+    @GetMapping("/patient/home")
+    public ModelAndView patientHome(){
+        return new ModelAndView("patient-home");
+    }
+
+    @PreAuthorize("hasRole('SUPPLIER')")
+    @GetMapping("/supplier/home")
+    public ModelAndView supplierHome(){
+        return new ModelAndView("supplier-home");
+    }
+
 
 }

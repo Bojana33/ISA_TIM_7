@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <!--Import Google Icon Font-->
@@ -14,21 +14,9 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <title>Login</title>
+    <title>Supplier Home</title>
 </head>
 <body>
-<h1 class="container center-align">Login</h1>
 
-<div class="container">
-    <form th:action="@{/auth/login}"  method="post">
-
-        <br><label for="email">Email:</label>
-        <input id="email" type="email" name="email" />
-        <br><label for="password">Password:</label>
-        <input id="password" type="password" name="password"/>
-        <br>
-        <input class="btn grey lighten-4 black-text" type="submit">
-    </form>
-</div>
 </body>
 </html>
