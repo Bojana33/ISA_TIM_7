@@ -19,7 +19,7 @@ import java.util.Set;
 public class Patient extends User {
 
     @Column
-    private Double loyaltyPoints;
+    private Double loyaltyPoints = 0.0;
 
     @ManyToMany(targetEntity = Drug.class)
     @JoinTable(name = "Allergies", joinColumns = @JoinColumn(name = "Patient_id", referencedColumnName = "id"),
@@ -42,7 +42,7 @@ public class Patient extends User {
     private Set<DrugReservation> drugReservations = new HashSet<>();
 
     @Column
-    private UserCategory userCategory;
+    private UserCategory userCategory = UserCategory.NONE;
 
     @Column
     private Integer discount;

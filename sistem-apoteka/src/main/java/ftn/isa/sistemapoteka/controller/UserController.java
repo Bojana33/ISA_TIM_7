@@ -39,6 +39,9 @@ public class UserController {
             u.setIsFirstLogin(false);
             return new ModelAndView("redirect:/auth/change-password");
         }
+        if (u instanceof Patient){
+            this.userService.defineUserCategory((Patient) u);
+        }
         return new ModelAndView("indexPage");
     }
 
