@@ -5,7 +5,6 @@ import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.repository.PatientRepository;
 import ftn.isa.sistemapoteka.repository.UserRepository;
-import ftn.isa.sistemapoteka.service.AuthorityService;
 import ftn.isa.sistemapoteka.service.PharmacyService;
 import ftn.isa.sistemapoteka.service.UserService;
 import lombok.AllArgsConstructor;
@@ -34,8 +33,6 @@ public class UserServiceImpl implements UserService {
     private PatientRepository patientRepository;
 
     //private PasswordEncoder passwordEncoder;
-
-    private AuthorityService authService;
 
     private ConfirmationTokenServiceImpl confirmationTokenService;
 
@@ -86,8 +83,6 @@ public class UserServiceImpl implements UserService {
         u.setPhoneNumber(userRequest.getPhoneNumber());
         u.setEnabled(false); //setujemo na true kada korisnik potvrdi registraciju preko emaila
 
-        List<Authority> auth = authService.findByName("ROLE_PATIENT");
-        u.setAuthorities(auth);
         u.setUserRole(UserRole.PATIENT);
 
         u = this.userRepository.save(u);
@@ -289,14 +284,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(c.getNewPassword());
         this.userRepository.save(user);
         return user;
-    }
-
-    public boolean isAuthorized(User user, String role){
-        List<Authority> auth = this.authService.findByName(role);
-        if (user.getAuthorities().equals(auth)){
-            return true;
-        }
-        return false;
     }
 
     @Override

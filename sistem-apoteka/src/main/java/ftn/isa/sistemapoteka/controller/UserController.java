@@ -53,9 +53,6 @@ public class UserController {
         Patient patient = (Patient) this.userService.findById(id);
         if (patient == null) { throw new Exception("Page does not exist"); }
 
-        // TODO: Odradi proveru da l` je ulogovan
-        // TODO: Razmisli da li treba poseban servis za pacijenta\
-
         model.addAttribute("patient", patient);
         return new ModelAndView("views/patientProfile");
     }
@@ -137,19 +134,17 @@ public class UserController {
     @GetMapping("/sys-admin/home")
     @PreAuthorize("hasRole('SYS_ADMIN')")
     public ModelAndView sysAdminHome(){
-        return new ModelAndView("sys-admin-home");
+        return new ModelAndView("views/sys-admin-home");
     }
 
     @PreAuthorize("hasRole('PATIENT')")
     @GetMapping("/patient/home")
-    public ModelAndView patientHome(){
-        return new ModelAndView("patient-home");
-    }
+    public ModelAndView patientHome(){ return new ModelAndView("views/patient-home"); }
 
     @PreAuthorize("hasRole('SUPPLIER')")
     @GetMapping("/supplier/home")
     public ModelAndView supplierHome(){
-        return new ModelAndView("supplier-home");
+        return new ModelAndView("views/supplier-home");
     }
 
 

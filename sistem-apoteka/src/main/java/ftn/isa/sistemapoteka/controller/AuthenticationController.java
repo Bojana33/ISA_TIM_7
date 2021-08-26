@@ -32,7 +32,7 @@ public class AuthenticationController {
     public ModelAndView loginForm(Model model) {
         UserDTO user = new UserDTO();
         model.addAttribute("user", user);
-        return new ModelAndView("login");
+        return new ModelAndView("views/login");
     }
 
 //    //endpoint za logovanje
@@ -93,7 +93,7 @@ public class AuthenticationController {
 
     @GetMapping("/home")
     public ModelAndView home(){
-        return new ModelAndView("home");
+        return new ModelAndView("views/home");
     }
 
     @GetMapping("/logout")
@@ -108,7 +108,7 @@ public class AuthenticationController {
     public ModelAndView registrationForm(Model model){
         UserRequest userRequest = new UserRequest();
         model.addAttribute(userRequest);
-        return new ModelAndView("registration");
+        return new ModelAndView("views/registration");
     }
 
     @PostMapping("/signup/submit")

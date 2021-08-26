@@ -6,6 +6,7 @@ import ftn.isa.sistemapoteka.model.DrugType;
 import ftn.isa.sistemapoteka.model.Patient;
 import ftn.isa.sistemapoteka.service.DrugService;
 import ftn.isa.sistemapoteka.service.impl.DrugServiceImpl;
+import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
