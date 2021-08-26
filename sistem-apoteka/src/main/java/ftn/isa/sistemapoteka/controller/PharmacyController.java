@@ -24,6 +24,14 @@ public class PharmacyController {
         this.userService = userService;
     }
 
+    @GetMapping("/{id}")
+    public ModelAndView showPharmacyPage(@PathVariable Long id, Model model) throws Exception {
+        if (this.pharmacyService.findById(id) == null) { throw new Exception("Pharmacy with this id does not exist"); }
+        model.addAttribute("pharmacy", this.pharmacyService.findById(id));
+
+        return new ModelAndView("views/pharmacy");
+    }
+
     @GetMapping(value = "/registerPharmacy")
     public ModelAndView registerPharmacyForm(Model model, HttpServletRequest request){
 //        if (request.getSession().getAttribute("email")== null){

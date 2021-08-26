@@ -5,24 +5,16 @@ import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.repository.PatientRepository;
 import ftn.isa.sistemapoteka.repository.UserRepository;
-import ftn.isa.sistemapoteka.service.PharmacyService;
 import ftn.isa.sistemapoteka.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.Console;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -39,6 +31,8 @@ public class UserServiceImpl implements UserService {
     private EmailSender emailSender;
 
     private PharmacyServiceImpl pharmacyService;
+
+    private DrugServiceImpl drugService;
 
     private LoyaltyProgramServiceImpl loyaltyProgramService;
 
@@ -306,5 +300,34 @@ public class UserServiceImpl implements UserService {
     public Page<Patient> findPaginatedPatientDrugs(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum-1, pageSize);
         return this.patientRepository.findAll(pageable);
+    }
+
+    @Override
+    public Patient addAllergyTrigger(Patient patient, Drug drug) throws Exception{
+        Patient p = this.patientRepository.findById(patient.getId()).get();
+        if(p == null) { throw new Exception("Patient with this id does not exist"); }
+        Drug d = this.drugService.findByName(drug.getName()).get(0);
+        if(d == null) { throw new Exception("drug with this code does not exist"); }
+
+        Set<Drug> triggers = p.getAllergyTriggers();
+        triggers.add(d);
+        p.setAllergyTriggers(triggers);
+
+        Set<Patient> patientsWithAllergies = d.getPatientsWithAllergies();
+        patientsWithAllergies.add(p);
+        d.setPatientsWithAllergies(patientsWithAllergies);
+
+        savePatient(p);
+        this.drugService.saveDrug(d);
+
+        return p;
+    }
+
+    @Override
+    public Patient savePatient(Patient patient) throws Exception {
+        Patient p = this.patientRepository.findById(patient.getId()).get();
+        if(p == null) { throw new Exception("Patient with this id does not exist"); }
+
+        return this.userRepository.save(p);
     }
 }

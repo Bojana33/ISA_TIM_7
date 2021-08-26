@@ -13,7 +13,7 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <title>Profile</title>
+    <title>appointment slots</title>
 </head>
 <body>
 
@@ -70,30 +70,32 @@
                     <div id="profile">
                         <div class="row">
                             <div class="col-md-6">
-                                <label>Name</label>
+                                <label>Pharmacy name</label>
                             </div>
                             <div class="col-md-6">
                                 <p th:text="${pharmacy.name}"></p>
                             </div>
+                        </div> </br></br>
+
+                        <!--TABELA SA TERMINIMA-->
+                        <div th:object="${appointments}">
+                            <table id="appointments" width="90%">
+                                <tr>
+                                    <th>Appointment start:</th>
+                                    <th>Appointment end:</th>
+                                    <th>Dermatologist:</th>
+                                    <th>Price:</th>
+                                </tr>
+                                <tr th:each="appointment:${appointments}">
+                                    <td th:text="${appointment.dateTimeStart}"></td>
+                                    <td th:text="${appointment.dateTimeEnd}"></td>
+                                    <td th:text="${appointment.dermatologist}"></td>
+                                    <td th:text="${appointment.price}"></td>
+                            </table>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Address</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p th:text="${pharmacy.address}"></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Average rating</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p th:text="${pharmacy.averageRating}"></p>
-                            </div>
-                        </div>
+
                         </br></br></br>
-                        <a th:href="${'/appointments/timeSlots'}">Appointment time slots</a>
+
                     </div>
                 </div>
             </div>

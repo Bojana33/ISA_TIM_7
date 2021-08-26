@@ -27,7 +27,10 @@ public class Appointment implements Serializable {
     private Double price;
 
     @Column
-    private LocalDateTime dateTime;
+    private LocalDateTime dateTimeStart;
+
+    @Column
+    private LocalDateTime dateTimeEnd;
 
     @ManyToOne(targetEntity = Dermatologist.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "dermatologist_id", nullable = false, referencedColumnName = "id")

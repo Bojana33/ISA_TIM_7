@@ -3,6 +3,7 @@ package ftn.isa.sistemapoteka.controller;
 import ftn.isa.sistemapoteka.exception.ResourceConflictException;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.service.UserService;
+import ftn.isa.sistemapoteka.service.impl.DrugServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.PharmacyServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
 import org.springframework.security.core.Authentication;
@@ -22,11 +23,13 @@ public class UserController {
 
     private UserServiceImpl userService;
     private PharmacyServiceImpl pharmacyService;
+    private DrugServiceImpl drugService;
 
     @Autowired
-    public UserController(UserServiceImpl userService, PharmacyServiceImpl pharmacyService){
+    public UserController(UserServiceImpl userService, PharmacyServiceImpl pharmacyService, DrugServiceImpl drugService) {
         this.pharmacyService = pharmacyService;
         this.userService = userService;
+        this.drugService = drugService;
     }
 
     @GetMapping("/index")
@@ -64,9 +67,28 @@ public class UserController {
         Patient patient = this.userService.findPatientById(id);
         if(patient == null) { throw new Exception("Patient does not exist."); }
 
-        model.addAttribute("drugs", patient.getAllergies());
+        model.addAttribute("drugs", patient.getAllergyTriggers());
 
         return new ModelAndView("views/showAllergies");
+    }
+
+    @PreAuthorize("hasRole('PATIENT')")
+    @GetMapping("/{id}/allergyTriggers/add")
+    public ModelAndView showAllergyTriggerForm(@PathVariable Long id, Model model) throws Exception{
+        Patient patient = this.userService.findPatientById(id);
+        if(patient == null) { throw new Exception("Patient does not exist."); }
+
+        model.addAttribute("patient", patient);
+        model.addAttribute("drugs", this.drugService.findAllDrugs());
+
+        return new ModelAndView("views/addAllergy");
+    }
+
+    @PostMapping("/{id}/allergyTriggers/add")
+    public ModelAndView addAllergyTrigger(@ModelAttribute Patient patient, @ModelAttribute Drug drug, @PathVariable Long id) throws Exception {
+        this.userService.addAllergyTrigger(patient, drug);
+        // TODO: proveri sta se zapravo vraca sa atributom drug!!!!
+        return new ModelAndView("redirect:/user/" + patient.getId() + "/allergyTriggers");
     }
 
     @GetMapping("/registerPharmacyAdmin/{pharmacyId}")

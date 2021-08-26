@@ -24,4 +24,6 @@ public interface UserService {
 
     Patient updatePatientProfile(Patient patient) throws Exception;
     Page<Patient> findPaginatedPatientDrugs(int pageNum, int pageSize);
+    Patient addAllergyTrigger(Patient patient, Drug drug) throws Exception;
+    Patient savePatient(Patient patient) throws Exception;
 }
