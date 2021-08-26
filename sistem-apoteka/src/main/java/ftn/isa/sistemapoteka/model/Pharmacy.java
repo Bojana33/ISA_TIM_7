@@ -50,8 +50,12 @@ public class Pharmacy implements Serializable {
     @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
     private Set<PharmacyAdministrator> pharmacyAdministrators = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Drug> drugs = new HashSet<>();
+
+    @OneToOne(mappedBy = "pharmacy", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private PharmacyReport pharmacyReport;
 
     public Pharmacy(String name, String address) {
         this.name = name;

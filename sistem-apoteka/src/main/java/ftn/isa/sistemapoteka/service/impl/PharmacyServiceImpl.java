@@ -23,6 +23,7 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     private final PharmacyRepository pharmacyRepository;
 
+
     private ConsultationRepository consultationRepository;
     private UserRepository userRepository;
     private DaysService daysService;

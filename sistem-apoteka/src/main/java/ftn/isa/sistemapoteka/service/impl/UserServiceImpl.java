@@ -4,8 +4,6 @@ import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.repository.UserRepository;
-import ftn.isa.sistemapoteka.service.AuthorityService;
-import ftn.isa.sistemapoteka.service.PharmacyService;
 import ftn.isa.sistemapoteka.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -24,8 +22,6 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     //private PasswordEncoder passwordEncoder;
-
-    private AuthorityService authService;
 
     private ConfirmationTokenServiceImpl confirmationTokenService;
 
@@ -254,16 +250,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Dermatologist> showPharmacyDermatologists(Pharmacy pharmacy) {
-        Authority authority = new Authority();
-        authority.setName("ROLE_DERMATOLOGIST");
-        return this.userRepository.findUsersByAuthoritiesIsDermatologist(authority);
+
+        return (List<Dermatologist>) pharmacy.getDermatologists();
+
     }
 
     @Override
     public List<Pharmacist> showPharmacyPharmacists(Pharmacy pharmacy) {
-        Authority authority = new Authority();
-        authority.setName("ROLE_PHARMACIST");
-        return this.userRepository.findUsersByAuthoritiesIsPharmacist(authority);
+
+        return (List<Pharmacist>) pharmacy.getPharmacists();
     }
 
     @Override
@@ -333,8 +328,7 @@ public class UserServiceImpl implements UserService {
     public Pharmacist savePharmacist(Pharmacist pharmacist) {
         pharmacist.setEnabled(true);
         pharmacist.setPassword(pharmacist.getPassword());
-        List<Authority> auth = authService.findByName("ROLE_PHARMACIST");
-        pharmacist.setAuthorities(auth);
+        pharmacist.setUserRole(UserRole.PHARMACIST);
 
         this.userRepository.save(pharmacist);
         return pharmacist;
@@ -356,8 +350,5 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public boolean isAuthorized(User user, String role) {
-        List<Authority> auth = this.authService.findByName(role);
-        return user.getAuthorities().equals(auth);
-    }
+
 }

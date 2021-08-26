@@ -34,7 +34,7 @@ public class Appointment implements Serializable {
     private Dermatologist dermatologist;
 
     @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "patient_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "patient_id", referencedColumnName = "id")
     private Patient patient;
 
 }

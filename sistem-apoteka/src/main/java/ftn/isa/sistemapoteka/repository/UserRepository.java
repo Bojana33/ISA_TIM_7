@@ -1,10 +1,11 @@
 package ftn.isa.sistemapoteka.repository;
 
 
-import ftn.isa.sistemapoteka.model.Authority;
+
 import ftn.isa.sistemapoteka.model.Dermatologist;
 import ftn.isa.sistemapoteka.model.Pharmacist;
 import ftn.isa.sistemapoteka.model.User;
+import ftn.isa.sistemapoteka.model.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,9 +25,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<Pharmacist> findPharmacistByFirstNameContainingAndLastNameContaining(String firstName, String lastName);
 
-    List<Dermatologist> findUsersByAuthoritiesIsDermatologist(Authority authority);
+    List<Dermatologist> findDermatologistsByUserRole(UserRole userRole);
 
-    List<Pharmacist> findUsersByAuthoritiesIsPharmacist(Authority authority);
+    List<Pharmacist> findPharmacistsByUserRole(UserRole userRole);
 
     @Transactional
     @Modifying
