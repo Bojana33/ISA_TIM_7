@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
 
 @Controller
@@ -49,12 +50,23 @@ public class UserController {
     }
 
     @GetMapping("/patientHome/{id}")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView showProfile(@PathVariable Long id, Model model) throws Exception {
         Patient patient = (Patient) this.userService.findById(id);
         if (patient == null) { throw new Exception("Page does not exist"); }
 
         model.addAttribute("patient", patient);
         return new ModelAndView("views/patientProfile");
+    }
+
+    @GetMapping("/{id}/allergyTriggers")
+    public ModelAndView showAllergies(@PathVariable Long id, Model model) throws Exception{
+        Patient patient = this.userService.findPatientById(id);
+        if(patient == null) { throw new Exception("Patient does not exist."); }
+
+        model.addAttribute("drugs", patient.getAllergies());
+
+        return new ModelAndView("views/showAllergies");
     }
 
     @GetMapping("/registerPharmacyAdmin/{pharmacyId}")

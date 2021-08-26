@@ -3,12 +3,14 @@ package ftn.isa.sistemapoteka.controller;
 import ftn.isa.sistemapoteka.model.Patient;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @Controller
@@ -19,6 +21,7 @@ public class ProfileController {
     @Autowired
     public ProfileController(UserServiceImpl userService) { this.userService = userService; }
 
+    @PreAuthorize("hasRole('PATIENT')")
     @GetMapping("/p/{id}")
     public ModelAndView showPatientProfile(@PathVariable Long id, Model model) throws Exception {
         Patient patient = this.userService.findPatientById(id);
@@ -29,8 +32,7 @@ public class ProfileController {
         return new ModelAndView("views/patientProfile");
     }
 
-
-
+    @PreAuthorize("hasRole('PATIENT')")
     @GetMapping("/p/{id}/editProfile")
     public ModelAndView updateProfile(@PathVariable Long id, Model model) throws Exception{
         Patient patient = this.userService.findPatientById(id);
@@ -40,6 +42,7 @@ public class ProfileController {
         return new ModelAndView("views/editProfile");
     }
 
+    @PreAuthorize("hasRole('PATIENT')")
     @PostMapping("/p/{id}/editProfile/submit")
     public ModelAndView updateProfile(@Valid @ModelAttribute Patient patient, Model model, BindingResult bindingResult,
                                       @PathVariable Long id) throws Exception{
