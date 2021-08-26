@@ -67,6 +67,11 @@ public class Drug implements Serializable {
     @Column
     private DrugShape drugShape;
 
+    @ManyToMany
+    @JoinTable(name = "AllergyTriggers", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))
+    private Set<Patient> patientsWithAllergies = new HashSet<>();
+
     public Drug(Long code, String name, String contraindications, String structure, int dailyIntake, Boolean reserved, String producer, Boolean onPrescription, String additionalNote, Integer loyaltyPoints, Integer quantity, Double price, DrugType drugType, DrugShape drugShape, Set<Long> replacementDrugs) {
         this.code = code;
         this.name = name;

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -52,4 +53,12 @@ public class Patient extends User {
             , inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))
     private Set<Pharmacy> subscriptions = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "AllergyTriggers", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "drug_id", referencedColumnName = "id"))
+    private Set<Drug> allergyTriggers = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "loyalty_program_id", referencedColumnName = "id")
+    private LoyaltyProgram loyaltyProgram;
 }

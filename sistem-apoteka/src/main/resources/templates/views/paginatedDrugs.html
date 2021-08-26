@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <title>Drugs</title>
+</head>
+<body>
+
+    <div class="container-fluid bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Jankovic Pharmacy</a>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Appointments
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Schedule appointment with dermatologist</a>
+                            <a class="dropdown-item" href="#">Schedule appointment with pharmacist</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Cancel appointment with dermatologist</a>
+                            <a class="dropdown-item" href="#">Cancel appointment with pharmacist</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Scheduled appointments</a>
+                            <a class="dropdown-item" href="#">Appointment history</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ePrescription
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">View all</a>
+                            <a class="dropdown-item" href="#">View history</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="${'/myPharmacy/pharmacies/allPharmacies'}">List of pharmacies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="${'/myPharmacy/auth/login'}">Log in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="${'/myPharmacy/auth/signup'}">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="${'/myPharmacy/auth/logout'}">Log out</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    </br>
+
+    <div class="row">
+        <div class="col col-lg-5">
+            <form th:action="@{'/drugs/allDrugs/page/__${currentPage}__'}" method="get">
+                <input type="text" placeholder="Name, producer or type.." name="keyword"/>
+                <button type="submit" class="btn btn-dark mt-2">Search</button>
+            </form>
+        </div>
+    </div>
+
+    </br>
+
+    <div>
+        <table id="drugs" width="90%">
+            <tr>
+                <th>Code:</th>
+                <th>Name:</th>
+                <th>Producer:</th>
+                <th>Price:</th>
+                <th>Daily intake:</th>
+                <th>On prescription:</th>
+                <th>Drug type:</th>
+            </tr>
+            <tr th:each="drug:${drugs}">
+                <td th:text="${drug.code}"></td>
+                <td th:text="${drug.name}"></td>
+                <td th:text="${drug.producer}"></td>
+                <td th:text="${drug.price}"></td>
+                <td th:text="${drug.dailyIntake}"></td>
+                <td th:text="${drug.onPrescription}"></td>
+                <td th:text="${drug.drugType}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:if="${totalPages > 1}">
+        <div class="row col-sm-10">
+            <div class="col-sm-2">
+                Total Rows: <span>[[${totalItems}]]</span>
+            </div>
+            <div class="col-sm-1">
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                      <a th:if="${currentPage != i}" th:href="@{'/drugs/allDrugs/page/' + ${i}}">[[${i}]]</a>
+                      <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                </span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/drugs/allDrugs/page/' + ${currentPage + 1}}">Next</a>
+                <span th:unless="${currentPage < totalPages}">Next</span>
+            </div>
+
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/drugs/allDrugs/page/' + ${totalPages}}">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
+            </div>
+        </div>
+    </div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

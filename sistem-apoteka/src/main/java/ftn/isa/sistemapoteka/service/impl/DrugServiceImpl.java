@@ -4,6 +4,9 @@ import ftn.isa.sistemapoteka.model.Drug;
 import ftn.isa.sistemapoteka.repository.DrugRepository;
 import ftn.isa.sistemapoteka.service.DrugService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -38,5 +41,11 @@ public class DrugServiceImpl implements DrugService {
     @Override
     public List<Drug> findByName(String name) {
         return this.drugRepository.findByKeyword(name);
+    }
+
+    @Override
+    public Page<Drug> findPaginated(int pageNum, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        return this.drugRepository.findAll(pageable);
     }
 }

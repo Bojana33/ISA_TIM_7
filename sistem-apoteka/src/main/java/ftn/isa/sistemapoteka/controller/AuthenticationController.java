@@ -3,35 +3,20 @@ package ftn.isa.sistemapoteka.controller;
 import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.dto.UserDTO;
 import ftn.isa.sistemapoteka.model.*;
-import ftn.isa.sistemapoteka.security.auth.JwtAuthenticationRequest;
 import ftn.isa.sistemapoteka.service.impl.CustomUserDetailsService;
 import ftn.isa.sistemapoteka.exception.ResourceConflictException;
 import ftn.isa.sistemapoteka.security.TokenUtils;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -61,7 +46,7 @@ public class AuthenticationController {
     public ModelAndView loginForm(Model model) {
         UserDTO user = new UserDTO();
         model.addAttribute("user", user);
-        return new ModelAndView("login");
+        return new ModelAndView("views/login");
     }
 
     //endpoint za logovanje
@@ -86,7 +71,7 @@ public class AuthenticationController {
             return new ModelAndView("redirect:/auth/change-password");
         }
         if (u instanceof Patient){
-            return new ModelAndView("redirect:/auth/patient/home");
+            return new ModelAndView("redirect:/profile/p/" + u.getId());
         } else if(u instanceof SystemAdministrator){
             return new ModelAndView("redirect:/auth/sys-admin/home");
         } else {
@@ -98,7 +83,7 @@ public class AuthenticationController {
     public ModelAndView changePasswordForm(Model model){
         ChangePasswordAfterFirstLoginDTO changePasswordAfterFirstLoginDTO = new ChangePasswordAfterFirstLoginDTO();
         model.addAttribute(changePasswordAfterFirstLoginDTO);
-        return new ModelAndView("change-password");
+        return new ModelAndView("views/change-password");
     }
 
     @PostMapping("/change-password/submit")
@@ -122,17 +107,17 @@ public class AuthenticationController {
     public ModelAndView sysAdminHome(HttpServletRequest request, Model model){
         User user = this.userService.findByEmail(request.getSession().getAttribute("email").toString());
         model.addAttribute(user);
-        return new ModelAndView("sys-admin-home");
+        return new ModelAndView("views/sys-admin-home");
     }
 
     @GetMapping("/patient/home")
     public ModelAndView patientHome(){
-        return new ModelAndView("patient-home");
+        return new ModelAndView("views/patient-home");
     }
 
     @GetMapping("/home")
     public ModelAndView home(){
-        return new ModelAndView("home2");
+        return new ModelAndView("views/home2");
     }
 
     @GetMapping("/logout")
@@ -147,7 +132,7 @@ public class AuthenticationController {
     public ModelAndView registrationForm(Model model){
         UserRequest userRequest = new UserRequest();
         model.addAttribute(userRequest);
-        return new ModelAndView("registration");
+        return new ModelAndView("views/registration");
     }
 
     @PostMapping("/signup/submit")

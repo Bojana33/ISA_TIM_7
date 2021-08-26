@@ -14,4 +14,8 @@ public interface PharmacyService {
     List<Pharmacy> findAll();
 
     List<Pharmacy> findByKeyword(String keyword);
+    List<Pharmacy> orderByNameAsc();
+    List<Pharmacy> orderByNameDesc();
+    List<Pharmacy> orderByRatingAsc();
+    List<Pharmacy> orderByRatingDesc();
 }

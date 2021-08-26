@@ -142,4 +142,8 @@ public class User implements UserDetails {
         this.enabled = enabled;
         this.authorities = authorities;
     }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

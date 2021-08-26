@@ -20,27 +20,29 @@ public class LoyaltyProgram implements Serializable {
     private Long id;
 
     @Column
-    private Double consultationPoints;
+    private Double consultationPoints = 0.0;
 
     @Column
-    private Double appointmentPoints;
+    private Double appointmentPoints = 0.0;
 
     @Column
-    private Double regularPoints;
+    private Double regularPoints = 0.0;
 
     @Column
-    private Double silverPoints;
+    private Double silverPoints = 0.0;
 
     @Column
-    private Double goldPoints;
+    private Double goldPoints = 0.0;
 
     @Column
-    private Integer discountRegular;
+    private Integer discountRegular = 0;
 
     @Column
-    private Integer discountSilver;
+    private Integer discountSilver = 0;
 
     @Column
-    private Integer discountGold;
+    private Integer discountGold = 0;
 
+    @OneToOne(mappedBy = "loyaltyProgram")
+    private Patient patient;
 }

@@ -3,11 +3,15 @@ package ftn.isa.sistemapoteka.service.impl;
 import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.model.*;
+import ftn.isa.sistemapoteka.repository.PatientRepository;
 import ftn.isa.sistemapoteka.repository.UserRepository;
 import ftn.isa.sistemapoteka.service.AuthorityService;
 import ftn.isa.sistemapoteka.service.PharmacyService;
 import ftn.isa.sistemapoteka.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +22,7 @@ import java.io.Console;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,6 +30,8 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+
+    private PatientRepository patientRepository;
 
     //private PasswordEncoder passwordEncoder;
 
@@ -54,6 +61,17 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    public Patient findPatientById(Long id) throws Exception{
+        if (!this.patientRepository.findById(id).isPresent()) {
+            throw new Exception("No such value(Patient service)");
+        }
+        Patient patient = this.patientRepository.findById(id).get();
+        if (patient == null) {
+            throw new Exception("Patient with this id does not exist");
+        }
+        return patient;
+    }
+
     @Override
     public Patient savePatient(UserRequest userRequest) {
         LoyaltyProgram loyaltyProgram = this.loyaltyProgramService.getLP(1L);
@@ -68,7 +86,7 @@ public class UserServiceImpl implements UserService {
         u.setPhoneNumber(userRequest.getPhoneNumber());
         u.setIsFirstLogin(true);
         u.setEnabled(false); //setujemo na true kada korisnik potvrdi registraciju preko emaila
-
+        // TODO: Povezi pacijenta sa loyalty programom
         List<Authority> auth = authService.findByName("ROLE_PATIENT");
         u.setAuthorities(auth);
 
@@ -270,6 +288,28 @@ public class UserServiceImpl implements UserService {
         user.setPassword(c.getNewPassword());
         this.userRepository.save(user);
         return user;
+    }
+
+    @Override
+    public Patient updatePatientProfile(Patient patient) throws Exception{
+        Patient forUpdate = this.findPatientById(patient.getId());
+        if (forUpdate == null) { throw new Exception("Patient does not exist"); }
+
+        forUpdate.setFirstName(patient.getFirstName());
+        forUpdate.setLastName(patient.getLastName());
+        forUpdate.setResidence(patient.getResidence());
+        forUpdate.setCity(patient.getCity());
+        forUpdate.setState(patient.getState());
+        forUpdate.setPhoneNumber(patient.getPhoneNumber());
+
+        this.patientRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
+    public Page<Patient> findPaginatedPatientDrugs(int pageNum, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        return this.patientRepository.findAll(pageable);
     }
 
     public boolean isAuthorized(User user, String role){

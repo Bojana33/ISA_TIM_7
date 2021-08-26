@@ -21,6 +21,30 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Appointments
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Schedule appointment with dermatologist</a>
+                            <a class="dropdown-item" href="#">Schedule appointment with pharmacist</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Cancel appointment with dermatologist</a>
+                            <a class="dropdown-item" href="#">Cancel appointment with pharmacist</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Scheduled appointments</a>
+                            <a class="dropdown-item" href="#">Appointment history</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ePrescription
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">View all</a>
+                            <a class="dropdown-item" href="#">View history</a>
+                        </div>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="${'/myPharmacy/drugs/allDrugs'}">List of drugs</a>
                     </li>
@@ -40,13 +64,24 @@
 
     </br>
 
-    <div class="col col-lg-5">
-        <form th:action="@{'/pharmacies/allPharmacies'}" method="get">
-            <input type="text" placeholder="Name or address.." name="keyword"/>
-            <button type="submit" class="btn btn-dark mt-2">Search</button>
-        </form>
+    <div class="row">
+        <div class="col col-lg-5">
+            <form th:action="@{'/pharmacies/allPharmacies'}" method="get">
+                <input type="text" placeholder="Name or address.." name="keyword"/>
+                <button type="submit" class="btn btn-dark mt-2">Search</button>
+            </form>
+        </div>
+        <div class="col col-lg-5">
+            <div col col-lg-6>
+                <h5>Sort by Name </h5>
+                <a th:href="${'/myPharmacy/pharmacies/allPharmacies/sortByNameAsc'}">Ascending</a>
+                </br><a th:href="${'/myPharmacy/pharmacies/allPharmacies/sortByNameDesc'}">Descending</a> </br></br>
+                <h5>Sort by Average Rating </h5>
+                <a th:href="${'/myPharmacy/pharmacies/allPharmacies/sortByRatingAsc'}">Ascending</a>
+                </br><a th:href="${'/myPharmacy/pharmacies/allPharmacies/sortByRatingDesc'}">Descending</a> </br></br>
+            </div>
+        </div>
     </div>
-
     </br>
 
     <div>

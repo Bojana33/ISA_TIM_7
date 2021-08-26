@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/pharmacies")
@@ -34,7 +35,7 @@ public class PharmacyController {
 //        }
         Pharmacy pharmacy = new Pharmacy();
         model.addAttribute(pharmacy);
-        return new ModelAndView("registerPharmacy");
+        return new ModelAndView("views/registerPharmacy");
     }
 
     @PostMapping("/registerPharmacy/submit")
@@ -51,7 +52,39 @@ public class PharmacyController {
         {
             model.addAttribute("pharmacies", this.pharmacyService.findAll());
         }
-        return new ModelAndView("pharmacies");
+        return new ModelAndView("views/pharmacies");
+    }
+
+    @GetMapping("/allPharmacies/sortByNameAsc")
+    public ModelAndView sortByNameAsc(Model model) {
+        List<Pharmacy> sorted = this.pharmacyService.orderByNameAsc();
+        model.addAttribute("pharmacies", sorted);
+
+        return new ModelAndView("views/pharmacies");
+    }
+
+    @GetMapping("/allPharmacies/sortByNameDesc")
+    public ModelAndView sortByNameDesc(Model model) {
+        List<Pharmacy> sorted = this.pharmacyService.orderByNameDesc();
+        model.addAttribute("pharmacies", sorted);
+
+        return new ModelAndView("views/pharmacies");
+    }
+
+    @GetMapping("/allPharmacies/sortByRatingDesc")
+    public ModelAndView sortByRatingDesc(Model model) {
+        List<Pharmacy> sorted = this.pharmacyService.orderByRatingDesc();
+        model.addAttribute("pharmacies", sorted);
+
+        return new ModelAndView("views/pharmacies");
+    }
+
+    @GetMapping("/allPharmacies/sortByRatingAsc")
+    public ModelAndView sortByRatingAsc(Model model) {
+        List<Pharmacy> sorted = this.pharmacyService.orderByRatingAsc();
+        model.addAttribute("pharmacies", sorted);
+
+        return new ModelAndView("views/pharmacies");
     }
 
 }
