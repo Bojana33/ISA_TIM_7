@@ -36,14 +36,7 @@ public class PharmacyController {
     }
 
     @GetMapping(value = "/registerPharmacy")
-    public ModelAndView registerPharmacyForm(Model model, HttpServletRequest request){
-//        if (request.getSession().getAttribute("email")== null){
-//            throw new AccessDeniedException("Access denied");
-//        }
-//        User user = this.userService.findByEmail(request.getSession().getAttribute("email").toString());
-//        if (!userService.isAuthorized(user, "ROLE_SYS_ADMIN")){
-//            throw new AccessDeniedException("Access denied");
-//        }
+    public ModelAndView registerPharmacyForm(Model model){
         Pharmacy pharmacy = new Pharmacy();
         model.addAttribute(pharmacy);
         return new ModelAndView("registerPharmacy");

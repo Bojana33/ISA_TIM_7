@@ -85,6 +85,8 @@ public class AuthenticationController {
             return new ModelAndView("redirect:/user/patient/home");
         } else if(user instanceof SystemAdministrator){
             return new ModelAndView("redirect:/user/sys-admin/home");
+        } else if(user instanceof Supplier){
+            return new ModelAndView("redirect:/user/supplier/home");
         } else {
             return new ModelAndView("redirect:/auth/home");
         }

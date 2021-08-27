@@ -14,15 +14,32 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <title>Supplier Home</title>
+    <title>Order Forms</title>
 </head>
 <body>
-    <a th:href="${'/myPharmacy/auth/logout'}">Logout</a>
+<div class="container">
+    <h3>Order Forms</h3>
     <br>
-    <a>Update Profile</a>
-    <br>
-    <a th:href="${'/myPharmacy/orderForms/allOrderForms'}">Order Forms</a>
-    <br>
-    <a th:href="${'/myPharmacy/offers/myOffers'}">My Offers</a>
+    <div class="table">
+        <table id="orderForms">
+            <tr>
+                <th>Id:</th>
+                <th>Creator Id:</th>
+                <th>Drugs:</th>
+                <th>Offer Due Date:</th>
+                <th>Offer:</th>
+            </tr>
+            <tr th:each="orderForm:${orderForms}">
+                <td th:text="${orderForm.id}"></td>
+                <td th:text="${orderForm.creator.id}"></td>
+                <td th:text="${orderForm.drugs}"></td>
+                <td th:text="${orderForm.offerDueDate}"></td>
+                <td><a th:href="${'/myPharmacy/orderForms/check/'+ orderForm.getId()}">Give Offer</a></td>
+
+            </tr>
+        </table>
+    </div>
+
+</div>
 </body>
 </html>
