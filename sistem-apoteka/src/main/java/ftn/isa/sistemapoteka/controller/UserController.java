@@ -145,4 +145,23 @@ public class UserController {
         return new ModelAndView("redirect:/user/sys-admin/home");
     }
 
+    @GetMapping("/updateProfile")
+    @PreAuthorize("hasAnyRole('PATIENT','SYS_ADMIN','SUPPLIER')")
+    public ModelAndView updateProfile(Model model, Authentication authentication){
+        User user = this.userService.findByEmail(authentication.getName());
+        model.addAttribute("user", user);
+        model.addAttribute("id", user.getId());
+        return new ModelAndView("update-profile");
+    }
+
+    @PostMapping("/updateProfile/{id}/submit")
+    @PreAuthorize("hasAnyRole('PATIENT','SYS_ADMIN','SUPPLIER')")
+    public ModelAndView updateProfileSubmit(Model model, @ModelAttribute User user, @PathVariable Long id){
+        this.userService.updateProfile(user);
+        model.addAttribute("user", user);
+        if (this.userService.findById(id).getUserRole()==UserRole.SUPPLIER){
+            return new ModelAndView("redirect:/user/supplier/home");
+        }
+        return new ModelAndView("redirect:/user/index");
+    }
 }

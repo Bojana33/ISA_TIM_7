@@ -21,5 +21,5 @@ public interface UserRepository extends JpaRepository<User,Long>{
             "SET u.enabled = TRUE WHERE u.email = ?1")
     int enableUser(String email);
 
-    User findByEmailAndPassword(String email, String password) throws Exception;
+    User findByEmailAndPassword(String email, String password);
 }

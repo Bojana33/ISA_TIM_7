@@ -1,6 +1,8 @@
 package ftn.isa.sistemapoteka.security;
 
+import ftn.isa.sistemapoteka.model.User;
 import ftn.isa.sistemapoteka.repository.UserRepository;
+import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,11 +21,11 @@ import static ftn.isa.sistemapoteka.model.UserRole.*;
 public class UserAuthenticationService
         implements AuthenticationProvider
 {
-    private UserRepository userRepository;
+    private UserServiceImpl userService;
 
     @Autowired
-    public UserAuthenticationService(UserRepository userRepository){
-        this.userRepository = userRepository;
+    public UserAuthenticationService(UserServiceImpl userService){
+        this.userService = userService;
     }
 
     @Override
@@ -32,31 +34,32 @@ public class UserAuthenticationService
         System.out.println("test");
         Authentication retVal = null;
         List<GrantedAuthority> grantedAuths = new ArrayList<>();
+        User user = this.userService.findByEmailAndPassword(auth.getName(),auth.getCredentials().toString());
 
-        if (auth != null) {
+        if (auth != null && user!= null) {
             String email = auth.getName();
             String password = auth.getCredentials().toString();
             System.out.println("email: " + email);
             System.out.println("password: " + password);
 
-            if (userRepository.findByEmail(email).getUserRole() == SYS_ADMIN) {
+            if (user.getUserRole() == SYS_ADMIN) {
                 grantedAuths.add(new SimpleGrantedAuthority("ROLE_SYS_ADMIN"));
 
                 retVal = new UsernamePasswordAuthenticationToken(
-                        email, "", grantedAuths
+                        email, password, grantedAuths
                 );
             }
-            else if (userRepository.findByEmail(email).getUserRole() == SUPPLIER){
+            else if (user.getUserRole() == SUPPLIER){
                 grantedAuths.add(new SimpleGrantedAuthority("ROLE_SUPPLIER"));
 
                 retVal = new UsernamePasswordAuthenticationToken(
-                        email, "", grantedAuths
+                        email, password, grantedAuths
                 );
-            } else if (userRepository.findByEmail(email).getUserRole() == PATIENT){
+            } else if (user.getUserRole() == PATIENT){
                 grantedAuths.add(new SimpleGrantedAuthority("ROLE_PATIENT"));
 
                 retVal = new UsernamePasswordAuthenticationToken(
-                        email, "", grantedAuths
+                        email, password, grantedAuths
                 );
             }
         }

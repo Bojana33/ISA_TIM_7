@@ -17,6 +17,7 @@ public interface UserService {
     Supplier saveSupplier(Supplier supplier);
     SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator);
     Dermatologist saveDermatologist(Dermatologist dermatologist);
-    User findByEmailAndPassword(String email, String password) throws Exception;
+    User findByEmailAndPassword(String email, String password);
     User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c);
+    User updateProfile(User user);
 }

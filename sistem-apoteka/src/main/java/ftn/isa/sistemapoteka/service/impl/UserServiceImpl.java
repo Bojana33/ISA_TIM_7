@@ -25,8 +25,6 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    //private PasswordEncoder passwordEncoder;
-
     private ConfirmationTokenServiceImpl confirmationTokenService;
 
     private EmailSender emailSender;
@@ -262,11 +260,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmailAndPassword(String email, String password) throws Exception {
+    public User findByEmailAndPassword(String email, String password) {
         User user = this.userRepository.findByEmailAndPassword(email,password);
-        if (user==null){
-            throw new Exception("User with this credentials doesn't exist.");
-        }
         return user;
     }
 
@@ -275,5 +270,17 @@ public class UserServiceImpl implements UserService {
         user.setPassword(c.getNewPassword());
         this.userRepository.save(user);
         return user;
+    }
+
+    @Override
+    public User updateProfile(User user) {
+        User u = this.userRepository.getOne(user.getId());
+        u.setFirstName(user.getFirstName());
+        u.setLastName(user.getLastName());
+        u.setCity(user.getCity());
+        u.setResidence(user.getResidence());
+        u.setState(user.getState());
+        u.setPhoneNumber(user.getPhoneNumber());
+        return this.userRepository.save(u);
     }
 }
