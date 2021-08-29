@@ -64,6 +64,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Patient findPatientByEmail(String email) throws Exception {
+        Patient patient = this.patientRepository.findByEmail(email);
+        /*if (patient == null) {
+            throw new Exception("Patient with this email does not exist");
+        }*/
+        return patient;
+    }
+
+    @Override
     public Patient savePatient(UserRequest userRequest) {
         LoyaltyProgram loyaltyProgram = this.loyaltyProgramService.getLP(1L);
         Patient u = new Patient();
@@ -297,6 +306,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Patient updateAppointments(Patient patient) throws Exception {
+        Patient forUpdate = this.findPatientById(patient.getId());
+        if (forUpdate == null) { throw new Exception("Patient does not exist"); }
+
+        forUpdate.setAppointments(patient.getAppointments());
+
+        this.patientRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
     public Page<Patient> findPaginatedPatientDrugs(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum-1, pageSize);
         return this.patientRepository.findAll(pageable);
@@ -325,9 +345,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Patient savePatient(Patient patient) throws Exception {
-        Patient p = this.patientRepository.findById(patient.getId()).get();
-        if(p == null) { throw new Exception("Patient with this id does not exist"); }
+        if(this.patientRepository.findById(patient.getId()).isPresent()) {
+            throw new Exception("Patient already exist(User Service)");
+        }
 
-        return this.userRepository.save(p);
+        return this.userRepository.save(patient);
     }
+
+
 }

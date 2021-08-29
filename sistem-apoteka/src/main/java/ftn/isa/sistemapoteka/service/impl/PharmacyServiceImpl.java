@@ -20,14 +20,26 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public Pharmacy save(Pharmacy pharmacy) throws Exception {
-        if (this.pharmacyRepository.findByName(pharmacy.getName()) != null){
-            throw new Exception("Pharmacy with that name already exist!");
-        }
         return this.pharmacyRepository.save(pharmacy);
     }
 
     @Override
-    public Pharmacy findById(Long id) {
+    public Pharmacy updateAppointments(Pharmacy pharmacy) throws Exception {
+        if (!this.pharmacyRepository.findById(pharmacy.getId()).isPresent()) {
+            throw new Exception("No value (Pharmacy service)");
+        }
+        Pharmacy forUpdate = this.pharmacyRepository.findById(pharmacy.getId()).get();
+
+        forUpdate.setAppointments(pharmacy.getAppointments());
+        this.pharmacyRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
+    public Pharmacy findById(Long id) throws Exception {
+        if (this.pharmacyRepository.getById(id) == null) {
+            throw new Exception("Pharmacy does not exist");
+        }
         return this.pharmacyRepository.getById(id);
     }
 

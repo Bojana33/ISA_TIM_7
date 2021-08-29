@@ -32,12 +32,19 @@ public class Appointment implements Serializable {
     @Column
     private LocalDateTime dateTimeEnd;
 
+    @Column
+    private Boolean scheduled = false;
+
     @ManyToOne(targetEntity = Dermatologist.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "dermatologist_id", nullable = false, referencedColumnName = "id")
     private Dermatologist dermatologist;
 
     @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "patient_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "patient_id", nullable = true, referencedColumnName = "id")
     private Patient patient;
+
+    @ManyToOne(targetEntity = Pharmacy.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "pharmacy_id", nullable = true, referencedColumnName = "id")
+    private Pharmacy pharmacy;
 
 }

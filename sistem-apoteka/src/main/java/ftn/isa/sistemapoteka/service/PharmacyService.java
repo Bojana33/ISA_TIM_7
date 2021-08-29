@@ -8,9 +8,9 @@ import java.util.List;
 public interface PharmacyService {
 
     Pharmacy save(Pharmacy pharmacy) throws Exception;
+    Pharmacy updateAppointments(Pharmacy pharmacy) throws Exception;
 
-    Pharmacy findById(Long id);
-
+    Pharmacy findById(Long id) throws Exception;
     List<Pharmacy> findAll();
 
     List<Pharmacy> findByKeyword(String keyword);

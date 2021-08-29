@@ -11,6 +11,7 @@ public interface UserService {
     User findByEmail(String email);
     List<User> findAll ();
     Patient findPatientById(Long id) throws Exception;
+    Patient findPatientByEmail(String email) throws Exception;
     Patient savePatient(UserRequest userRequest);
     int enableUser(String email);
     String confirmToken(String token);
@@ -26,4 +27,5 @@ public interface UserService {
     Page<Patient> findPaginatedPatientDrugs(int pageNum, int pageSize);
     Patient addAllergyTrigger(Patient patient, Drug drug) throws Exception;
     Patient savePatient(Patient patient) throws Exception;
+    Patient updateAppointments(Patient patient) throws Exception;
 }

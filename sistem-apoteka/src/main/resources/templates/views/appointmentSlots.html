@@ -13,6 +13,12 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+    <link th:rel="stylesheet" th:href="@{assets/bootstrap-datepicker/css/bootstrap-datepicker.css}"/>
+    <link th:rel="stylesheet" th:href="@{assets/bootstrap-datepicker/css/bootstrap-datepicker.standalone.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{webjars/font-awesome/5.11.2/css/all.css} "/>
+
+
     <title>appointment slots</title>
 </head>
 <body>
@@ -28,12 +34,7 @@
                         Appointments
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Schedule appointment with dermatologist</a>
-                        <a class="dropdown-item" href="#">Schedule appointment with pharmacist</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Cancel appointment with dermatologist</a>
-                        <a class="dropdown-item" href="#">Cancel appointment with pharmacist</a>
-                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Schedule appointment</a>
                         <a class="dropdown-item" href="#">Scheduled appointments</a>
                         <a class="dropdown-item" href="#">Appointment history</a>
                     </div>
@@ -79,18 +80,27 @@
 
                         <!--TABELA SA TERMINIMA-->
                         <div th:object="${appointments}">
-                            <table id="appointments" width="90%">
+                            <table id="appointments" width="100%">
                                 <tr>
                                     <th>Appointment start:</th>
                                     <th>Appointment end:</th>
                                     <th>Dermatologist:</th>
                                     <th>Price:</th>
+                                    <th>Price:</th>
+                                    <th></th>
                                 </tr>
-                                <tr th:each="appointment:${appointments}">
+                                <tr th:each="appointment:${appointments}"  th:if="${appointment.scheduled == false}">
                                     <td th:text="${appointment.dateTimeStart}"></td>
                                     <td th:text="${appointment.dateTimeEnd}"></td>
-                                    <td th:text="${appointment.dermatologist}"></td>
+                                    <td th:text="${appointment.dermatologist.getFullName()}"></td>
                                     <td th:text="${appointment.price}"></td>
+                                    <td th:text="${principal}"></td>
+                                    <td><a th:href="${'/myPharmacy/appointments/__${pharmacy.id}__/schedule/__${appointment.id}__/__${principal}__'}">Schedule appointment</a></td>
+                                    <!--<td>
+                                        <form action="#" th:action="@{/myPharmacy/appointments/__${pharmacy.id}__/timeSlots/scheduleSuccess}" method="post">
+                                            <input type="submit" name="submit" value="test" class="link-button"/>
+                                        </form>
+                                    </td>-->
                             </table>
                         </div>
 
@@ -110,6 +120,12 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
 
 </body>
 </html>

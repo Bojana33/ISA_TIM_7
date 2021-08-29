@@ -102,7 +102,7 @@ public class UserController {
 
     @PostMapping(value = "/registerPharmacyAdmin/{pharmacyId}/submit")
     @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ModelAndView registerPharmacyAdmin(@ModelAttribute PharmacyAdministrator user, @PathVariable Long pharmacyId){
+    public ModelAndView registerPharmacyAdmin(@ModelAttribute PharmacyAdministrator user, @PathVariable Long pharmacyId) throws Exception {
         if (this.userService.findByEmail(user.getEmail()) != null) {
             throw new ResourceConflictException(user.getId(), "Email already exists");
         }

@@ -1,9 +1,21 @@
 package ftn.isa.sistemapoteka.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 public class DrugReservation implements Serializable {
 
@@ -12,50 +24,18 @@ public class DrugReservation implements Serializable {
     private Long id;
 
     @Column
-    private LocalDateTime dateOfReservation;
+    //@DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
+    private LocalDate dateOfReservation;
 
     @Column
-    private LocalDateTime takingDrugDate;
+    //@DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
+    private LocalDate takingDrugDate;
 
     @OneToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     private Drug drug;
 
     @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "patient_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "patient_id", nullable = true, referencedColumnName = "id")
     private Patient patient;
 
-    public DrugReservation() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getDateOfReservation() {
-        return dateOfReservation;
-    }
-
-    public void setDateOfReservation(LocalDateTime dateOfReservation) {
-        this.dateOfReservation = dateOfReservation;
-    }
-
-    public LocalDateTime getTakingDrugDate() {
-        return takingDrugDate;
-    }
-
-    public void setTakingDrugDate(LocalDateTime takingDrugDate) {
-        this.takingDrugDate = takingDrugDate;
-    }
-
-    public Drug getDrug() {
-        return drug;
-    }
-
-    public void setDrug(Drug drug) {
-        this.drug = drug;
-    }
 }
