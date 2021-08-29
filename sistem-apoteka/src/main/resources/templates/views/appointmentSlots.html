@@ -86,7 +86,6 @@
                                     <th>Appointment end:</th>
                                     <th>Dermatologist:</th>
                                     <th>Price:</th>
-                                    <th>Price:</th>
                                     <th></th>
                                 </tr>
                                 <tr th:each="appointment:${appointments}"  th:if="${appointment.scheduled == false}">
@@ -94,7 +93,6 @@
                                     <td th:text="${appointment.dateTimeEnd}"></td>
                                     <td th:text="${appointment.dermatologist.getFullName()}"></td>
                                     <td th:text="${appointment.price}"></td>
-                                    <td th:text="${principal}"></td>
                                     <td><a th:href="${'/myPharmacy/appointments/__${pharmacy.id}__/schedule/__${appointment.id}__/__${principal}__'}">Schedule appointment</a></td>
                                     <!--<td>
                                         <form action="#" th:action="@{/myPharmacy/appointments/__${pharmacy.id}__/timeSlots/scheduleSuccess}" method="post">
