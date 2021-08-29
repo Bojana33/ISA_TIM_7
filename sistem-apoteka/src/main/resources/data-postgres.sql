@@ -19,3 +19,5 @@ insert into order_form_drugs(order_form_id,quantity,drug_code) values (1,10,112)
 
 insert into supplier_drugs(supplier_id,quantity,drug_code) values (3,11,111);
 insert into supplier_drugs(supplier_id,quantity,drug_code) values (3,15,112);
+
+insert into pharmacy(name,address) values ('apoteka','adresa');

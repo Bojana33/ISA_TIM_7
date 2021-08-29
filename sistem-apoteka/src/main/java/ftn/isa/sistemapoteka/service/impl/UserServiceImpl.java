@@ -3,21 +3,25 @@ package ftn.isa.sistemapoteka.service.impl;
 import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.model.*;
+import ftn.isa.sistemapoteka.repository.PharmacyRepository;
 import ftn.isa.sistemapoteka.repository.UserRepository;
 import ftn.isa.sistemapoteka.service.PharmacyService;
 import ftn.isa.sistemapoteka.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.Console;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -32,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private PharmacyServiceImpl pharmacyService;
 
     private LoyaltyProgramServiceImpl loyaltyProgramService;
+
+    private PharmacyRepository pharmacyRepository;
 
     @Override
     public User findByEmail(String email) {
@@ -283,4 +289,40 @@ public class UserServiceImpl implements UserService {
         u.setPhoneNumber(user.getPhoneNumber());
         return this.userRepository.save(u);
     }
+
+    @Override
+    public void subscribePatient(Patient patient, Pharmacy pharmacy) throws Exception {
+        if (patient.getSubscriptions().contains(pharmacy)){
+            throw new Exception("You are already subscribed to this pharmacy");
+        }
+
+        Set<Patient> subscribePatients = pharmacy.getSubscriptionedPatients();
+        subscribePatients.add(patient);
+        pharmacy.setSubscriptionedPatients(subscribePatients);
+        this.pharmacyRepository.save(pharmacy);
+
+        Set<Pharmacy> subscriptions = patient.getSubscriptions();
+        subscriptions.add(pharmacy);
+        patient.setSubscriptions(subscriptions);
+        this.userRepository.save(patient);
+    }
+
+    @Override
+    public void unsubscribePatient(Patient patient, Pharmacy pharmacy){
+        Set<Pharmacy> subscriptions = patient.getSubscriptions();
+        subscriptions.remove(pharmacy);
+        patient.setSubscriptions(subscriptions);
+        this.userRepository.save(patient);
+
+        Set<Patient> subscribePatients = pharmacy.getSubscriptionedPatients();
+        subscribePatients.remove(patient);
+        pharmacy.setSubscriptionedPatients(subscribePatients);
+        this.pharmacyRepository.save(pharmacy);
+    }
+
+    @Override
+    public Set<Pharmacy> findAllSubscribedPharmacies(Patient patient) {
+        return this.pharmacyRepository.findAllBySubscriptionedPatients(patient);
+    }
+
 }

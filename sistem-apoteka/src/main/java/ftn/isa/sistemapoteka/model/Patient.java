@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("Patient")
+@DiscriminatorValue("patient")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -47,9 +47,7 @@ public class Patient extends User {
     @Column
     private Integer discount;
 
-    @ManyToMany
-    @JoinTable(name = "Subscriptions", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id")
-            , inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))
+    @ManyToMany(targetEntity = Pharmacy.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Pharmacy> subscriptions = new HashSet<>();
 
 }

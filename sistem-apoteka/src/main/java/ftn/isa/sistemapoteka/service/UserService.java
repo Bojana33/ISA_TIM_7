@@ -4,6 +4,7 @@ import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.model.*;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     User findById(Long id);
@@ -20,4 +21,10 @@ public interface UserService {
     User findByEmailAndPassword(String email, String password);
     User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c);
     User updateProfile(User user);
+
+    void subscribePatient(Patient patient, Pharmacy pharmacy) throws Exception;
+
+    void unsubscribePatient(Patient patient, Pharmacy pharmacy);
+
+    Set<Pharmacy> findAllSubscribedPharmacies(Patient patient);
 }

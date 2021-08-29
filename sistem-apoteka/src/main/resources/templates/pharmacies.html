@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <!--Import Google Icon Font-->
@@ -23,14 +23,14 @@
             <th>Name:</th>
             <th>Address:</th>
             <th>Average Rating:</th>
-            <th>Add Pharmacy Admin</th>
+            <th sec:authorize="hasRole('SYS_ADMIN')">Add Pharmacy Admin</th>
         </tr>
         <tr th:each="pharmacy:${pharmacies}">
             <td th:text="${pharmacy.id}"></td>
-            <td th:text="${pharmacy.name}"></td>
+            <td> <a th:href="${'/myPharmacy/pharmacies/pharmacy/' + pharmacy.getId()}" th:text="${pharmacy.name}"> </a></td>
             <td th:text="${pharmacy.address}"></td>
             <td th:text="${pharmacy.averageRating}"></td>
-            <td><a th:href="${'/myPharmacy/user/registerPharmacyAdmin/' + pharmacy.getId()}">Register New Pharmacy Admin</a></td>
+            <td sec:authorize="hasRole('SYS_ADMIN')"><a th:href="${'/myPharmacy/user/registerPharmacyAdmin/' + pharmacy.getId()}">Register New Pharmacy Admin</a></td>
         </tr>
     </table>
 </body>

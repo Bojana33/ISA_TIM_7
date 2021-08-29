@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
@@ -163,5 +165,14 @@ public class UserController {
             return new ModelAndView("redirect:/user/supplier/home");
         }
         return new ModelAndView("redirect:/user/index");
+    }
+
+    @GetMapping("/subscribedPharmacies")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ModelAndView sp(Authentication authentication, Model model){
+        Patient patient =(Patient) this.userService.findByEmail(authentication.getName());
+        Set<Pharmacy> pharmacies = this.userService.findAllSubscribedPharmacies(patient);
+        model.addAttribute("pharmacies",pharmacies);
+        return new ModelAndView("subscriptions");
     }
 }

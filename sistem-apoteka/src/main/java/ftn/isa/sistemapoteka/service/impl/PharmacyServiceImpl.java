@@ -1,5 +1,6 @@
 package ftn.isa.sistemapoteka.service.impl;
 
+import ftn.isa.sistemapoteka.model.Patient;
 import ftn.isa.sistemapoteka.model.Pharmacy;
 import ftn.isa.sistemapoteka.repository.PharmacyRepository;
 import ftn.isa.sistemapoteka.service.PharmacyService;
@@ -35,4 +36,6 @@ public class PharmacyServiceImpl implements PharmacyService {
     public List<Pharmacy> findAll() {
         return this.pharmacyRepository.findAll();
     }
+
+
 }
