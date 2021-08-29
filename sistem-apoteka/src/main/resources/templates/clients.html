@@ -14,30 +14,19 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <title>Index Page</title>
+    <title>Clients</title>
 </head>
 <body>
-    <div th:align="center" sec:authorize="hasRole('SYS_ADMIN')">
-        <h4>Welcome Admin</h4>
-        <a th:href="${'sys-admin/home'}">Home</a>
-    </div>
-    <div th:align="center" sec:authorize="hasRole('SUPPLIER')">
-        <h4>Welcome Supplier</h4>
-        <a th:href="${'supplier/home'}">Home</a>
-    </div>
-    <div th:align="center" sec:authorize="hasRole('PATIENT')">
-        <h4>Welcome Patient</h4>
-        <a th:href="${'patient/home'}">Home</a>
-    </div>
-    <div th:align="center" sec:authorize="hasRole('DERMATOLOGIST')">
-        <h4>Welcome Dermatologist</h4>
-        <a th:href="${'dermatologist/home'}">Home</a>
-    </div>
-    <div th:align="center" sec:authorize="hasRole('PHARMACIST')">
-        <h4>Welcome Pharmacist</h4>
-        <a th:href="${'pharmacist/home'}">Home</a>
-    </div>
-
-
+    <table id="clients">
+        <tr>
+            <th>Id:</th>
+            <th>First name:</th>
+            <th>Last name:</th>
+        </tr>
+        <tr th:each="user:${users}">
+            <td th:text="${user.id}"></td>
+            <td> <a th:href="${'/myPharmacy/users/user/' + user.getId()}" th:text="${user.firstName}" th:text="${user.lastName}"> </a></td>
+            </tr>
+    </table>
 </body>
 </html>

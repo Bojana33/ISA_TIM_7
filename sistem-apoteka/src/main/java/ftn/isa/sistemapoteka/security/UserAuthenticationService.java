@@ -61,6 +61,12 @@ public class UserAuthenticationService
                 retVal = new UsernamePasswordAuthenticationToken(
                         email, password, grantedAuths
                 );
+            } else if (user.getUserRole() == DERMATOLOGIST) {
+                grantedAuths.add(new SimpleGrantedAuthority("ROLE_DERMATOLOGIST"));
+
+                retVal = new UsernamePasswordAuthenticationToken(
+                        email, password, grantedAuths
+                );
             }
         }
         else

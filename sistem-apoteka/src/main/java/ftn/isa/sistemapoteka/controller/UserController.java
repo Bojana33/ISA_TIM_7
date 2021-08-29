@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/index")
-    @PreAuthorize("hasAnyRole('SYS_ADMIN','PATIENT','SUPPLIER')")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN','PATIENT','SUPPLIER','DERMATOLOGIST','PHARMACIST')")
     public ModelAndView indexPage(Authentication auth) throws Exception{
         User u = this.userService.findByEmail(auth.getName());
         if (u.getEnabled()==false){
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST','PHARMACIST')")
     public User loadById(@PathVariable Long userId) {
         return this.userService.findById(userId);
     }
@@ -60,6 +60,19 @@ public class UserController {
         model.addAttribute("loyaltyProgram", loyaltyProgram);
         return new ModelAndView("sys-admin-home");
     }
+
+    @PreAuthorize("hasRole('DERMATOLOGIST')")
+    @GetMapping("/dermatologist/home")
+    public ModelAndView dermatologistHome(){
+        return new ModelAndView("dermatologist-home");
+    }
+
+    @PreAuthorize("hasRole('PHARMACIST')")
+    @GetMapping("/pharmacist/home")
+    public ModelAndView pharmacistHome(){
+        return new ModelAndView("pharmacist-home");
+    }
+
 
     @PreAuthorize("hasRole('PATIENT')")
     @GetMapping("/patient/home")
@@ -148,7 +161,7 @@ public class UserController {
     }
 
     @GetMapping("/updateProfile")
-    @PreAuthorize("hasAnyRole('PATIENT','SYS_ADMIN','SUPPLIER')")
+    @PreAuthorize("hasAnyRole('PATIENT','SYS_ADMIN','SUPPLIER','DERMATOLOGIST','PHARMACIST')")
     public ModelAndView updateProfile(Model model, Authentication authentication){
         User user = this.userService.findByEmail(authentication.getName());
         model.addAttribute("user", user);
@@ -157,7 +170,7 @@ public class UserController {
     }
 
     @PostMapping("/updateProfile/{id}/submit")
-    @PreAuthorize("hasAnyRole('PATIENT','SYS_ADMIN','SUPPLIER')")
+    @PreAuthorize("hasAnyRole('PATIENT','SYS_ADMIN','SUPPLIER','DERMATOLOGIST','PHARMACIST')")
     public ModelAndView updateProfileSubmit(Model model, @ModelAttribute User user, @PathVariable Long id){
         this.userService.updateProfile(user);
         model.addAttribute("user", user);
