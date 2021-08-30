@@ -123,7 +123,6 @@ public class AuthenticationController {
         }
         this.userService.savePatient(userRequest);
 
-
         return new ModelAndView("redirect:/auth/home");
     }
 

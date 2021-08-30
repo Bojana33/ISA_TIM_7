@@ -28,6 +28,7 @@ public class PharmacyController {
     public ModelAndView showPharmacyPage(@PathVariable Long id, Model model) throws Exception {
         if (this.pharmacyService.findById(id) == null) { throw new Exception("Pharmacy with this id does not exist"); }
         model.addAttribute("pharmacy", this.pharmacyService.findById(id));
+        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
         return new ModelAndView("views/pharmacy");
     }
@@ -53,44 +54,49 @@ public class PharmacyController {
     }
 
     @GetMapping("/allPharmacies")
-    public ModelAndView getAllPharmacies(Model model, String keyword) {
+    public ModelAndView getAllPharmacies(Model model, String keyword) throws Exception {
         if (keyword != null) {
             model.addAttribute("pharmacies", this.pharmacyService.findByKeyword(keyword));
         } else
         {
             model.addAttribute("pharmacies", this.pharmacyService.findAll());
         }
+        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
         return new ModelAndView("views/pharmacies");
     }
 
     @GetMapping("/allPharmacies/sortByNameAsc")
-    public ModelAndView sortByNameAsc(Model model) {
+    public ModelAndView sortByNameAsc(Model model) throws Exception {
         List<Pharmacy> sorted = this.pharmacyService.orderByNameAsc();
         model.addAttribute("pharmacies", sorted);
+        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
         return new ModelAndView("views/pharmacies");
     }
 
     @GetMapping("/allPharmacies/sortByNameDesc")
-    public ModelAndView sortByNameDesc(Model model) {
+    public ModelAndView sortByNameDesc(Model model) throws Exception {
         List<Pharmacy> sorted = this.pharmacyService.orderByNameDesc();
         model.addAttribute("pharmacies", sorted);
+        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
         return new ModelAndView("views/pharmacies");
     }
 
     @GetMapping("/allPharmacies/sortByRatingDesc")
-    public ModelAndView sortByRatingDesc(Model model) {
+    public ModelAndView sortByRatingDesc(Model model) throws Exception {
         List<Pharmacy> sorted = this.pharmacyService.orderByRatingDesc();
         model.addAttribute("pharmacies", sorted);
+        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
         return new ModelAndView("views/pharmacies");
     }
 
     @GetMapping("/allPharmacies/sortByRatingAsc")
-    public ModelAndView sortByRatingAsc(Model model) {
+    public ModelAndView sortByRatingAsc(Model model) throws Exception {
         List<Pharmacy> sorted = this.pharmacyService.orderByRatingAsc();
         model.addAttribute("pharmacies", sorted);
+        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
         return new ModelAndView("views/pharmacies");
     }

@@ -15,5 +15,8 @@ public interface AppointmentService {
     Appointment update(Appointment appointment) throws Exception;
 
     void makeAppointment(Appointment appointment, Pharmacy pharmacy,
-                                String email) throws Exception;
+                                Long patientId) throws Exception;
+
+    List<Appointment> findScheduled();
+    List<Appointment> findAllByPharmacy(Long phId);
 }

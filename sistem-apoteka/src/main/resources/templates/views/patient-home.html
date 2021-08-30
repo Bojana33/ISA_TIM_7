@@ -23,8 +23,8 @@
                         Appointments
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Schedule appointment</a>
-                        <a class="dropdown-item" href="#">Scheduled appointments</a>
+                        <a class="dropdown-item" th:href="${'/pharmacies/allPharmacies'}">Schedule appointment</a>
+                        <a class="dropdown-item" th:href="${'/appointment/scheduledHistory'}">Scheduled appointments</a>
                         <a class="dropdown-item" href="#">Appointment history</a>
                     </div>
                 </li>
@@ -44,7 +44,7 @@
                     <a class="nav-link" th:href="${'/myPharmacy/drugs/allDrugs'}">List of drugs</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/myPharmacy/user/profile'}">Profile</a>
+                    <a class="nav-link" th:href="${'/myPharmacy/profile/p/__${user.id}__'}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/myPharmacy/auth/logout'}">Log out</a>

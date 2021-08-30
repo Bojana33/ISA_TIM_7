@@ -46,12 +46,14 @@ public class DrugController {
     }
 
     @GetMapping("/allDrugs")
-    public ModelAndView getAllDrugs(Model model, String keyword) {
+    public ModelAndView getAllDrugs(Model model, String keyword) throws Exception {
         if (keyword != null) {
             model.addAttribute("drugs", this.drugService.findByName(keyword));
         } else {
             model.addAttribute("drugs", this.drugService.findAllDrugs());
         }
+
+        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
         return new ModelAndView("views/drugs");
     }
 
@@ -71,7 +73,7 @@ public class DrugController {
 
     @PostMapping(value = "/addDrug/submit")
     @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ModelAndView addDrug(@ModelAttribute Drug drug) {
+    public ModelAndView addDrug(@ModelAttribute Drug drug) throws Exception {
         if (this.drugService.findByCode(drug.getCode()) != null) {
             throw new ResourceConflictException(drug.getCode(), "Drug with this code already exist");
         }

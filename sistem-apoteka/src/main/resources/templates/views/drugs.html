@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -47,13 +47,16 @@
           <li class="nav-item">
             <a class="nav-link" th:href="${'/myPharmacy/pharmacies/allPharmacies'}">List of pharmacies</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="isAnonymous()">
             <a class="nav-link" th:href="${'/myPharmacy/auth/login'}">Log in</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="isAnonymous()">
             <a class="nav-link" th:href="${'/myPharmacy/auth/signup'}">Register</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="hasRole('PATIENT')">
+            <a class="nav-link" th:href="${'/myPharmacy/profile/p/__${principal.id}__'}">Profile</a>
+          </li>
+          <li class="nav-item" sec:authorize="isAuthenticated()">
             <a class="nav-link" th:href="${'/myPharmacy/auth/logout'}">Log out</a>
           </li>
         </ul>
@@ -84,6 +87,7 @@
         <th>Daily intake:</th>
         <th>On prescription:</th>
         <th>Drug type:</th>
+        <th sec:authorize="hasRole('PATIENT')"></th>
       </tr>
       <tr th:each="drug:${drugs}">
         <td th:text="${drug.code}"></td>
@@ -93,6 +97,7 @@
         <td th:text="${drug.dailyIntake}"></td>
         <td th:text="${drug.onPrescription}"></td>
         <td th:text="${drug.drugType}"></td>
+        <td sec:authorize="hasRole('PATIENT')"><a th:href="@{'/user/__${principal.id}__/allergyTriggers/addSuccess/__${drug.code}__'}"> Add as allergy trigger</a></td>
       </tr>
     </table>
   </div>

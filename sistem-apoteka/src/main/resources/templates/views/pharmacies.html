@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -16,66 +16,66 @@
 <body>
 
     <div class="container-fluid bg-light">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Jankovic Pharmacy</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Jankovic Pharmacy</a>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Appointments
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Schedule appointment with dermatologist</a>
-                            <a class="dropdown-item" href="#">Schedule appointment with pharmacist</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Cancel appointment with dermatologist</a>
-                            <a class="dropdown-item" href="#">Cancel appointment with pharmacist</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Scheduled appointments</a>
-                            <a class="dropdown-item" href="#">Appointment history</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            ePrescription
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">View all</a>
-                            <a class="dropdown-item" href="#">View history</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="${'/myPharmacy/drugs/allDrugs'}">List of drugs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="${'/myPharmacy/auth/login'}">Log in</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="${'/myPharmacy/auth/signup'}">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="${'/myPharmacy/auth/logout'}">Log out</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Appointments
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Schedule appointment</a>
+                        <a class="dropdown-item" href="#">Scheduled appointments</a>
+                        <a class="dropdown-item" href="#">Appointment history</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ePrescription
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">View all</a>
+                        <a class="dropdown-item" href="#">View history</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/myPharmacy/drugs/allDrugs'}">List of drugs</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="${'/myPharmacy/auth/login'}">Log in</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="${'/myPharmacy/auth/signup'}">Register</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('PATIENT')">
+                    <a class="nav-link" th:href="${'/myPharmacy/profile/p/__${principal.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="${'/myPharmacy/auth/logout'}">Log out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
 
     </br>
 
-    <div class="row">
-        <div class="col col-lg-5">
+    <div class="row my-2">
+        <div class="col col-lg-3">
             <form th:action="@{'/pharmacies/allPharmacies'}" method="get">
                 <input type="text" placeholder="Name or address.." name="keyword"/>
                 <button type="submit" class="btn btn-dark mt-2">Search</button>
             </form>
         </div>
-        <div class="col col-lg-5">
-            <div col col-lg-6>
+        <div class="row">
+            <div class="col col-lg-7">
                 <h5>Sort by Name </h5>
                 <a th:href="${'/myPharmacy/pharmacies/allPharmacies/sortByNameAsc'}">Ascending</a>
                 </br><a th:href="${'/myPharmacy/pharmacies/allPharmacies/sortByNameDesc'}">Descending</a> </br></br>
+            </div>
+            <div class="col">
                 <h5>Sort by Average Rating </h5>
                 <a th:href="${'/myPharmacy/pharmacies/allPharmacies/sortByRatingAsc'}">Ascending</a>
                 </br><a th:href="${'/myPharmacy/pharmacies/allPharmacies/sortByRatingDesc'}">Descending</a> </br></br>
@@ -91,14 +91,16 @@
                 <th>Name:</th>
                 <th>Address:</th>
                 <th>Average Rating:</th>
-                <th>Add Pharmacy Admin</th>
+                <th sec:authorize="hasRole('SYS_ADMIN')">Add Pharmacy Admin</th>
+                <th></th>
             </tr>
             <tr th:each="pharmacy:${pharmacies}">
                 <td th:text="${pharmacy.id}"></td>
                 <td th:text="${pharmacy.name}"></td>
                 <td th:text="${pharmacy.address}"></td>
                 <td th:text="${pharmacy.averageRating}"></td>
-                <td><a th:href="${'/myPharmacy/user/registerPharmacyAdmin/' + pharmacy.getId()}">Register New Pharmacy Admin</a></td>
+                <td sec:authorize="hasRole('SYS_ADMIN')"><a th:href="${'/myPharmacy/user/registerPharmacyAdmin/' + pharmacy.getId()}">Register New Pharmacy Admin</a></td>
+                <td><a th:href="${'/myPharmacy/pharmacies/' + pharmacy.getId()}">Go to profile</a></td>
             </tr>
         </table>
     </div>

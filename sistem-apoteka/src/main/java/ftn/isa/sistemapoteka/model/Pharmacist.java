@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -24,5 +25,8 @@ public class Pharmacist extends User {
 
     @ElementCollection
     private Set<Integer> ratings;
+
+    @OneToMany(mappedBy = "pharmacist", targetEntity = Appointment.class ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Appointment> appointments = new HashSet<>();
 
 }

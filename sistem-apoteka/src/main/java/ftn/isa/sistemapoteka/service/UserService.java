@@ -14,6 +14,7 @@ public interface UserService {
     Patient findPatientByEmail(String email) throws Exception;
     Patient savePatient(UserRequest userRequest);
     int enableUser(String email);
+    void sendEmail(String to, String body, String topic);
     String confirmToken(String token);
     String buildEmail(String name, String link);
     PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator);
@@ -28,4 +29,6 @@ public interface UserService {
     Patient addAllergyTrigger(Patient patient, Drug drug) throws Exception;
     Patient savePatient(Patient patient) throws Exception;
     Patient updateAppointments(Patient patient) throws Exception;
+    Patient removeAllergyTrigger(Patient patient, Drug drug) throws Exception;
+    Patient getPatientFromPrincipal() throws Exception;
 }

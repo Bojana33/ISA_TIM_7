@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -26,12 +26,7 @@
                         Appointments
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Schedule appointment with dermatologist</a>
-                        <a class="dropdown-item" href="#">Schedule appointment with pharmacist</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Cancel appointment with dermatologist</a>
-                        <a class="dropdown-item" href="#">Cancel appointment with pharmacist</a>
-                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Schedule appointment</a>
                         <a class="dropdown-item" href="#">Scheduled appointments</a>
                         <a class="dropdown-item" href="#">Appointment history</a>
                     </div>
@@ -48,14 +43,20 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/myPharmacy/drugs/allDrugs'}">List of drugs</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="${'/myPharmacy/auth/login'}">Log in</a>
+                <li class="nav-item" >
+                    <div sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="${'/myPharmacy/auth/login'}">Log in</a>
+                    </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/myPharmacy/auth/signup'}">Register</a>
+                    <div  sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="${'/myPharmacy/auth/signup'}">Register</a>
+                    </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/myPharmacy/auth/logout'}">Log out</a>
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:href="${'/myPharmacy/auth/logout'}">Log out</a>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -92,6 +93,7 @@
             <th>Address:</th>
             <th>Average Rating:</th>
             <th>Add Pharmacy Admin</th>
+            <th>Profile</th>
         </tr>
         <tr th:each="pharmacy:${pharmacies}">
             <td th:text="${pharmacy.id}"></td>
@@ -99,6 +101,7 @@
             <td th:text="${pharmacy.address}"></td>
             <td th:text="${pharmacy.averageRating}"></td>
             <td><a th:href="${'/myPharmacy/user/registerPharmacyAdmin/' + pharmacy.getId()}">Register New Pharmacy Admin</a></td>
+            <td><a th:href="${'/myPharmacy/pharmacies/' + pharmacy.getId()}">Go to profile</a></td>
         </tr>
     </table>
 </div>

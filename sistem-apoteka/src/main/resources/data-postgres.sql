@@ -1,13 +1,13 @@
 /*LOYALTY PROGRAM*/
 INSERT INTO loyalty_program(id, appointment_points, consultation_points, discount_gold, discount_regular, discount_silver, gold_points, regular_points, silver_points)
-VALUES(1,0,0,0,0,0,0,0,0);
+VALUES(11,0,0,0,0,0,0,0,0);
 
 /*USERS*/
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role)
 VALUES ('Bojana', 'Todorovic', 'bojana@gmail.com', 'bojana', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'system_administrator', true, false, 0);
 
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, loyalty_program_id, user_role)
-VALUES('Goran', 'Markovic', 'goran@hotmail.com', 'goran', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'Patient', true, false, 1, 1);
+VALUES('Goran', 'Markovic', 'goran@hotmail.com', 'goran', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'Patient', true, false, 11, 1);
 
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role)
 VALUES('Dr Milos', 'Savic', 'savic@mail.com', 'savic', 'Novi Sad', 'Novi Sad', 'Srbija', '066999999', 'Dermatologist', true, false, 5);
@@ -33,7 +33,7 @@ INSERT INTO pharmacy(name, address, average_rating) VALUES ('Jankovic', 'Strazil
 INSERT INTO pharmacy(name, address, average_rating) VALUES ('Jankovic2', 'Ive Lole Ribara 17a', 4.5);
 
 /*APPOINTMENTS*/
-INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date_time_start, date_time_end, scheduled)
-VALUES (1, 10, 4500.0, 3, '20211010 10:10:00 AM', '20211010 11:10:00 AM', false);
-INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date_time_start, date_time_end, scheduled)
-VALUES (2, 8, 4000.0, 4, '20210911 09:00:00 AM', '20210911 08:00:00 AM', false);
+INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date_time_start, date_time_end, scheduled, pharmacy_id)
+VALUES (1, 10, 4500.0, 3, '20211010 10:10:00 AM', '20211010 11:10:00 AM', false, 1);
+INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date_time_start, date_time_end, scheduled, pharmacy_id)
+VALUES (2, 8, 4000.0, 4, '20210911 09:00:00 AM', '20210911 08:00:00 AM', false, 1);

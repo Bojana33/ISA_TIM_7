@@ -50,8 +50,7 @@ public class ProfileController {
             this.userService.updatePatientProfile(patient);
             model.addAttribute("patient", patient);
             // TODO: Namesti redirektovanje
-            //return new ModelAndView("redirect:/profile/p/" + patient.getId() + "/editProfile");
-            return new ModelAndView("views/editProfile");
+            return new ModelAndView("redirect:/profile/p/" + patient.getId() + "/editProfile");
         } catch (Exception e) {
             return new ModelAndView("views/home2");
         }

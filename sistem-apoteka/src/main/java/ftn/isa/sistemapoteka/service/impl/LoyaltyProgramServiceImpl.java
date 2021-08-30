@@ -30,6 +30,10 @@ public class LoyaltyProgramServiceImpl implements LoyaltyProgramService {
         return this.loyaltyProgramRepository.save(loyaltyProgram);
     }
 
+    public LoyaltyProgram save(LoyaltyProgram loyaltyProgram) {
+        return this.loyaltyProgramRepository.save(loyaltyProgram);
+    }
+
     @Override
     public LoyaltyProgram getLP(Long id) {
         return this.loyaltyProgramRepository.getOne(id);

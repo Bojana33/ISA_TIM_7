@@ -67,11 +67,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void makeAppointment(Appointment appointment, Pharmacy pharmacy, String email) throws Exception {
-        // TODO: Proveri da li vraca pacijenta sa svim poljima ili su neka null
+    public void makeAppointment(Appointment appointment, Pharmacy pharmacy, Long patientId) throws Exception {
 
-        String mail = email + ".com";
-        Patient pat = (Patient) this.userService.findByEmail(mail);
+        /*String mail = email + ".com";
+        Patient pat = (Patient) this.userService.findByEmail(mail);*/
+        Patient pat = this.userService.findPatientById(patientId);
         if (pat == null) { throw new Exception("Patient does not exist(App service)"); }
 
         Appointment a = findById(appointment.getId());
@@ -96,5 +96,15 @@ public class AppointmentServiceImpl implements AppointmentService {
         this.userService.updateAppointments(pat);
         this.pharmacyService.updateAppointments(ph);
         update(a);
+    }
+
+    @Override
+    public List<Appointment> findScheduled() {
+        return this.appointmentRepository.findScheduled();
+    }
+
+    @Override
+    public List<Appointment> findAllByPharmacy(Long phId) {
+        return this.appointmentRepository.findAllByPharmacy(phId);
     }
 }

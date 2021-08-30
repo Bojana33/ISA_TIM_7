@@ -1,7 +1,9 @@
 package ftn.isa.sistemapoteka.service.impl;
 
+import ftn.isa.sistemapoteka.authFacade.AuthenticationFacade;
 import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.email.EmailSender;
+import ftn.isa.sistemapoteka.email.EmailService;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.repository.PatientRepository;
 import ftn.isa.sistemapoteka.repository.UserRepository;
@@ -36,6 +38,10 @@ public class UserServiceImpl implements UserService {
 
     private LoyaltyProgramServiceImpl loyaltyProgramService;
 
+    private EmailService emailService;
+
+    private AuthenticationFacade facade;
+
     @Override
     public User findByEmail(String email) {
         User u = userRepository.findByEmail(email);
@@ -66,15 +72,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Patient findPatientByEmail(String email) throws Exception {
         Patient patient = this.patientRepository.findByEmail(email);
-        /*if (patient == null) {
+        if (patient == null) {
             throw new Exception("Patient with this email does not exist");
-        }*/
+        }
         return patient;
     }
 
     @Override
     public Patient savePatient(UserRequest userRequest) {
-        LoyaltyProgram loyaltyProgram = this.loyaltyProgramService.getLP(1L);
+        LoyaltyProgram loyaltyProgram = new LoyaltyProgram();
+
         Patient u = new Patient();
         u.setEmail(userRequest.getEmail());
         u.setPassword(userRequest.getPassword());
@@ -85,10 +92,13 @@ public class UserServiceImpl implements UserService {
         u.setState(userRequest.getState());
         u.setPhoneNumber(userRequest.getPhoneNumber());
         u.setEnabled(false); //setujemo na true kada korisnik potvrdi registraciju preko emaila
+        u.setLoyaltyProgram(loyaltyProgram);
 
         u.setUserRole(UserRole.PATIENT);
-
         u = this.userRepository.save(u);
+
+        loyaltyProgram.setPatient(u);
+        loyaltyProgram = this.loyaltyProgramService.save(loyaltyProgram);
 
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
@@ -133,6 +143,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public int enableUser(String email) {
         return userRepository.enableUser(email);
+    }
+
+    @Override
+    public void sendEmail(String to, String body, String topic) {
+        this.emailService.sendEmail(to, body, topic);
     }
 
     @Override
@@ -316,13 +331,47 @@ public class UserServiceImpl implements UserService {
         return forUpdate;
     }
 
+
+    @Override
+    public Patient addAllergyTrigger(Patient patient, Drug drug) throws Exception {
+        Patient forUpdate = findPatientById(patient.getId());
+
+        Set<Drug> allergyTriggers = forUpdate.getAllergyTriggers();
+        allergyTriggers.add(drug);
+        forUpdate.setAllergyTriggers(allergyTriggers);
+
+        this.patientRepository.save(forUpdate);
+
+        return forUpdate;
+    }
+
+    @Override
+    public Patient removeAllergyTrigger(Patient patient, Drug drug) throws Exception {
+        Patient forUpdate = findPatientById(patient.getId());
+
+        Set<Drug> allergyTriggers = forUpdate.getAllergyTriggers();
+        allergyTriggers.remove(drug);
+        forUpdate.setAllergyTriggers(allergyTriggers);
+
+        this.patientRepository.save(forUpdate);
+
+        return forUpdate;
+    }
+
+    @Override
+    public Patient getPatientFromPrincipal() throws Exception {
+        String principal = this.facade.getPrincipalEmail();
+
+        return findPatientByEmail(principal);
+    }
+
     @Override
     public Page<Patient> findPaginatedPatientDrugs(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum-1, pageSize);
         return this.patientRepository.findAll(pageable);
     }
 
-    @Override
+    /*@Override
     public Patient addAllergyTrigger(Patient patient, Drug drug) throws Exception{
         Patient p = this.patientRepository.findById(patient.getId()).get();
         if(p == null) { throw new Exception("Patient with this id does not exist"); }
@@ -341,7 +390,7 @@ public class UserServiceImpl implements UserService {
         this.drugService.saveDrug(d);
 
         return p;
-    }
+    }*/
 
     @Override
     public Patient savePatient(Patient patient) throws Exception {

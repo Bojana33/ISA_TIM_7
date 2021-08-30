@@ -28,12 +28,7 @@
                             Appointments
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Schedule appointment with dermatologist</a>
-                            <a class="dropdown-item" href="#">Schedule appointment with pharmacist</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Cancel appointment with dermatologist</a>
-                            <a class="dropdown-item" href="#">Cancel appointment with pharmacist</a>
-                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Schedule appointment</a>
                             <a class="dropdown-item" href="#">Scheduled appointments</a>
                             <a class="dropdown-item" href="#">Appointment history</a>
                         </div>
@@ -102,7 +97,7 @@
                     <div class="profile-work">
                         <p>Other</p>
                         <a th:href="@{/profile/p/__${patient.id}__/editProfile}">Edit profile</a><br/></br>
-                        <a th:href="@{/user/__${patient.id}__/allergyTriggers}">Allergies</a><br/>
+                        <a th:href="@{'/user/__${patient.id}__/allergyTriggers'}">Allergies triggers</a><br/>
                         <a href="">Leave feedback</a><br/>
                     </div>
                 </div>

@@ -68,6 +68,7 @@ public class UserController {
         if(patient == null) { throw new Exception("Patient does not exist."); }
 
         model.addAttribute("drugs", patient.getAllergyTriggers());
+        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
         return new ModelAndView("views/showAllergies");
     }
@@ -76,7 +77,6 @@ public class UserController {
     @GetMapping("/{id}/allergyTriggers/add")
     public ModelAndView showAllergyTriggerForm(@PathVariable Long id, Model model) throws Exception{
         Patient patient = this.userService.findPatientById(id);
-        if(patient == null) { throw new Exception("Patient does not exist."); }
 
         model.addAttribute("patient", patient);
         model.addAttribute("drugs", this.drugService.findAllDrugs());
@@ -84,10 +84,26 @@ public class UserController {
         return new ModelAndView("views/addAllergy");
     }
 
-    @PostMapping("/{id}/allergyTriggers/add")
-    public ModelAndView addAllergyTrigger(@ModelAttribute Patient patient, @ModelAttribute Drug drug, @PathVariable Long id) throws Exception {
-        this.userService.addAllergyTrigger(patient, drug);
-        // TODO: proveri sta se zapravo vraca sa atributom drug!!!!
+    @GetMapping(value = "/{id}/allergyTriggers/addSuccess/{code}")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ModelAndView addAllergyTrigger(@PathVariable Long id, @PathVariable Long code, Model model) throws Exception {
+        Patient patient = this.userService.findPatientById(id);
+        Drug drug = this.drugService.findByCode(code);
+
+        //Drug d = this.drugService.updatePatientsWithAllergies(drug, patient);
+        Patient p = this.userService.addAllergyTrigger(patient, drug);
+
+        return new ModelAndView("redirect:/user/" + patient.getId() + "/allergyTriggers");
+    }
+
+    @GetMapping(value = "/{id}/allergyTriggers/remove/{code}")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ModelAndView removeAllergyTrigger(@PathVariable Long id, @PathVariable Long code, Model model) throws Exception {
+        Patient patient = this.userService.findPatientById(id);
+        Drug drug = this.drugService.findByCode(code);
+
+        Patient p = this.userService.removeAllergyTrigger(patient, drug);
+
         return new ModelAndView("redirect:/user/" + patient.getId() + "/allergyTriggers");
     }
 
@@ -173,7 +189,10 @@ public class UserController {
 
     @PreAuthorize("hasRole('PATIENT')")
     @GetMapping("/patient/home")
-    public ModelAndView patientHome(){ return new ModelAndView("views/patient-home"); }
+    public ModelAndView patientHome(Model model) throws Exception {
+        model.addAttribute("user", this.userService.getPatientFromPrincipal());
+        return new ModelAndView("views/patient-home");
+    }
 
     @PreAuthorize("hasRole('SUPPLIER')")
     @GetMapping("/supplier/home")
