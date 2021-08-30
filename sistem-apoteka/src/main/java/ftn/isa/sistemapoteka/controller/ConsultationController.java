@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("consultations")
+@RequestMapping("/consultations")
 public class ConsultationController {
 
     private ConsultationService consultationService;
