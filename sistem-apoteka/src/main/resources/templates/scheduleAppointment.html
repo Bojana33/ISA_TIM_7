@@ -33,12 +33,22 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="localDateTime">LocalDateTime:</label>
-                    <select class="form-control" id="localDateTime" th:field="*{localDateTime}">
+                    <label for="startDateTime">StartDateTime:</label>
+                    <select class="form-control" id="startDateTime" th:field="*{startDateTime}">
                         <option value="">Select a type</option>
-                        <option th:each="localDateTimeOpt : ${T(ftn.isa.sistemapoteka.model.Appointment).values()}"
-                                th:value="${localDateTimeOpt}"
-                                th:text="${localDateTimeOpt.getDisplayName()}"></option>
+                        <option th:each="startDateTimeOpt : ${T(ftn.isa.sistemapoteka.model.Appointment).values()}"
+                                th:value="${startDateTimeOpt}"
+                                th:text="${startDateTimeOpt.getDisplayName()}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="endDateTime">EndDateTime:</label>
+                    <select class="form-control" id="endDateTime" th:field="*{endDateTime}">
+                        <option value="">Select a type</option>
+                        <option th:each="endDateTimeOpt : ${T(ftn.isa.sistemapoteka.model.Appointment).values()}"
+                                th:value="${endDateTimeOpt}"
+                                th:text="${endDateTimeOpt.getDisplayName()}"></option>
                     </select>
                 </div>
 
