@@ -4,9 +4,9 @@ INSERT INTO users(first_name, last_name, email, password, residence, city, state
 
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role) VALUES ('Mina', 'Bojanic', 'mina@gmail.com', 'mina', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'supplier', true, false,3);
 
-INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role) VALUES ('Dermatolog', 'Vidakovic', 'dermatolog@gmail.com', 'dermatolog', 'Subotica', 'Subotica', 'Srbija', '0640076133', 'Dermatologist', true, false,5);
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role) VALUES ('Dermatolog', 'Vidakovic', 'dermatolog@gmail.com', 'dermatolog', 'Subotica', 'Subotica', 'Srbija', '0640076133', 'Dermatologist', true, true,5);
 
-INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role) VALUES ('Farmaceut', 'Vidakovic', 'farmaceut@gmail.com', 'farmaceut', 'Subotica', 'Subotica', 'Srbija', '0640076133', 'Pharmacist', true, false,4);
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role) VALUES ('Farmaceut', 'Vidakovic', 'farmaceut@gmail.com', 'farmaceut', 'Subotica', 'Subotica', 'Srbija', '0640076133', 'Pharmacist', true, true,4);
 
 INSERT INTO loyalty_program(appointment_points,consultation_points, discount_gold, discount_regular, discount_silver, gold_points, is_defined, regular_points, silver_points) values (0.0,0.0,0,0,0,0.0,true,0.0,0.0);
 
