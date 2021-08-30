@@ -19,12 +19,27 @@
 <body>
     <div class="center-align">
         <h1>Appointment</h1>
-        <form th:action="@{/apointments/addAppointment/submit}" th:object="${appointment}" method="post">
+        <form th:action="@{/appointments/addAppointment/submit}" th:object="${appointment}" method="post">
             <br><label for="diagnosis">Diagnosis:</label>
             <input id="diagnosis" type="text" th:field="*{diagnosis}"/>
             <br><label for="therapy">Therapy:</label>
             <input id="therapy" type="text" th:field="*{therapy}"/>
+            <br>
+            <h4>Drug Specification</h4>
+            <br><label for="state">Daily Intake:</label>
+            <input id="state" type="number" th:field="*{dailyIntake}"/>
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-success">Submit</button>
+            </div>
         </form>
+    </div>
+
+    <div class="row" sec:authorize="hasRole('DERMATOLOGIST')">
+        <a th:href="${'/myPharmacy/appointments/scheduleAppointment'}">Schedule appointment</a>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-block btn-success">Submit</button>
     </div>
 </body>
 </html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Start consultation</title>
+</head>
+<body>
+
+    <div class="container center-align">
+        <div class="center-align">
+        <h1>Start consultation</h1>
+            <form th:action="@{/consultations/start/submit}" th:object="${consultation}" method="post">
+                <br><label for="price">Price:</label>
+                <input id="price" type="text" th:field="*{price}"/>
+                <br><label for="drug">Drug:</label>
+                <input id="drug" type="text" th:field="*{drug}"/>
+            </form>
+        </div>
+
+        <div class="row" sec:authorize="hasRole('PHARMACIST')">
+            <a th:href="${'/myPharmacy/consultations/scheduleConsultation'}">Schedule consultation</a>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-block btn-success">Submit</button>
+        </div>
+    </div>
+</body>
+</html>

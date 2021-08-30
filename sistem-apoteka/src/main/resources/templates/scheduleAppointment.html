@@ -17,6 +17,37 @@
     <title>Schedule appointment</title>
 </head>
 <body>
+    <div class="container center-align">
+        <div class="center-align">
+            <h1>Schedule appointment</h1>
+            <form th:action="@{/appointments/scheduleAppointment/submit}" th:object="${appointment}" method="post">
+
+                <div class="form-group">
+                    <label for="appointment">Appointment:</label>
+                    <select class="form-control" id="appointment" th:field="*{appointment}">
+                        <option value="">Select a type</option>
+                        <option th:each="appointmentOpt : ${T(ftn.isa.sistemapoteka.model.Appointment).values()}"
+                                th:value="${appointmentOpt}"
+                                th:text="${appointmentOpt.getDisplayName()}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="localDateTime">LocalDateTime:</label>
+                    <select class="form-control" id="localDateTime" th:field="*{localDateTime}">
+                        <option value="">Select a type</option>
+                        <option th:each="localDateTimeOpt : ${T(ftn.isa.sistemapoteka.model.Appointment).values()}"
+                                th:value="${localDateTimeOpt}"
+                                th:text="${localDateTimeOpt.getDisplayName()}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </body>
 </html>
