@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <!--Import Google Icon Font-->
@@ -14,17 +14,20 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <title>Home</title>
+    <title>Specification</title>
 </head>
-<div class="center-align">
-    <h3>My Pharmacy</h3>
-</div>
 <body>
-<h5 class="center-align"><a th:href="${'/myPharmacy/auth/login'}">Login</a><br>
-    <a th:href="${'/myPharmacy/auth/signup'}">Register</a><br>
-    <a th:href="${'/myPharmacy/drugs/'}">Drugs</a>
-    <br>
-    <a th:href="${'/myPharmacy/pharmacies/allPharmacies'}">Pharmacies</a></h5><br>
+<div class="center-align">
+    <h1> <p th:text="${drug.name}"></p></h1>
+    <h3>Specification</h3>
+    <label for="contr">Contraindications:</label>
+    <p id="contr" th:text="${drug.contraindications}"></p>
+    <label for="struct">Structure:</label>
+    <p id="struct" th:text="${drug.structure}"></p>
+    <label for="intake">Daily Intake:</label>
+    <p id="intake" th:text="${drug.dailyIntake}"></p>
+</div>
 
+<br>
 </body>
 </html>

@@ -1,12 +1,14 @@
 package ftn.isa.sistemapoteka.service.impl;
 
 import ftn.isa.sistemapoteka.model.Drug;
+import ftn.isa.sistemapoteka.model.DrugType;
 import ftn.isa.sistemapoteka.repository.DrugRepository;
 import ftn.isa.sistemapoteka.service.DrugService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class DrugServiceImpl implements DrugService {
@@ -45,5 +47,23 @@ public class DrugServiceImpl implements DrugService {
     @Override
     public Drug findByCode(Long code) {
         return this.drugRepository.findByCode(code);
+    }
+
+    @Override
+    public List<Drug> findDrugByName(String name) {
+        if (!name.equals("")){
+            return this.drugRepository.findAllByName(name);
+        }
+        return this.drugRepository.findAll();
+    }
+
+    @Override
+    public List<Drug> findDrugByType(DrugType drugType) {
+        return this.drugRepository.findAllByDrugType(drugType);
+    }
+
+    @Override
+    public List<Drug> filterDrugByRating(Double rating) {
+        return this.drugRepository.findAllByAverageRating(rating);
     }
 }

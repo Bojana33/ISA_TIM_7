@@ -1,11 +1,9 @@
 package ftn.isa.sistemapoteka.controller;
 
 import ftn.isa.sistemapoteka.exception.ResourceConflictException;
-import ftn.isa.sistemapoteka.model.Patient;
-import ftn.isa.sistemapoteka.model.Pharmacy;
-import ftn.isa.sistemapoteka.model.PharmacyAdministrator;
-import ftn.isa.sistemapoteka.model.User;
+import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.service.PharmacyService;
+import ftn.isa.sistemapoteka.service.impl.DrugServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.PharmacyServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/pharmacies")
@@ -31,14 +27,17 @@ public class PharmacyController {
 
     private PharmacyServiceImpl pharmacyServiceImpl;
     private UserServiceImpl userService;
+    private DrugServiceImpl drugService;
 
     @Autowired
-    public PharmacyController(PharmacyServiceImpl pharmacyServiceImpl, UserServiceImpl userService){
+    public PharmacyController(PharmacyServiceImpl pharmacyServiceImpl, UserServiceImpl userService, DrugServiceImpl drugService){
         this.pharmacyServiceImpl = pharmacyServiceImpl;
         this.userService = userService;
+        this.drugService = drugService;
     }
 
     @GetMapping(value = "/registerPharmacy")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
     public ModelAndView registerPharmacyForm(Model model){
         Pharmacy pharmacy = new Pharmacy();
         model.addAttribute(pharmacy);
@@ -46,6 +45,7 @@ public class PharmacyController {
     }
 
     @PostMapping("/registerPharmacy/submit")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
     public ModelAndView registerPharmacySubmit(@ModelAttribute Pharmacy pharmacy) throws Exception{
         this.pharmacyServiceImpl.save(pharmacy);
         return new ModelAndView("redirect:/user/registerPharmacyAdmin/" + pharmacy.getId());
@@ -65,6 +65,7 @@ public class PharmacyController {
     }
 
     @RequestMapping("/subscribe/{id}")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView subsribePatient(Model model, @PathVariable Long id, Authentication authentication) throws Exception{
         Patient patient = (Patient) this.userService.findByEmail(authentication.getName());
         Pharmacy pharmacy = this.pharmacyServiceImpl.findById(id);
@@ -74,6 +75,7 @@ public class PharmacyController {
     }
 
     @RequestMapping("/unsubscribe/{id}")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView unsubsribePatient(Model model, @PathVariable Long id, Authentication authentication){
         Patient patient = (Patient) this.userService.findByEmail(authentication.getName());
         Pharmacy pharmacy = this.pharmacyServiceImpl.findById(id);
@@ -81,6 +83,14 @@ public class PharmacyController {
         Set<Pharmacy> pharmacies = this.userService.findAllSubscribedPharmacies(patient);
         model.addAttribute("pharmacies",pharmacies);
         return new ModelAndView("redirect:/user/subscribedPharmacies");
+    }
+
+    @GetMapping("/drug/{code}/pharmacies")
+    public ModelAndView drugPharmacies(Model model, @PathVariable Long code){
+        Drug drug = this.drugService.findByCode(code);
+        Map<Pharmacy,Double> pharmacies = this.pharmacyServiceImpl.findByDrug(drug);
+        model.addAttribute("pharmacies",pharmacies);
+        return new ModelAndView("drug-pharmacies");
     }
 
 }

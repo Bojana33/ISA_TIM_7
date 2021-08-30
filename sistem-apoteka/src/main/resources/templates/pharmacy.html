@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <!--Import Google Icon Font-->
@@ -22,7 +22,7 @@
     <h5> <p th:text="${pharmacy.address}"></p></h5>
 </div>
 <div>
-    <a th:href="${'/myPharmacy/pharmacies/subscribe/'+ pharmacy.getId()}">Subscribe</a>
+    <a sec:authorize="hasRole('PATIENT')" th:href="${'/myPharmacy/pharmacies/subscribe/'+ pharmacy.getId()}">Subscribe</a>
 </div>
 
 <br>

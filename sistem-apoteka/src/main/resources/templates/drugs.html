@@ -10,7 +10,7 @@
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -18,35 +18,67 @@
 </head>
 <body>
 <div class="container">
-<h3>Drugs</h3>
-<br>
-<div class="row" sec:authorize="hasRole('SYS_ADMIN')">
-    <a th:href="${'/myPharmacy/drugs/addDrug'}">Add New Drug</a>
-</div>
-<br>
-<div class="table">
-    <table id="drugs">
-        <tr>
-            <th sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')">Id:</th>
-            <th>Name:</th>
-            <th sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')">Code:</th>
-            <th>Type:</th>
-            <th>Rating</th>
-            <th>Drug Specification</th>
-            <th>Availability</th>
-        </tr>
-        <tr th:each="drug:${drugs}">
-            <td sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')" th:text="${drug.id}"></td>
-            <td th:text="${drug.name}"></td>
-            <td sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')" th:text="${drug.code}"></td>
-            <td th:text="${drug.drugType}"></td>
-            <td th:text="${drug.averageRating}"></td>
-            <td><a>Specification</a></td>
-            <td><a>Show Pharmacies</a></td>
-        </tr>
-    </table>
-</div>
+    <h3>Drugs</h3>
+    <br>
+    <div class="right-align" sec:authorize="hasRole('SYS_ADMIN')">
+        <a th:href="${'/myPharmacy/drugs/addDrug'}">Add New Drug</a>
+    </div>
+    <br>
+    <div class="right-align">
+        <form th:action="@{/drugs/findDrug}" th:object="${drug}">
+            <label for="name">Find drug:</label>
+            <input id="name" type="text" placeholder="Enter drug name.." th:field="*{name}">
+            <button type="submit"  id="button">Search</button>
+        </form>
+    </div>
+    <br>
+    <div>
+        <form th:action = "@{/drugs/filterDrugs}" th:object = "${drug}" method="post">
+            <div class="form-group">
+                <label for="offerStatus">Filter Offers By Type:</label>
+                <select class="form-control" id="offerStatus" th:field="*{drugType}">
+                    <option value="">Filter By Type</option>
+                    <option th:each="drugTypeOpt : ${T(ftn.isa.sistemapoteka.model.DrugType).values()}"
+                            th:value="${drugTypeOpt}"
+                            th:text="${drugTypeOpt.getDisplayName()}"></option>
+                </select>
+            </div>
+            <button type="submit"  id="button">Search</button>
+        </form>
+    </div>
+    <br>
+    <div class="right-align">
+        <form th:action="@{/drugs/filterByRate}" th:object="${drug}">
+            <label for="name">Filter By Rate:</label>
+            <input id="name" type="number" placeholder="Enter rate from 1 to 5.." th:field="*{averageRating}">
+            <button type="submit"  id="button">Search</button>
+        </form>
+    </div>
+    <br>
+    <br>
+    <div class="table">
+        <table id="drugs">
+            <tr>
+                <th sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')">Id:</th>
+                <th>Name:</th>
+                <th sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')">Code:</th>
+                <th>Type:</th>
+                <th>Rating</th>
+                <th>Drug Specification</th>
+                <th>Availability</th>
+            </tr>
+            <tr th:each="drug:${drugs}">
+                <td sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')" th:text="${drug.id}"></td>
+                <td th:text="${drug.name}"></td>
+                <td sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')" th:text="${drug.code}"></td>
+                <td th:text="${drug.drugType}"></td>
+                <td th:text="${drug.averageRating}"></td>
+                <td><a th:href="${'/myPharmacy/drugs/getDrugSpecification/'+ drug.getCode()}">Specification</a></td>
+                <td><a th:href="${'/myPharmacy/pharmacies/drug/'+ drug.getCode() +'/pharmacies'}">Show Pharmacies</a></td>
+            </tr>
+        </table>
+    </div>
 
-</div>
+    </div>
 </body>
 </html>
