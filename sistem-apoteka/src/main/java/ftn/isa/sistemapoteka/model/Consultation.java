@@ -23,6 +23,15 @@ public class Consultation implements Serializable {
     @Column
     private Double loyaltyPoints;
 
+    @Column
+    private LocalDateTime startDateTime;
+
+    @Column
+    private LocalDateTime endDateTime;
+
+    @Column
+    private Boolean scheduled = false;
+
     @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id", nullable = false, referencedColumnName = "id")
     private Patient patient;
