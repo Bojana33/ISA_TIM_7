@@ -17,7 +17,22 @@
     <title>Clients</title>
 </head>
 <body>
-    <table id="clients">
+
+    </div>
+    <div class="col col-lg-5">
+        <div col col-lg-6>
+            <h5>Sort by Name </h5>
+            <a th:href="${'/myPharmacy/clients/allPatients/sortByNameAsc'}">Ascending</a>
+            </br><a th:href="${'/myPharmacy/clients/allPatients/sortByNameDesc'}">Descending</a> </br>
+            <br>
+            <h5>Sort by Surname</h5>
+            <a th:href="${'/myPharmacy/clients/allPatients/sortBySurnameAsc'}">Ascending</a>
+            </br><a th:href="${'/myPharmacy/clients/allPatients/sortBySurnameDesc'}">Descending</a> </br>
+            <br>
+        </div>
+    </div>
+
+    <table id="users">
         <tr>
             <th>Id:</th>
             <th>First name:</th>
@@ -25,8 +40,12 @@
         </tr>
         <tr th:each="user:${users}">
             <td th:text="${user.id}"></td>
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
             <td> <a th:href="${'/myPharmacy/users/user/' + user.getId()}" th:text="${user.firstName}" th:text="${user.lastName}"> </a></td>
             </tr>
     </table>
+
+
 </body>
 </html>

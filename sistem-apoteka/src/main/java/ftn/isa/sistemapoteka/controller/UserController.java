@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -197,5 +198,38 @@ public class UserController {
         Set<Pharmacy> pharmacies = this.userService.findAllSubscribedPharmacies(patient);
         model.addAttribute("pharmacies",pharmacies);
         return new ModelAndView("subscriptions");
+    }
+
+
+    @GetMapping("/allPatients/sortByFirstNameAsc")
+    public ModelAndView sortByNameAsc(Model model) {
+        List<Patient> sorted = this.userService.orderByFirstNameAsc();
+        model.addAttribute("patients", sorted);
+
+        return new ModelAndView("users");
+    }
+
+    @GetMapping("/allPatients/sortByFirstNameDesc")
+    public ModelAndView sortByNameDesc(Model model) {
+        List<Patient> sorted = this.userService.orderByFirstNameDesc();
+        model.addAttribute("users", sorted);
+
+        return new ModelAndView("users");
+    }
+
+    @GetMapping("/allPatients/sortByLastNameAsc")
+    public ModelAndView sortByLastNameAsc(Model model) {
+        List<Patient> sorted = this.userService.orderByLastNameAsc();
+        model.addAttribute("patients", sorted);
+
+        return new ModelAndView("clients");
+    }
+
+    @GetMapping("/allPatients/sortByLastNameDesc")
+    public ModelAndView sortByLastNameDesc(Model model) {
+        List<Patient> sorted = this.userService.orderByLastNameDesc();
+        model.addAttribute("patients", sorted);
+
+        return new ModelAndView("clients");
     }
 }

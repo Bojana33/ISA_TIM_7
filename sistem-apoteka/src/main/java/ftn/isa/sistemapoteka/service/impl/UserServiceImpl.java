@@ -343,4 +343,15 @@ public class UserServiceImpl implements UserService {
         return this.pharmacyRepository.findAllBySubscriptionedPatients(patient);
     }
 
+    @Override
+    public List<Patient> orderByFirstNameAsc() { return this.userRepository.findByOrderByFirstNameAsc(); }
+
+    @Override
+    public List<Patient> orderByFirstNameDesc() { return this.userRepository.findByOrderByFirstNameDesc(); }
+
+    @Override
+    public List<Patient> orderByLastNameAsc() { return this.userRepository.findByOrderByLastNameAsc(); }
+
+    @Override
+    public List<Patient> orderByLastNameDesc() { return this.userRepository.findByOrderByLastNameDesc(); }
 }
