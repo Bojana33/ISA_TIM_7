@@ -1,4 +1,5 @@
 package ftn.isa.sistemapoteka.model;
 
-public enum UserCategory { REGULAR, SILVER, GOLD
+public enum UserCategory {
+    NONE, REGULAR, SILVER, GOLD
 }

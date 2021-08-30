@@ -3,17 +3,27 @@ package ftn.isa.sistemapoteka.service.impl;
 import ftn.isa.sistemapoteka.model.ConfirmationToken;
 import ftn.isa.sistemapoteka.repository.ConfirmationTokenRepository;
 import ftn.isa.sistemapoteka.service.ConfirmationTokenService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
-    private ConfirmationTokenRepository confirmationTokenRepository;
+    private final ConfirmationTokenRepository confirmationTokenRepository;
+
+    @Autowired
+
+    public ConfirmationTokenServiceImpl(ConfirmationTokenRepository confirmationTokenRepository) {
+        this.confirmationTokenRepository = confirmationTokenRepository;
+    }
+
+    @Autowired
+
+    public ConfirmationTokenServiceImpl(ConfirmationTokenRepository confirmationTokenRepository) {
+        this.confirmationTokenRepository = confirmationTokenRepository;
+    }
 
     @Override
     public void saveConfirmationToken(ConfirmationToken token) {

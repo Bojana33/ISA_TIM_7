@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
-    List<Appointment> getAllByDermatologist_PharmaciesOrderByDateTimeDa
+    List<Appointment> getAllByDermatologist_PharmaciesOrderByDateTimeAsc(Pharmacy pharmacy);
 }

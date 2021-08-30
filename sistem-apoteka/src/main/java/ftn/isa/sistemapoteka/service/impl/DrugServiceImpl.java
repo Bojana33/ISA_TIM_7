@@ -42,6 +42,12 @@ public class DrugServiceImpl implements DrugService {
         d.setContraindications(drug.getContraindications());
         d.setStructure(drug.getStructure());
         d.setDailyIntake(drug.getDailyIntake());
+        d.setDrugShape(drug.getDrugShape());
+        d.setAdditionalNote(drug.getAdditionalNote());
+        d.setLoyaltyPoints(drug.getLoyaltyPoints());
+        d.setProducer(drug.getProducer());
+        d.setOnPrescription(drug.getOnPrescription());
+        d.setQuantity(drug.getQuantity());
         this.drugRepository.save(d);
         return d;
     }

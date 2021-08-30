@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link href="css/materialize.min.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <!-- Compiled and minified CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Loyalty Program</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="center-align purple lighten-5">
+        <h1>Loyalty Program</h1>
+        <form method="post" th:action="@{/loyaltyProgram/updateLoyaltyProgram/submit}" th:object="${loyaltyProgram}">
+            <br><label for="consultationPoints">Consultation Points:</label>
+            <input id="consultationPoints" th:field="*{consultationPoints}" type="number"/>
+            <br><label for="appointmentPoints">Appointment Points:</label>
+            <input id="appointmentPoints" th:field="*{appointmentPoints}" type="number"/>
+            <br><label for="regularPoints">Regular Points:</label>
+            <input id="regularPoints" th:field="*{regularPoints}" type="number"/>
+            <br><label for="silverPoints">Silver Points</label>
+            <input id="silverPoints" th:field="*{silverPoints}" type="number"/>
+            <br><label for="goldPoints">Gold Points:</label>
+            <input id="goldPoints" th:field="*{goldPoints}" type="number"/>
+            <br><label for="discountRegular">Discount (Regular):</label>
+            <input id="discountRegular" th:field="*{discountRegular}" type="number"/>
+            <br><label for="discountSilver">Discount (Silver):</label>
+            <input id="discountSilver" th:field="*{discountSilver}" type="number"/>
+            <br><label for="discountGold">Discount (Gold):</label>
+            <input id="discountGold" th:field="*{discountGold}" type="number"/>
+            <div class="form-group">
+                <button class="btn btn-block btn-success" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

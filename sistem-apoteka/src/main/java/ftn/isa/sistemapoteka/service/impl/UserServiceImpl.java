@@ -78,20 +78,25 @@ public class UserServiceImpl implements UserService {
         return u;
     }
 
-    public UserCategory defineUserCategory(Patient patient, LoyaltyProgram loyaltyProgram) {
-        if (patient.getLoyaltyPoints() >= loyaltyProgram.getRegularPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getSilverPoints()) {
-            return UserCategory.REGULAR;
+    public void defineUserCategory(Patient patient) {
+        LoyaltyProgram loyaltyProgram = this.loyaltyProgramService.getLP(1L);
+        if (patient.getLoyaltyPoints() == 0.0) {
+            patient.setUserCategory(UserCategory.NONE);
+        } else if (patient.getLoyaltyPoints() >= loyaltyProgram.getRegularPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getSilverPoints()) {
+            patient.setUserCategory(UserCategory.REGULAR);
+        } else if (patient.getLoyaltyPoints() >= loyaltyProgram.getSilverPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getGoldPoints()) {
+            patient.setUserCategory(UserCategory.SILVER);
+        } else if (patient.getLoyaltyPoints() >= loyaltyProgram.getGoldPoints()) {
+            patient.setUserCategory(UserCategory.GOLD);
+        } else {
+            patient.setUserCategory(UserCategory.NONE);
         }
-        if (patient.getLoyaltyPoints() >= loyaltyProgram.getSilverPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getGoldPoints()) {
-            return UserCategory.SILVER;
-        }
-        if (patient.getLoyaltyPoints() >= loyaltyProgram.getGoldPoints()) {
-            return UserCategory.GOLD;
-        }
-        return null;
+        this.userRepository.save(patient);
+
     }
 
-    public Integer discount(Patient patient, LoyaltyProgram loyaltyProgram) {
+    public Integer discount(Patient patient) {
+        LoyaltyProgram loyaltyProgram = this.loyaltyProgramService.getLP(1L);
         if (patient.getUserCategory() == UserCategory.GOLD) {
             return loyaltyProgram.getDiscountGold();
         }

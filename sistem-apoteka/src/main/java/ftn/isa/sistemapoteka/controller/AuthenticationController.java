@@ -2,8 +2,8 @@ package ftn.isa.sistemapoteka.controller;
 
 import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.dto.UserDTO;
-import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.exception.ResourceConflictException;
+import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,7 +20,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/auth")
 public class AuthenticationController {
 
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
 
     @Autowired
@@ -78,13 +78,15 @@ public class AuthenticationController {
 
         User user = this.userService.findByEmail(auth.getName());
         this.userService.changePasswordAfterFirstLogin(user,changePasswordAfterFirstLoginDTO);
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return new ModelAndView("redirect:/auth/change-password");
         }
-        if (user instanceof Patient){
+        if (user instanceof Patient) {
             return new ModelAndView("redirect:/user/patient/home");
-        } else if(user instanceof SystemAdministrator){
+        } else if (user instanceof SystemAdministrator) {
             return new ModelAndView("redirect:/user/sys-admin/home");
+        } else if (user instanceof Supplier) {
+            return new ModelAndView("redirect:/user/supplier/home");
         } else {
             return new ModelAndView("redirect:/auth/home");
         }

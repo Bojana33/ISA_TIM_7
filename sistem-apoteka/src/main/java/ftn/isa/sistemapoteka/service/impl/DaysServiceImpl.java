@@ -7,11 +7,13 @@ import ftn.isa.sistemapoteka.model.Pharmacy;
 import ftn.isa.sistemapoteka.model.PharmacyAdministrator;
 import ftn.isa.sistemapoteka.repository.DaysRepository;
 import ftn.isa.sistemapoteka.service.DaysService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class DaysServiceImpl implements DaysService {
     private final DaysRepository daysRepository;
