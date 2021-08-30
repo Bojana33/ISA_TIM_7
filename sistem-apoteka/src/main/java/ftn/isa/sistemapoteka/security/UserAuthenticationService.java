@@ -67,6 +67,12 @@ public class UserAuthenticationService
                 retVal = new UsernamePasswordAuthenticationToken(
                         email, password, grantedAuths
                 );
+            } else if (user.getUserRole() == PHARMACIST) {
+                grantedAuths.add(new SimpleGrantedAuthority("ROLE_PHARMACIST"));
+
+                retVal = new UsernamePasswordAuthenticationToken(
+                        email, password, grantedAuths
+                );
             }
         }
         else
