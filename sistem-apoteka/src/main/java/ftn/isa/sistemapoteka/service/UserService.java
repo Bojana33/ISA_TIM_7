@@ -21,6 +21,8 @@ public interface UserService {
     User findByEmailAndPassword(String email, String password);
     User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c);
     User updateProfile(User user);
+    Dermatologist findDermatologistById(Long id) throws Exception;
+    Pharmacist findPharmacistById(Long id) throws Exception;
 
     void subscribePatient(Patient patient, Pharmacy pharmacy) throws Exception;
 

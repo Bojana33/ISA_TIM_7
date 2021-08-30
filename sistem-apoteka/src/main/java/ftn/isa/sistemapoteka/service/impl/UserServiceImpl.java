@@ -3,29 +3,25 @@ package ftn.isa.sistemapoteka.service.impl;
 import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.model.*;
+import ftn.isa.sistemapoteka.repository.DermatologistRepository;
+import ftn.isa.sistemapoteka.repository.PharmacistRepository;
 import ftn.isa.sistemapoteka.repository.PharmacyRepository;
 import ftn.isa.sistemapoteka.repository.UserRepository;
-import ftn.isa.sistemapoteka.service.PharmacyService;
 import ftn.isa.sistemapoteka.service.UserService;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.io.Console;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
+
+    private DermatologistRepository dermatologistRepository;
+
+    private PharmacistRepository pharmacistRepository;
 
     private UserRepository userRepository;
 
@@ -288,6 +284,28 @@ public class UserServiceImpl implements UserService {
         u.setState(user.getState());
         u.setPhoneNumber(user.getPhoneNumber());
         return this.userRepository.save(u);
+    }
+
+    public Dermatologist findDermatologistById(Long id) throws Exception{
+        if (!this.dermatologistRepository.findById(id).isPresent()) {
+            throw new Exception("No such value(Dermatologist service)");
+        }
+        Dermatologist dermatologist = this.dermatologistRepository.findById(id).get();
+        if (dermatologist == null) {
+            throw new Exception("Dermatologist with this id does not exist");
+        }
+        return dermatologist;
+    }
+
+    public Pharmacist findPharmacistById(Long id) throws Exception{
+        if (!this.pharmacistRepository.findById(id).isPresent()) {
+            throw new Exception("No such value(Pharmacist service)");
+        }
+        Pharmacist pharmacist = this.pharmacistRepository.findById(id).get();
+        if (pharmacist == null) {
+            throw new Exception("Pharmacist with this id does not exist");
+        }
+        return pharmacist;
     }
 
     @Override

@@ -160,6 +160,16 @@ public class UserController {
         return new ModelAndView("redirect:/user/sys-admin/home");
     }
 
+    @GetMapping("/showDermatologist/{id}")
+    @PreAuthorize("hasRole('DERMATOLOGIST')")
+    public ModelAndView showDermatologist(@PathVariable Long id, Model model) throws Exception {
+        Dermatologist dermatologist= (Dermatologist) this.userService.findById(id);
+        if (dermatologist == null) { throw new Exception("Page does not exist"); }
+
+        model.addAttribute("dermatologist", dermatologist);
+        return new ModelAndView("dermatologist-profile");
+    }
+
     @GetMapping("/updateProfile")
     @PreAuthorize("hasAnyRole('PATIENT','SYS_ADMIN','SUPPLIER','DERMATOLOGIST','PHARMACIST')")
     public ModelAndView updateProfile(Model model, Authentication authentication){
