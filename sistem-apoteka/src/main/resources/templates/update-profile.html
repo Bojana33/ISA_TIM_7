@@ -18,7 +18,7 @@
 </head>
 <div class="container">
     <div class="center-align blue lighten-5">
-        <h1>Update Profile</h1>
+        <h1>My Profile</h1>
         <form th:action="@{/user/updateProfile/__${id}__/submit}" th:object="${user}" method="post">
             <br><label for="firstName">FirstName:</label>
             <input id="firstName" type="text" th:field="*{firstName}"/>

@@ -24,13 +24,13 @@ public class ProfileController {
     public ProfileController(UserServiceImpl userService) { this.userService = userService; }
 
     @PreAuthorize("hasRole('DERMATOLOGIST')")
-    @GetMapping("/dermatologist}")
+    @GetMapping("/dermatologist/{id}")
     public ModelAndView showDermatologistProfile(@PathVariable Long id, Model model) throws Exception {
         Dermatologist dermatologist = this.userService.findDermatologistById(id);
         if (dermatologist == null) {
             throw new Exception("User does not exist");
         }
-        //model.addAttribute("dermatologist", dermatologist);
+        model.addAttribute("dermatologist", dermatologist);
         return new ModelAndView("dermatologist-profile");
     }
 
