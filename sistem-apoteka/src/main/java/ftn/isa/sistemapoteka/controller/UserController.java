@@ -1,18 +1,28 @@
 package ftn.isa.sistemapoteka.controller;
 
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.io.IOException;
+import com.itextpdf.io.source.ByteArrayOutputStream;
 import ftn.isa.sistemapoteka.exception.ResourceConflictException;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.service.UserService;
 import ftn.isa.sistemapoteka.service.impl.LoyaltyProgramServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.PharmacyServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.ITemplateEngine;
+import org.thymeleaf.context.WebContext;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Set;
 
