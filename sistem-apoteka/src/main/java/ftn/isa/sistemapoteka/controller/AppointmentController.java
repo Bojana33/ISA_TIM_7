@@ -24,4 +24,10 @@ public class AppointmentController {
     public ModelAndView dermatologistCalendar(){
         return new ModelAndView("Calendar1");
     }
+
+    @PreAuthorize("hasRole('DERMATOLOGIST')")
+    @GetMapping("/pharmacist/calendar")
+    public ModelAndView pharmacistCalendar(){
+        return new ModelAndView("Calendar2");
+    }
 }
