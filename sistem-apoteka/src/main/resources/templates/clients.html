@@ -31,20 +31,36 @@
             <br>
         </div>
     </div>
-
-    <table id="users">
-        <tr>
-            <th>Id:</th>
-            <th>First name:</th>
-            <th>Last name:</th>
-        </tr>
-        <tr th:each="user:${users}">
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.firstName}"></td>
-            <td th:text="${user.lastName}"></td>
             <td> <a th:href="${'/myPharmacy/users/user/' + user.getId()}" th:text="${user.firstName}" th:text="${user.lastName}"> </a></td>
+
+
+    </br>
+
+    <div class="row">
+        <div class="col col-lg-5">
+            <form th:action="@{'/user/allUsers'}" method="get">
+                <input type="text" placeholder="Name, Surname.." name="keyword"/>
+                <button type="submit" class="btn btn-dark mt-2">Search</button>
+            </form>
+        </div>
+    </div>
+
+    </br>
+
+    <div>
+        <table id="users" width="90%">
+            <tr>
+                <th>Id:</th>
+                <th>First name:</th>
+                <th>Last name:</th>
+                <th sec:authorize="hasRole('PHARMACIST','DERMATOLOGIST')"></th>
             </tr>
-    </table>
+            <tr th:each="drug:${drugs}">
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+            </tr>
+        </table>
+    </div>
 
 
 </body>
