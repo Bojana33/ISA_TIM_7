@@ -25,7 +25,7 @@ public class AppointmentController {
         return new ModelAndView("Calendar1");
     }
 
-    @PreAuthorize("hasRole('DERMATOLOGIST')")
+    @PreAuthorize("hasRole('PHARMACIST')")
     @GetMapping("/pharmacist/calendar")
     public ModelAndView pharmacistCalendar(){
         return new ModelAndView("Calendar2");
