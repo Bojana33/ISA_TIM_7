@@ -14,28 +14,40 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <title>Consultations</title>
+    <title>Issue drug</title>
 </head>
 <body>
+<div class="row">
+    <div class="col col-lg-5">
+        <form th:action="@{'/drugReservations/allDrugReservations'}" method="get">
+            <input type="text" placeholder="Id.." name="keyword"/>
+            <button type="submit" class="btn btn-dark mt-2">Search</button>
+        </form>
+    </div>
+</div>
+
+</br>
+
 <div>
-    <table id="consultations">
+    <table id="drugReservations" width="90%">
         <tr>
             <th>Id:</th>
-            <th>Price:</th>
-            <th>Start date time:</th>
-            <th>End date time:</th>
+            <th>Name:</th>
+            <th>Taken:</th>
+            <th sec:authorize="hasRole('PHARMACIST')"></th>
         </tr>
-        <tr th:each="consultation:${consultations}" th:if="${consultation.scheduled == false}">
-            <td th:text="${consultation.id}"></td>
-            <td th:text="${consultation.price}"></td>
-            <td th:text="${consultation.startDateTime}"></td>
-            <td th:text="${consultation.endDateTime}"></td>
-            <td sec:authorize="hasRole('PHARMACIST')"><a th:href="${'/myPharmacy/consultations/}">Schedule consultation</a></td>
+        <tr th:each="drugReservation:${drugReservations}">
+            <td th:text="${drugReservation.id}"></td>
+            <td th:text="${drugReservation.name}"></td>
+            <div class="form-group">
+                <label>Taken:</label>
+                <input name="taken" type="radio" th:field="*{taken}" value="1" checked>Yes
+
+            </div>
         </tr>
     </table>
-
-    <div class="row" sec:authorize="hasRole('PHARMACIST')">
-        <a th:href="${'/myPharmacy/consultations/scheduleConsultation'}">Schedule consultation</a>
+    <div class="form-group">
+        <button type="submit" class="btn btn-block btn-success">Submit</button>
     </div>
 </div>
 </body>

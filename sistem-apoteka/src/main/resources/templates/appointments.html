@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <!--Import Google Icon Font-->
@@ -30,11 +30,13 @@
                 <td th:text="${appointment.price}"></td>
                 <td th:text="${appointment.startDateTime}"></td>
                 <td th:text="${appointment.endDateTime}"></td>
-                <td><a th:href="${'/myPharmacy/appointments/}">Schedule appointment</a></td>
+                <td sec:authorize="hasRole('DERMATOLOGIST')"><a th:href="${'/myPharmacy/appointments/}">Schedule appointment</a></td>
             </tr>
-
-
         </table>
+
+        <div class="row" sec:authorize="hasRole('DERMATOLOGIST')">
+            <a th:href="${'/myPharmacy/appointments/scheduleAppointment'}">Schedule appointment</a>
+        </div>
     </div>
 </body>
 </html>

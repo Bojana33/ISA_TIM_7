@@ -55,7 +55,7 @@
                 <th>Last name:</th>
                 <th sec:authorize="hasRole('PHARMACIST','DERMATOLOGIST')"></th>
             </tr>
-            <tr th:each="drug:${drugs}">
+            <tr th:each="user:${users}">
                 <td th:text="${user.firstName}"></td>
                 <td th:text="${user.lastName}"></td>
             </tr>

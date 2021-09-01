@@ -20,6 +20,9 @@ public class DrugReservation implements Serializable {
     @OneToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     private Drug drug;
 
+    @Column
+    Boolean taken;
+
     @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id", nullable = false, referencedColumnName = "id")
     private Patient patient;
