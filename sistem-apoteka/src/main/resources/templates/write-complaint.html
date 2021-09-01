@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Write Complaint</title>
+</head>
+<body>
+<form th:action="@{/complaints/writeComplaint/__${id}__/submit/__${complaint.getComplaintType()}__}" th:object="${complaint}" method="post">
+
+    <div th:if="${complaint.complaintType == T(ftn.isa.sistemapoteka.model.ComplaintType).PHARMACY}">
+        <h3 class="center-align">Complaint for pharmacy</h3>
+        <br>
+        <div class="text-danger">
+            <h7>You can write offer for pharmacy, only if you had at least one appointment, consultation or drug reservation in that pharmacy!</h7>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="pharmacy">Choose Pharmacy:</label>
+            <select class="form-control" id="pharmacy" th:field="*{pharmacyId}">
+                <option value="">Select pharmacy</option>
+                <option th:each="pharmacyStat : ${pharmacies}"
+                        th:value="${pharmacyStat.id}"
+                        th:text="${pharmacyStat.name}"></option>
+            </select>
+        </div>
+    </div>
+
+    <div th:unless="${complaint.complaintType == T(ftn.isa.sistemapoteka.model.ComplaintType).PHARMACY}">
+        <div th:if="${complaint.complaintType == T(ftn.isa.sistemapoteka.model.ComplaintType).PHARMACIST}">
+            <h3 class="center-align">Complaint for pharmacist</h3>
+            <br>
+            <div class="text-danger">
+                <h7>You can write offer for pharmacist, only if you had at least one consultation with that pharmacist!</h7>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="employee1">Choose Pharmacist:</label>
+                <select class="form-control" id="employee1" th:field="*{pharmacistId}">
+                    <option value="">Select pharmacist</option>
+                    <option th:each="userStat : ${pharmacists}"
+                            th:value="${userStat.id}"
+                            th:text="${userStat.firstName} + ' ' + ${userStat.lastName} + ' ' + ${userStat.email}"></option>
+                </select>
+            </div>
+        </div>
+        <div th:unless="${complaint.complaintType == T(ftn.isa.sistemapoteka.model.ComplaintType).PHARMACIST}">
+            <h3 class="center-align">Complaint for dermatologist</h3>
+            <br>
+            <div class="text-danger">
+                <h7>You can write offer for dermatologist, only if you had at least one appointment with that dermatologist!</h7>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="employee">Choose Dermatologist:</label>
+                <select class="form-control" id="employee" th:field="*{dermatologistId}" >
+                    <option value="">Select dermatologist</option>
+                    <option th:each="userStat : ${dermatologists}"
+                            th:value="${userStat.id}"
+                            th:text="${userStat.firstName} + ' ' + ${userStat.lastName} + ' ' + ${userStat.email}"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <br><label for="text">Write complaint:</label>
+        <br>
+        <textarea id="text" type="text" th:field="*{text}" autofocus></textarea>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-block btn-success">Submit</button>
+    </div>
+
+</form>
+
+</body>
+</html>

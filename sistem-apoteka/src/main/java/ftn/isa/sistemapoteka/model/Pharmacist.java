@@ -6,10 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("Pharmacist")
+@DiscriminatorValue("pharmacist")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,5 +26,8 @@ public class Pharmacist extends User {
 
     @ElementCollection
     private Set<Integer> ratings;
+
+    @OneToMany(mappedBy = "pharmacist", cascade = CascadeType.ALL)
+    List<Consultation> consultations = new ArrayList<>();
 
 }

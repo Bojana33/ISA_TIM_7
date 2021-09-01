@@ -36,4 +36,8 @@ public class Consultation implements Serializable {
 
     @Column
     private LocalDateTime dateTime;
+
+    @ManyToOne(targetEntity = Pharmacy.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "pharmacy_id", nullable = false, referencedColumnName = "id")
+    private Pharmacy pharmacy;
 }

@@ -3,6 +3,8 @@ package ftn.isa.sistemapoteka.service.impl;
 import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.model.*;
+import ftn.isa.sistemapoteka.repository.DermatologistRepository;
+import ftn.isa.sistemapoteka.repository.PharmacistRepository;
 import ftn.isa.sistemapoteka.repository.PharmacyRepository;
 import ftn.isa.sistemapoteka.repository.UserRepository;
 import ftn.isa.sistemapoteka.service.PharmacyService;
@@ -38,6 +40,10 @@ public class UserServiceImpl implements UserService {
     private LoyaltyProgramServiceImpl loyaltyProgramService;
 
     private PharmacyRepository pharmacyRepository;
+
+    private PharmacistRepository pharmacistRepository;
+
+    private DermatologistRepository dermatologistRepository;
 
     @Override
     public User findByEmail(String email) {
@@ -324,5 +330,45 @@ public class UserServiceImpl implements UserService {
     public Set<Pharmacy> findAllSubscribedPharmacies(Patient patient) {
         return this.pharmacyRepository.findAllBySubscriptionedPatients(patient);
     }
+
+    @Override
+    public List<User> findDermatologists() {
+        return this.userRepository.findAllByUserRole(UserRole.DERMATOLOGIST);
+    }
+
+    @Override
+    public List<User> findPharmacists() {
+        return this.userRepository.findAllByUserRole(UserRole.PHARMACIST);
+    }
+
+    @Override
+    public User findPharmacistByConsultations(Consultation consultation) {
+        return this.pharmacistRepository.findByConsultations(consultation);
+    }
+    @Override
+    public List<User> findPharmacistsByConsultations(List<Consultation> consultations) {
+        List<User> pharmacists = new ArrayList<>();
+        for (Consultation consultation : consultations) {
+            User user = findPharmacistByConsultations(consultation);
+            pharmacists.add(user);
+        }
+        return pharmacists;
+    }
+
+    @Override
+    public User findDermatologistByAppointments(Appointment appointment) {
+        return this.dermatologistRepository.findByAppointments(appointment);
+    }
+
+    @Override
+    public List<User> findDermatologistsByAppointments(List<Appointment> appointments) {
+        List<User> dermatologists = new ArrayList<>();
+        for (Appointment appointment : appointments) {
+            User user = findDermatologistByAppointments(appointment);
+            dermatologists.add(user);
+        }
+        return dermatologists;
+    }
+
 
 }

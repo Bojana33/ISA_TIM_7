@@ -27,4 +27,15 @@ public interface UserService {
     void unsubscribePatient(Patient patient, Pharmacy pharmacy);
 
     Set<Pharmacy> findAllSubscribedPharmacies(Patient patient);
+
+    List<User> findDermatologists();
+    List<User> findPharmacists();
+
+    List<User> findPharmacistsByConsultations(List<Consultation> consultations);
+
+    User findPharmacistByConsultations(Consultation consultation);
+
+    List<User> findDermatologistsByAppointments(List<Appointment> appointments);
+
+    User findDermatologistByAppointments(Appointment appointment);
 }

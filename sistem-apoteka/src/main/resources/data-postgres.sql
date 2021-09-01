@@ -4,6 +4,17 @@ INSERT INTO users(first_name, last_name, email, password, residence, city, state
 
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role) VALUES ('Mina', 'Bojanic', 'mina@gmail.com', 'mina', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'supplier', true, false,3);
 
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role, user_category, loyalty_points) VALUES ('Ana', 'Bojanic', 'ana1@gmail.com', 'a', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'patient', true, false,1, 0, 0.0);
+
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role) VALUES ('Milos', 'Milosevic', 'milos@gmail.com', 'mina', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'pharmacist', true, false,4);
+
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role) VALUES ('Stefan', 'Stefanovic', 'stefan@gmail.com', 'mina', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'dermatologist', true, false,5);
+
+
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role) VALUES ('Mika', 'Mikic', 'mika@gmail.com', 'mina', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'pharmacist', true, false,4);
+
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role) VALUES ('Sima', 'Simic', 'sima@gmail.com', 'mina', 'Novi Sad', 'Novi Sad', 'Srbija', '061111111', 'dermatologist', true, false,5);
+
 INSERT INTO loyalty_program(appointment_points,consultation_points, discount_gold, discount_regular, discount_silver, gold_points, is_defined, regular_points, silver_points) values (0.0,0.0,0,0,0,0.0,true,0.0,0.0);
 
 
@@ -41,3 +52,9 @@ insert into pharmacy_drugs(pharmacy_id,drug_code,price) values (2,122,999.99);
 insert into pharmacy_drugs(pharmacy_id,drug_code,price) values (3,122,1000.00);
 insert into pharmacy_drugs(pharmacy_id,drug_code,price) values (3,111,1000.00);
 insert into pharmacy_drugs(pharmacy_id,drug_code,price) values (2,111,1050.00);
+
+insert into drug_reservation(date_of_reservation, taking_drug_date, drug_id, patient_id, pharmacy_id) values ('2021-08-26', '2021-09-03', 1, 4, 1);
+insert into drug_reservation(date_of_reservation, taking_drug_date, drug_id, patient_id, pharmacy_id) values ('2021-08-26', '2021-09-03', 1, 4, 2);
+
+insert into consultation(date_time, loyalty_points, price, patient_id, pharmacist_id, pharmacy_id) values ('2021-08-26', 20.00, 1000.00, 4, 5, 3);
+insert into appointment(date_time, loyalty_points, price, patient_id, dermatologist_id, pharmacy_id) values ('2021-08-26', 20.00, 1000.00, 4, 6, 2);

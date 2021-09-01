@@ -7,10 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -56,6 +53,15 @@ public class Pharmacy implements Serializable {
     @MapKeyColumn(name = "drug_code")
     @Column(name = "quantity")
     private Map<Long,Integer> drugsQuantity = new HashMap<>();
+
+    @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
+    private Set<DrugReservation> drugReservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
+    private Set<Consultation> consultations = new HashSet<>();
+
+    @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
+    private Set<Appointment> appointments = new HashSet<>();
 
     public Pharmacy(String name, String address) {
         this.name = name;

@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("Dermatologist")
+@DiscriminatorValue("dermatologist")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,4 +30,5 @@ public class Dermatologist extends User {
     @JoinTable(name = "PharmDerm", joinColumns = @JoinColumn(name = "dermatologist_id", referencedColumnName = "id")
             , inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))
     private Set<Pharmacy> pharmacies = new HashSet<>();
+
 }

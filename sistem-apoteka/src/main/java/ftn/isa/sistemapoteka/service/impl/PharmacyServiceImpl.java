@@ -1,8 +1,6 @@
 package ftn.isa.sistemapoteka.service.impl;
 
-import ftn.isa.sistemapoteka.model.Drug;
-import ftn.isa.sistemapoteka.model.Patient;
-import ftn.isa.sistemapoteka.model.Pharmacy;
+import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.repository.PharmacyRepository;
 import ftn.isa.sistemapoteka.service.PharmacyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +50,125 @@ public class PharmacyServiceImpl implements PharmacyService {
         }
         return showList;
     }
+
+    @Override
+    public List<Pharmacy> findByDrugReservationOrConsultationsOrAppointments(DrugReservation drugReservation, Consultation consultation, Appointment appointment) {
+        return this.pharmacyRepository.findDistinctByDrugReservationsOrConsultationsOrAppointments(drugReservation,consultation,appointment);
+    }
+
+    @Override
+    public List<Pharmacy> findByAppointments(Appointment appointment) {
+        return this.pharmacyRepository.findDistinctByAppointments(appointment);
+    }
+
+    @Override
+    public List<Pharmacy> findByConsultations(Consultation consultation) {
+        return this.pharmacyRepository.findDistinctByConsultations(consultation);
+    }
+
+    @Override
+    public List<Pharmacy> findByDrugReservations(DrugReservation drugReservation) {
+        return this.pharmacyRepository.findDistinctByDrugReservations(drugReservation);
+    }
+
+    @Override
+    public List<Pharmacy> findByDrugReservationsOrConsultations(DrugReservation drugReservation, Consultation consultation) {
+        return this.pharmacyRepository.findDistinctByDrugReservationsOrConsultations(drugReservation,consultation);
+    }
+
+    @Override
+    public List<Pharmacy> findByDrugReservationsOrAppointments(DrugReservation drugReservation, Appointment appointment) {
+        return this.pharmacyRepository.findDistinctByDrugReservationsOrAppointments(drugReservation,appointment);
+    }
+
+    @Override
+    public List<Pharmacy> findByConsultationsOrAppointments(Consultation consultation, Appointment appointment) {
+        return this.pharmacyRepository.findDistinctByConsultationsOrAppointments(consultation,appointment);
+    }
+
+    @Override
+    public List<Pharmacy> findPharmaciesByDrugReservationsConsultationsAppointments(List<DrugReservation> drugReservations, List<Consultation> consultations, List<Appointment> appointments) {
+        List<Pharmacy> pharmacies = new ArrayList<>();
+        if (drugReservations.size()==0 && consultations.size()==0 && appointments.size()!=0){
+            for (Appointment appointment : appointments) {
+                List<Pharmacy> pharmaciesList = findByAppointments(appointment);
+                for (Pharmacy pharmacy : pharmaciesList) {
+                    if (!pharmacies.contains(pharmacy)) {
+                        pharmacies.add(pharmacy);
+                    }
+                }
+            }
+        } else if(drugReservations.size()==0 && consultations.size()!=0 && appointments.size()==0){
+            for (Consultation consultation : consultations) {
+                List<Pharmacy> pharmaciesList = findByConsultations(consultation);
+                for (Pharmacy pharmacy : pharmaciesList) {
+                    if (!pharmacies.contains(pharmacy)) {
+                        pharmacies.add(pharmacy);
+                    }
+                }
+            }
+        } else if(drugReservations.size()!=0 && consultations.size()==0 && appointments.size()==0) {
+            for (DrugReservation drugReservation : drugReservations) {
+                List<Pharmacy> pharmaciesList = findByDrugReservations(drugReservation);
+                for (Pharmacy pharmacy : pharmaciesList) {
+                    if (!pharmacies.contains(pharmacy)) {
+                        pharmacies.add(pharmacy);
+                    }
+                }
+            }
+        }
+        else if(drugReservations.size()!=0 && consultations.size()!=0 && appointments.size()==0) {
+            for (DrugReservation drugReservation : drugReservations) {
+                for (Consultation consultation : consultations) {
+                    List<Pharmacy> pharmaciesList = findByDrugReservationsOrConsultations(drugReservation, consultation);
+                    for (Pharmacy pharmacy : pharmaciesList) {
+                        if (!pharmacies.contains(pharmacy)) {
+                            pharmacies.add(pharmacy);
+                        }
+                    }
+                }
+            }
+        } else if(drugReservations.size()!=0 && consultations.size()==0 && appointments.size()!=0) {
+            for (DrugReservation drugReservation : drugReservations) {
+                for (Appointment appointment : appointments) {
+                    List<Pharmacy> pharmaciesList = findByDrugReservationsOrAppointments(drugReservation, appointment);
+                    for (Pharmacy pharmacy : pharmaciesList) {
+                        if (!pharmacies.contains(pharmacy)) {
+                            pharmacies.add(pharmacy);
+                        }
+                    }
+                }
+            }
+        }
+        else if(drugReservations.size()==0 && consultations.size()!=0 && appointments.size()!=0) {
+            for (Consultation consultation : consultations) {
+                for (Appointment appointment : appointments) {
+                    List<Pharmacy> pharmaciesList = findByConsultationsOrAppointments(consultation, appointment);
+                    for (Pharmacy pharmacy : pharmaciesList) {
+                        if (!pharmacies.contains(pharmacy)) {
+                            pharmacies.add(pharmacy);
+                        }
+                    }
+                }
+            }
+        }else{
+            for (DrugReservation drugReservation : drugReservations) {
+                for (Consultation consultation : consultations) {
+                    for (Appointment appointment : appointments) {
+                        List<Pharmacy> pharmaciesList = findByDrugReservationOrConsultationsOrAppointments(drugReservation, consultation, appointment);
+                        for (Pharmacy pharmacy: pharmaciesList){
+                            if (!pharmacies.contains(pharmacy)){
+                                pharmacies.add(pharmacy);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return pharmacies;
+    }
+
 
 
 }

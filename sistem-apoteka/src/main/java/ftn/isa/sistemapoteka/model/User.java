@@ -55,7 +55,7 @@ public class User implements Serializable {
     private Timestamp lastPasswordResetDate;
 
     @Column
-    UserRole userRole;
+    private UserRole userRole;
 
     @Column
     private Boolean isFirstLogin = false;
@@ -95,4 +95,5 @@ public class User implements Serializable {
         this.phoneNumber = phoneNumber;
         this.enabled = enabled;
     }
+
 }

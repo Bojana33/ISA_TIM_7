@@ -1,10 +1,19 @@
 package ftn.isa.sistemapoteka.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor
+@Setter
+@Getter
+@AllArgsConstructor
 public class DrugReservation implements Serializable {
 
     @Id
@@ -24,38 +33,9 @@ public class DrugReservation implements Serializable {
     @JoinColumn(name = "patient_id", nullable = false, referencedColumnName = "id")
     private Patient patient;
 
-    public DrugReservation() {
-    }
+    @ManyToOne(targetEntity = Pharmacy.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "pharmacyId", referencedColumnName = "id")
+    private Pharmacy pharmacy;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getDateOfReservation() {
-        return dateOfReservation;
-    }
-
-    public void setDateOfReservation(LocalDateTime dateOfReservation) {
-        this.dateOfReservation = dateOfReservation;
-    }
-
-    public LocalDateTime getTakingDrugDate() {
-        return takingDrugDate;
-    }
-
-    public void setTakingDrugDate(LocalDateTime takingDrugDate) {
-        this.takingDrugDate = takingDrugDate;
-    }
-
-    public Drug getDrug() {
-        return drug;
-    }
-
-    public void setDrug(Drug drug) {
-        this.drug = drug;
-    }
 }
