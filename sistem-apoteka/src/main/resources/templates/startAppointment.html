@@ -18,7 +18,7 @@
 </head>
 <body>
     <div class="center-align">
-        <h1>Appointment</h1>
+        <h1>Start appointment</h1>
         <form th:action="@{/appointments/addAppointment/submit}" th:object="${appointment}" method="post">
             <br><label for="diagnosis">Diagnosis:</label>
             <input id="diagnosis" type="text" th:field="*{diagnosis}"/>

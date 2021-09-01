@@ -23,8 +23,43 @@
 
 </head>
 <body>
+<h3 class="container center-align">My Calendar</h3>
 
-<section class="ftco-section">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            My appointments
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Per week</a>
+            <a class="dropdown-item" href="#">Per month</a>
+            <a class="dropdown-item" href="#">Per year</a>
+        </div>
+    </li>
+
+    </br>
+
+    <div>
+        <table id="appointments" width="90%">
+            <tr>
+                <th>Id:</th>
+                <th>Start date time:</th>
+                <th>End date time:</th>
+                <th>Patient first name:</th>
+                <th>Patient last name:</th>
+                <th sec:authorize="hasRole('DERMATOLOGIST')"></th>
+            </tr>
+            <tr th:each="appointment:${appointments}">
+                <td th:text="${appointment.startDateTime}"></td>
+                <td th:text="${appointment.endDateTime}"></td>
+                <td th:text="${appointment.patient.user.firstName}"></td>
+                <td th:text="${appointment.patient.user.lastName}"></td>
+            </tr>
+        </table>
+    </div>
+
+
+
+    <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 text-center mb-5">

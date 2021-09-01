@@ -45,4 +45,5 @@ public class Consultation implements Serializable {
 
     @Column
     private LocalDateTime dateTime;
+
 }
