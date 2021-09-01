@@ -1,8 +1,10 @@
 package ftn.isa.sistemapoteka.service;
 
 import ftn.isa.sistemapoteka.fieldMatch.FieldMatch;
+import ftn.isa.sistemapoteka.model.Drug;
 import ftn.isa.sistemapoteka.model.Pharmacy;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PharmacyService {
@@ -18,4 +20,7 @@ public interface PharmacyService {
     List<Pharmacy> orderByNameDesc();
     List<Pharmacy> orderByRatingAsc();
     List<Pharmacy> orderByRatingDesc();
+
+    List<Pharmacy> findAllThatContainsDrug(Drug drug);
+    //List<Pharmacy> findAllWithAvailablePharmacists(LocalDateTime );
 }

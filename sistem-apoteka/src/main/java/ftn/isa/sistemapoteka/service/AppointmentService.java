@@ -17,6 +17,11 @@ public interface AppointmentService {
     void makeAppointment(Appointment appointment, Pharmacy pharmacy,
                                 Long patientId) throws Exception;
 
-    List<Appointment> findScheduled();
+    List<Appointment> findScheduledByPatient(Long phId);
+    //List<Appointment> findAllScheduled();
     List<Appointment> findAllByPharmacy(Long phId);
+    List<Appointment> findAllByPharmacyAndAdvising(Long phId, Boolean advising);
+
+    void cancelAppointment(Appointment appointment, Pharmacy pharmacy,
+                           Long patientId) throws Exception;
 }

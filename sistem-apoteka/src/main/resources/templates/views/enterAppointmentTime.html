@@ -17,7 +17,7 @@
 </head>
 <body>
 
-    <div class="container-fluid bg-light">
+<div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Apoteka Jankovic</a>
 
@@ -28,8 +28,8 @@
                         Appointments
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Schedule appointment</a>
-                        <a class="dropdown-item" href="#">Scheduled appointments</a>
+                        <a class="dropdown-item" th:href="${'/myPharmacy/appointments/allAppointments'}">Schedule appointment</a>
+                        <a class="dropdown-item" th:href="${'/myPharmacy/appointments/scheduledAppointments/__${patient.id}__'}">Scheduled appointments</a>
                         <a class="dropdown-item" href="#">Appointment history</a>
                     </div>
                 </li>
@@ -48,12 +48,6 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/myPharmacy/drugs/allDrugs'}">List of drugs</a>
                 </li>
-                <li class="nav-item" sec:authorize="isAnonymous()">
-                    <a class="nav-link" th:href="${'/myPharmacy/auth/login'}">Log in</a>
-                </li>
-                <li class="nav-item" sec:authorize="isAnonymous()">
-                    <a class="nav-link" th:href="${'/myPharmacy/auth/signup'}">Register</a>
-                </li>
                 <li class="nav-item" sec:authorize="hasRole('PATIENT')">
                     <a class="nav-link" th:href="${'/myPharmacy/profile/p/__${principal.id}__'}">Profile</a>
                 </li>
@@ -65,28 +59,22 @@
     </nav>
 </div></br></br>
 
-    <div class="col col-md-5">
-        <a th:href="${'/myPharmacy/drugs/allDrugs'}">Add allergy trigger</a>
-    </div>
+<div class="container mySpace">
+    <div class="center-align blue lighten-5">
+        <h1>Add allergy trigger</h1> </br></br>
+        <form th:action="@{/user/__${principal.id}__/allergyTriggers/add}" th:object="${principal}" method="get">
+            <div class="form-group blu-margin" th:object="${drugs}">
 
-    <div>
-        <table id="drugs" width="90%">
-            <tr>
-                <th>Code:</th>
-                <th>Name:</th>
-                <th>Producer:</th>
-                <th>Drug type:</th>
-                <th></th>
-            </tr>
-            <tr th:each="drug:${drugs}">
-                <td th:text="${drug.code}"></td>
-                <td th:text="${drug.name}"></td>
-                <td th:text="${drug.producer}"></td>
-                <td th:text="${drug.drugType}"></td>
-                <td><a th:href="@{'/user/__${principal.id}__/allergyTriggers/remove/__${drug.code}__'}">Remove</a></td>
-            </tr>
-        </table>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-success">Add</button>
+                </div>
+                <a th:href="@{'/users/__${patient.id}__/allergyTriggers/addSuccess'}">Add allergy trigger</a>
+            </div>
+        </form>
     </div>
+</div>
+
+
 
 
 <!-- Optional JavaScript -->

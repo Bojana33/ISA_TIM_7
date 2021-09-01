@@ -10,4 +10,6 @@ public interface DrugReservationService {
 
     void makeReservationHardcodeDate(DrugReservation drugReservation, Patient patient,
                                      Long drugCode) throws Exception;
+
+    DrugReservation saveDR(DrugReservation dr);
 }

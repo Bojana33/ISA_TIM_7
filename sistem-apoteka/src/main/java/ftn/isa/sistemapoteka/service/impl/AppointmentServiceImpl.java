@@ -8,7 +8,6 @@ import ftn.isa.sistemapoteka.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
@@ -57,8 +56,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         forUpdate.setPharmacy(appointment.getPharmacy());
         forUpdate.setPatient(appointment.getPatient());
         forUpdate.setDermatologist(appointment.getDermatologist());
-        forUpdate.setDateTimeEnd(appointment.getDateTimeEnd());
-        forUpdate.setDateTimeStart(appointment.getDateTimeStart());
+        /*forUpdate.setDateTimeEnd(appointment.getDateTimeEnd());
+        forUpdate.setDateTimeStart(appointment.getDateTimeStart());*/
+        forUpdate.setDate(appointment.getDate());
+        forUpdate.setDurationInMinutes(appointment.getDurationInMinutes());
+        forUpdate.setStartingTime(appointment.getStartingTime());
         forUpdate.setPrice(appointment.getPrice());
         forUpdate.setLoyaltyPoints(appointment.getLoyaltyPoints());
         forUpdate.setScheduled(appointment.getScheduled());
@@ -69,8 +71,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void makeAppointment(Appointment appointment, Pharmacy pharmacy, Long patientId) throws Exception {
 
-        /*String mail = email + ".com";
-        Patient pat = (Patient) this.userService.findByEmail(mail);*/
         Patient pat = this.userService.findPatientById(patientId);
         if (pat == null) { throw new Exception("Patient does not exist(App service)"); }
 
@@ -99,12 +99,48 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> findScheduled() {
-        return this.appointmentRepository.findScheduled();
+    public List<Appointment> findScheduledByPatient(Long id) {
+        return this.appointmentRepository.findScheduledByPatient(id);
     }
+
+/*    @Override
+    public List<Appointment> findAllScheduled() {
+        return this.appointmentRepository.findAllScheduled();
+    }*/
 
     @Override
     public List<Appointment> findAllByPharmacy(Long phId) {
         return this.appointmentRepository.findAllByPharmacy(phId);
+    }
+
+    @Override
+    public List<Appointment> findAllByPharmacyAndAdvising(Long phId, Boolean advising) {
+        return this.appointmentRepository.findAllByPharmacyAndAdvising(phId, advising);
+    }
+
+    @Override
+    public void cancelAppointment(Appointment appointment, Pharmacy pharmacy, Long patientId) throws Exception {
+        Patient pat = this.userService.findPatientById(patientId);
+        if (pat == null) { throw new Exception("Patient does not exist(App service)"); }
+
+        Pharmacy ph = this.pharmacyService.findById(pharmacy.getId());
+        if (ph == null) { throw new Exception("Pharmacy with this id does not exist"); }
+        Appointment a = findById(appointment.getId());
+
+        Set<Appointment> app = pat.getAppointments();
+        app.remove(a);
+        pat.setAppointments(app);
+
+        a.setPatient(null);
+
+        Set<Appointment> app1 = ph.getAppointments();
+        app1.remove(a);
+        ph.setAppointments(app1);
+
+        a.setScheduled(false);
+
+        this.userService.updateAppointments(pat);
+        this.pharmacyService.updateAppointments(ph);
+        update(a);
     }
 }

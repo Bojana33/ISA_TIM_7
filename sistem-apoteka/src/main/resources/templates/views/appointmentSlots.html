@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -34,8 +34,8 @@
                         Appointments
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Schedule appointment</a>
-                        <a class="dropdown-item" href="#">Scheduled appointments</a>
+                        <a class="dropdown-item" th:href="${'/myPharmacy/appointments/allAppointments'}">Schedule appointment</a>
+                        <a class="dropdown-item" th:href="${'/myPharmacy/appointments/scheduledAppointments/__${principal.id}__'}">Scheduled appointments</a>
                         <a class="dropdown-item" href="#">Appointment history</a>
                     </div>
                 </li>
@@ -92,15 +92,15 @@
                             <table id="appointments" width="100%">
                                 <tr>
                                     <th>Appointment start:</th>
-                                    <th>Appointment end:</th>
+                                    <th>Appointment duration in minutes:</th>
                                     <th>Dermatologist:</th>
                                     <th>Pharmacy:</th>
                                     <th>Price:</th>
                                     <th></th>
                                 </tr>
                                 <tr th:each="appointment:${appointments}"  th:if="${appointment.scheduled == false}">
-                                    <td th:text="${appointment.dateTimeStart}"></td>
-                                    <td th:text="${appointment.dateTimeEnd}"></td>
+                                    <td th:text="${appointment.startingTime}"></td>
+                                    <td th:text="${appointment.durationInMinutes}"></td>
                                     <td th:text="${appointment.dermatologist.getFullName()}"></td>
                                     <td th:text="${appointment.pharmacy.getName()}"></td>
                                     <td th:text="${appointment.price}"></td>

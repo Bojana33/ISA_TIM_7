@@ -28,8 +28,8 @@
                             Appointments
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Schedule appointment</a>
-                            <a class="dropdown-item" href="#">Scheduled appointments</a>
+                            <a class="dropdown-item" th:href="${'/myPharmacy/appointments/allAppointments'}">Schedule appointment</a>
+                            <a class="dropdown-item" th:href="${'/myPharmacy/appointments/scheduledAppointments/__${patient.id}__'}">Scheduled appointments</a>
                             <a class="dropdown-item" href="#">Appointment history</a>
                         </div>
                     </li>

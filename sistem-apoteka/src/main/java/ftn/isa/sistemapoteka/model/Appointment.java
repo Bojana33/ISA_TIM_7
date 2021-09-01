@@ -28,10 +28,13 @@ public class Appointment implements Serializable {
     private Double price;
 
     @Column
-    private LocalDateTime dateTimeStart;
+    private LocalDateTime date;
 
     @Column
-    private LocalDateTime dateTimeEnd;
+    private LocalDateTime startingTime;
+
+    @Column
+    private Double durationInMinutes;
 
     @Column
     private Boolean scheduled = false;

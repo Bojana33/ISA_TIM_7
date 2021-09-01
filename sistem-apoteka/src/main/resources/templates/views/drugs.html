@@ -73,6 +73,9 @@
         <button type="submit" class="btn btn-dark mt-2">Search</button>
       </form>
     </div>
+    <div class="col col-lg-5">
+      <a th:href="${'/myPharmacy/user/__${principal.id}__/allergyTriggers'}">Allergy triggers</a>
+    </div>
   </div>
 
   </br>
@@ -88,6 +91,7 @@
         <th>On prescription:</th>
         <th>Drug type:</th>
         <th sec:authorize="hasRole('PATIENT')"></th>
+        <th sec:authorize="hasRole('PATIENT')"></th>
       </tr>
       <tr th:each="drug:${drugs}">
         <td th:text="${drug.code}"></td>
@@ -98,6 +102,7 @@
         <td th:text="${drug.onPrescription}"></td>
         <td th:text="${drug.drugType}"></td>
         <td sec:authorize="hasRole('PATIENT')"><a th:href="@{'/user/__${principal.id}__/allergyTriggers/addSuccess/__${drug.code}__'}"> Add as allergy trigger</a></td>
+        <td sec:authorize="hasRole('PATIENT')"><a th:href="@{'/drugReservations/__${drug.code}__/makeReservation'}"> Make reservation</a></td>
       </tr>
     </table>
   </div>

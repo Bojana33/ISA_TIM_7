@@ -1,17 +1,20 @@
 package ftn.isa.sistemapoteka.service.impl;
 
+import ftn.isa.sistemapoteka.model.Drug;
 import ftn.isa.sistemapoteka.model.Pharmacy;
 import ftn.isa.sistemapoteka.repository.PharmacyRepository;
 import ftn.isa.sistemapoteka.service.PharmacyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PharmacyServiceImpl implements PharmacyService {
 
-    private PharmacyRepository pharmacyRepository;
+    private final PharmacyRepository pharmacyRepository;
 
     @Autowired
     public PharmacyServiceImpl(PharmacyRepository pharmacyRepository){
@@ -64,4 +67,20 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public List<Pharmacy> orderByRatingDesc() { return this.pharmacyRepository.findByOrderByAverageRatingDesc(); }
+
+    @Override
+    public List<Pharmacy> findAllThatContainsDrug(Drug drug) {
+        List<Pharmacy> pharmacies = this.pharmacyRepository.findAll();
+        List<Pharmacy> withDrug = new ArrayList<>();
+
+        for (Pharmacy pharmacy : pharmacies) {
+            for (Drug d : pharmacy.getDrugs()) {
+                if (Objects.equals(d.getName(), drug.getName())) {
+                    withDrug.add(pharmacy);
+                }
+            }
+        }
+
+        return withDrug;
+    }
 }

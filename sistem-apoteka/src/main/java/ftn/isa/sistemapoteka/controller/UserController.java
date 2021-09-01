@@ -93,7 +93,8 @@ public class UserController {
         //Drug d = this.drugService.updatePatientsWithAllergies(drug, patient);
         Patient p = this.userService.addAllergyTrigger(patient, drug);
 
-        return new ModelAndView("redirect:/user/" + patient.getId() + "/allergyTriggers");
+        return new ModelAndView("redirect:/drugs/allDrugs");
+        //return new ModelAndView("redirect:/user/" + patient.getId() + "/allergyTriggers");
     }
 
     @GetMapping(value = "/{id}/allergyTriggers/remove/{code}")

@@ -20,15 +20,15 @@ import java.util.Date;
 public class DrugReservation implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column
-    //@DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfReservation;
 
     @Column
-    //@DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate takingDrugDate;
 
     @OneToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
