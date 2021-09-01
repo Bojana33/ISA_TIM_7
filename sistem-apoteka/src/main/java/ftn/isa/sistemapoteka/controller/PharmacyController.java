@@ -61,44 +61,69 @@ public class PharmacyController {
         {
             model.addAttribute("pharmacies", this.pharmacyService.findAll());
         }
-        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
-        return new ModelAndView("views/pharmacies");
+
+        try {
+            model.addAttribute("principal", this.userService.getPatientFromPrincipal());
+            return new ModelAndView("views/pharmacies");
+        } catch (Exception e) {
+            return new ModelAndView("views/pharmaciesGuests");
+        }
+
+        /*model.addAttribute("principal", this.userService.getPatientFromPrincipal());
+        return new ModelAndView("views/pharmacies");*/
     }
 
     @GetMapping("/allPharmacies/sortByNameAsc")
     public ModelAndView sortByNameAsc(Model model) throws Exception {
         List<Pharmacy> sorted = this.pharmacyService.orderByNameAsc();
         model.addAttribute("pharmacies", sorted);
-        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
-        return new ModelAndView("views/pharmacies");
+        try {
+            model.addAttribute("principal", this.userService.getPatientFromPrincipal());
+            return new ModelAndView("views/pharmacies");
+        } catch (Exception e) {
+            return new ModelAndView("views/pharmaciesGuests");
+        }
+
     }
 
     @GetMapping("/allPharmacies/sortByNameDesc")
     public ModelAndView sortByNameDesc(Model model) throws Exception {
         List<Pharmacy> sorted = this.pharmacyService.orderByNameDesc();
         model.addAttribute("pharmacies", sorted);
-        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
-        return new ModelAndView("views/pharmacies");
+        try {
+            model.addAttribute("principal", this.userService.getPatientFromPrincipal());
+            return new ModelAndView("views/pharmacies");
+        } catch (Exception e) {
+            return new ModelAndView("views/pharmaciesGuests");
+        }
     }
 
     @GetMapping("/allPharmacies/sortByRatingDesc")
     public ModelAndView sortByRatingDesc(Model model) throws Exception {
         List<Pharmacy> sorted = this.pharmacyService.orderByRatingDesc();
         model.addAttribute("pharmacies", sorted);
-        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
-        return new ModelAndView("views/pharmacies");
+        try {
+            model.addAttribute("principal", this.userService.getPatientFromPrincipal());
+            return new ModelAndView("views/pharmacies");
+        } catch (Exception e) {
+            return new ModelAndView("views/pharmaciesGuests");
+        }
     }
 
     @GetMapping("/allPharmacies/sortByRatingAsc")
     public ModelAndView sortByRatingAsc(Model model) throws Exception {
         List<Pharmacy> sorted = this.pharmacyService.orderByRatingAsc();
         model.addAttribute("pharmacies", sorted);
-        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
-        return new ModelAndView("views/pharmacies");
+        try {
+            model.addAttribute("principal", this.userService.getPatientFromPrincipal());
+            return new ModelAndView("views/pharmacies");
+        } catch (Exception e) {
+            return new ModelAndView("views/pharmaciesGuests");
+        }
     }
 
 }

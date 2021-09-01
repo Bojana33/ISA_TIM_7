@@ -55,9 +55,14 @@ public class DrugController {
         } else {
             model.addAttribute("drugs", this.drugService.findAllDrugs());
         }
-
-        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
-        return new ModelAndView("views/drugs");
+        try {
+            model.addAttribute("principal", this.userService.getPatientFromPrincipal());
+            return new ModelAndView("views/drugs");
+        } catch(Exception e) {
+            return new ModelAndView("views/drugsGuests");
+        }
+        //model.addAttribute("principal", this.userService.getPatientFromPrincipal());
+        //return new ModelAndView("views/drugs");
     }
 
     @GetMapping("/")

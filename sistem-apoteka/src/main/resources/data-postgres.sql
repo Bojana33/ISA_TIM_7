@@ -35,6 +35,13 @@ VALUES (115,'caffetin menstrual','crvenilo, svrab', 'Alkaloid', 2, FALSE , 'Proi
 INSERT INTO drug(code, name, contraindications, structure, daily_intake, reserved, producer, on_prescription, additional_note, loyalty_points, quantity, price, drug_type, drug_shape)
 VALUES (118,'daktanol','crvenilo, svrab', 'struktura1', 2, FALSE , 'Proizvodjac2', TRUE , 'koristiti pre obroka', 10, 150, 384.99, 1, 3);
 
+INSERT INTO drug(id, code, name, contraindications, structure, daily_intake, reserved, producer, on_prescription, additional_note, loyalty_points, quantity, price, drug_type, drug_shape)
+VALUES (24, 214,'caffetin','crvenilo, svrab', 'struktura1', 2, FALSE , 'Alkaloid', TRUE , 'koristiti pre obroka', 10, 150, 384.99, 1, 3);
+INSERT INTO drug(id,code, name, contraindications, structure, daily_intake, reserved, producer, on_prescription, additional_note, loyalty_points, quantity, price, drug_type, drug_shape)
+VALUES (25, 215,'caffetin menstrual','crvenilo, svrab', 'Alkaloid', 2, FALSE , 'Proizvodjac2', TRUE , 'koristiti pre obroka', 10, 150, 384.99, 1, 3);
+INSERT INTO drug(id, code, name, contraindications, structure, daily_intake, reserved, producer, on_prescription, additional_note, loyalty_points, quantity, price, drug_type, drug_shape)
+VALUES (26, 218,'daktanol','crvenilo, svrab', 'struktura1', 2, FALSE , 'Proizvodjac2', TRUE , 'koristiti pre obroka', 10, 150, 384.99, 1, 3);
+
 /*PHARMACIES*/
 INSERT INTO pharmacy(name, address, average_rating) VALUES ('Jankovic', 'Strazilovska 31', 3.2);
 INSERT INTO pharmacy(name, address, average_rating) VALUES ('Jankovic2', 'Ive Lole Ribara 17a', 4.5);
@@ -47,6 +54,9 @@ INSERT INTO pharmacy_drugs(pharmacy_id, drugs_id) VALUES (1,3);
 INSERT INTO pharmacy_drugs(pharmacy_id, drugs_id) VALUES (2,4);
 INSERT INTO pharmacy_drugs(pharmacy_id, drugs_id) VALUES (2,5);
 INSERT INTO pharmacy_drugs(pharmacy_id, drugs_id) VALUES (2,6);
+INSERT INTO pharmacy_drugs(pharmacy_id, drugs_id) VALUES (1,24);
+INSERT INTO pharmacy_drugs(pharmacy_id, drugs_id) VALUES (1,25);
+INSERT INTO pharmacy_drugs(pharmacy_id, drugs_id) VALUES (1,26);
 
 /*DERMATOLOGIST APPOINTMENTS*/
 INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time, scheduled, pharmacy_id, advising)
