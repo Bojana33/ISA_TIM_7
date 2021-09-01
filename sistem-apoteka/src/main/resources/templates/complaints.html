@@ -21,16 +21,22 @@
     <tr>
         <th>Id:</th>
         <th>Sender:</th>
-        <th>User Id:</th>
-        <th>Pharmacy Id:
+        <th>Pharmacist Id:</th>
+        <th>Dermatologist Id:</th>
+        <th>Pharmacy Id:</th>
+        <th sec:authorize="hasRole('SYS_ADMIN')">Read Complaint</th>
         <th sec:authorize="hasRole('SYS_ADMIN')">Response</th>
     </tr>
     <tr th:each="complaint:${complaints}">
         <td th:text="${complaint.id}"></td>
-        <td th:text="${complaint.patient.email}"></td>
-        <td th:text="${complaint.user.id}"></td>
-        <td th:text="${complaint.pharmacy.id}"></td>
-        <td><a>Send Response</a></td>
+        <td th:text="${complaint.patient.id}"></td>
+        <td th:text="${complaint.pharmacistId}"></td>
+        <td th:text="${complaint.dermatologistId}"></td>
+        <td th:text="${complaint.pharmacyId}"></td>
+        <td><a th:href="${'/myPharmacy/complaints/readComplaint/'+ complaint.id}">Read</a></td>
+        <td th:if="${complaint.isAnswered}"><a th:href="${'/myPharmacy/complaints/sendResponse/'+ complaint.id}" disabled="disabled" onclick="return false">Send Response</a></td>
+        <td th:unless="${complaint.isAnswered}"><a th:href="${'/myPharmacy/complaints/sendResponse/'+ complaint.id}">Send Response</a></td>
+
     </tr>
 </table>
 </body>

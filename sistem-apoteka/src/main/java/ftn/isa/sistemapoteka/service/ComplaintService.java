@@ -13,4 +13,6 @@ public interface ComplaintService {
     Complaint updateComplaint(Complaint complaint);
 
     Complaint findById(Long id) throws Exception;
+
+    void sendResponse(Complaint complaint);
 }

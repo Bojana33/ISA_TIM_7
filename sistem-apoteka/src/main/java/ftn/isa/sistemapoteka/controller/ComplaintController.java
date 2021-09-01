@@ -90,5 +90,31 @@ public class ComplaintController {
         return new ModelAndView("redirect:/user/patient/home");
     }
 
+    @GetMapping("/sendResponse/{id}")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    public ModelAndView sendResponseForm(Model model, @PathVariable Long id) throws Exception{
+        Complaint complaint = this.complaintService.findById(id);
+        model.addAttribute("complaint", complaint);
+        return new ModelAndView("complaint-response");
+    }
+
+    @PostMapping("/sendResponse/{id}/submit")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    public ModelAndView sendResponse(@ModelAttribute Complaint complaint, @PathVariable Long id) throws Exception{
+        Complaint complaint1 = this.complaintService.findById(id);
+        complaint1.setIsAnswered(true);
+        complaint1.setResponse(complaint.getResponse());
+        this.complaintService.updateComplaint(complaint1);
+        this.complaintService.sendResponse(complaint1);
+        return new ModelAndView("redirect:/user/sys-admin/home");
+    }
+
+    @GetMapping("/readComplaint/{id}")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    public ModelAndView readComplaint(Model model, @PathVariable Long id) throws Exception{
+        Complaint complaint = this.complaintService.findById(id);
+        model.addAttribute("complaint", complaint);
+        return new ModelAndView("complaint-read");
+    }
 
 }
