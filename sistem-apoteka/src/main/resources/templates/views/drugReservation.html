@@ -77,6 +77,7 @@
                                     <label>Drug</label>
                                 </div>
                                 <div class="col-md-6">
+                                    <input type="text" name="drugId" th:value="${drug.id}" hidden>
                                     <p th:text="${drug.code}"></p>
                                 </div>
                             </div>
@@ -89,28 +90,16 @@
                                     <p th:text="${patient.getFullName()}"></p>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="form-group blu-margin" th:object="${pharmacies}">
+                                    <select class="form-control" name="pharmacyDrop"  id="pharmacyDrop">
+                                        <option value="">select pharmacy</option>
+                                        <option th:each="pharmacy : ${pharmacies}" th:value="${pharmacy.name}" th:text="${pharmacy.name}"></option>
+                                    </select>
+                                </div>
+                            </div>
                             </br>
-                            <!--<div class="row">
-                                <div class="col-md-6">
-                                    <label>DateTime</label>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type th:field="*{takingDrugDate}"></input>
-                                </div>
-                            </div>
-                            </br>-->
-                            </br><!--
-                            <div class="form-group">
-                                <label for="date">Date:</label>
-                                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"
-                                           th:field="*{takingDrugDate}" id="date" placeholder="Picking up date"/>
-                                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            </br>-->
+
                             <div class="form-group">
                                 <label for="date">Deliver Date Time(example: 12/12/2021):</label>
                                 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
@@ -121,17 +110,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--<div class="form-group row">
-                                <div class="col-md-4 mt-5">
-                                    <label for="birthdate">Date of birth</label>
-                                    <div class="input-group date">
-                                        <input type="text" class="form-control" id="birthdate" autocomplete="off" th:field="*{takingDrugDate}"/>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
                             <input class="btn grey lighten-4 black-text" type="submit">
                         </div>
                     </div>

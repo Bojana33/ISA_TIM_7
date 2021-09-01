@@ -1,5 +1,6 @@
 package ftn.isa.sistemapoteka.service.impl;
 
+import ftn.isa.sistemapoteka.email.EmailService;
 import ftn.isa.sistemapoteka.model.Drug;
 import ftn.isa.sistemapoteka.model.DrugReservation;
 import ftn.isa.sistemapoteka.model.Patient;
@@ -12,18 +13,24 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class DrugReservationServiceImpl implements DrugReservationService {
 
     private DrugReservationRepository drugReservationRepository;
     private DrugRepository drugRepository;
+    public EmailService emailService;
+    public UserServiceImpl userService;
 
     @Autowired
     public DrugReservationServiceImpl(DrugReservationRepository drugReservationRepository,
-                                      DrugRepository drugRepository) {
+                                      DrugRepository drugRepository, EmailService emailService,
+                                      UserServiceImpl userService) {
         this.drugReservationRepository = drugReservationRepository;
         this.drugRepository = drugRepository;
+        this.emailService = emailService;
+        this.userService = userService;
     }
 
     @Override
@@ -36,6 +43,11 @@ public class DrugReservationServiceImpl implements DrugReservationService {
     }
 
     @Override
+    public List<DrugReservation> findAll() {
+        return this.drugReservationRepository.findAll();
+    }
+
+    @Override
     public DrugReservation save(DrugReservation drugReservation) throws Exception {
         if (this.drugReservationRepository.findById(drugReservation.getId()).isPresent()) {
             throw new Exception("Value already exist(Drug reservation service-save)");
@@ -44,21 +56,37 @@ public class DrugReservationServiceImpl implements DrugReservationService {
         return this.drugReservationRepository.save(drugReservation);
     }
 
-    public void makeReservationHardcodeDate(DrugReservation drugReservation, Patient patient,
-                                Long drugCode) throws Exception {
-        Drug drug = this.drugRepository.findByCode(drugCode);
-
-        DrugReservation dr = findById(drugReservation.getId());
-        dr.setPatient(patient);
-        dr.setDrug(drug);
-
-        LocalDate date = LocalDate.now();
-        dr.setDateOfReservation(date);
-        dr.setTakingDrugDate(date.plusDays(1));
-    }
-
     @Override
     public DrugReservation saveDR(DrugReservation dr) {
         return this.drugReservationRepository.save(dr);
+    }
+
+    @Override
+    public Boolean reservationAlreadyExists(DrugReservation drugReservation) throws Exception {
+        List<DrugReservation> all = this.drugReservationRepository.findAll();
+        boolean exists = false;
+        for (DrugReservation dr : all) {
+            if ((dr.getPatient() == drugReservation.getPatient()) &&
+                    (dr.getPharmacy() == drugReservation.getPharmacy()) &&
+                    (dr.getDrug() == drugReservation.getDrug()) &&
+                    (dr.getDateOfReservation().isAfter(drugReservation.getDateOfReservation().minusDays(5)))) {
+                exists = true;
+                break;
+            }
+        }
+
+        return exists;
+    }
+
+    @Override
+    public void sendEmail(DrugReservation dr) throws Exception {
+        String to = this.userService.getPatientFromPrincipal().getEmail();
+        String body = "You successfully made drug reservation.\n\nReservation number: ";
+        body = body + dr.getReservationNumber().toString() + "\nDrug: " + dr.getDrug().getName();
+        body = body + "\nPharmacy: " + dr.getPharmacy().getName() + "\nDate of reservation: ";
+        body = body + dr.getDateOfReservation().toString() + "\nDate of picking up drug: ";
+        body = body + dr.getTakingDrugDate().toString();
+        String topic= "Drug reservation";
+        this.emailService.sendEmail(to, body, topic);
     }
 }

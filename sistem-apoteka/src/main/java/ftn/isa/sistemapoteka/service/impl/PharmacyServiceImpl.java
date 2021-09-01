@@ -83,4 +83,11 @@ public class PharmacyServiceImpl implements PharmacyService {
 
         return withDrug;
     }
+
+    @Override
+    public Pharmacy findByName(String phName) throws Exception {
+        Pharmacy pharmacy = this.pharmacyRepository.findByName(phName);
+        if (pharmacy == null) { throw new Exception("Pharmacy with this name already exist"); }
+        return pharmacy;
+    }
 }

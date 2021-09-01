@@ -17,4 +17,8 @@ public interface DrugService {
     Page<Drug> findPaginated(int pageNum, int pageSize);
 
     Drug updatePatientsWithAllergies(Drug drug, Patient patient) throws Exception;
+
+    Drug findById(Long id) throws Exception;
+
+    void decrementQuantity(Long drugId) throws Exception;
 }

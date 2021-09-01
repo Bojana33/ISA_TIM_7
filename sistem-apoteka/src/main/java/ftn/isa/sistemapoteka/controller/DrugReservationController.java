@@ -3,6 +3,7 @@ package ftn.isa.sistemapoteka.controller;
 import ftn.isa.sistemapoteka.model.Drug;
 import ftn.isa.sistemapoteka.model.DrugReservation;
 import ftn.isa.sistemapoteka.model.Patient;
+import ftn.isa.sistemapoteka.model.Pharmacy;
 import ftn.isa.sistemapoteka.service.DrugReservationService;
 import ftn.isa.sistemapoteka.service.impl.DrugServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.PharmacyServiceImpl;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 @Controller
 @RequestMapping("drugReservations")
@@ -40,8 +43,7 @@ public class DrugReservationController {
 
         Drug drug = this.drugService.findByCode(code);
         DrugReservation dr = new DrugReservation();
-        dr.setId(1L);
-        //this.reservationService.saveDR(dr);
+        //dr.setId(1L);
 
         model.addAttribute("reservation", dr);
         model.addAttribute("patient", this.userService.getPatientFromPrincipal());
@@ -53,24 +55,47 @@ public class DrugReservationController {
 
     @PostMapping("/{code}/makeReservation/submit")
     public ModelAndView makeReservation(@ModelAttribute("reservation") @Valid DrugReservation drugReservation,
-                                        @ModelAttribute("patient") @Valid Patient patient,
                                         @ModelAttribute("pickUpDate") String pickUpDate,
-                                        @PathVariable Long code, @RequestParam("patId") Long patId) throws Exception {
+                                        @ModelAttribute("pharmacyDrop") String pharmacyDrop,
+                                        @PathVariable("code") Long code, @RequestParam("patId") Long patId,
+                                        @RequestParam("drugId") Long drugId, Model model) throws Exception {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate ldt = LocalDate.parse(pickUpDate, formatter);
 
-        Patient pat = this.userService.findPatientById(patId);
+        BigInteger big = new BigInteger(32, new Random());
+
+        Pharmacy ph = this.pharmacyService.findByName(pharmacyDrop);
+        Patient pat = this.userService.getPatientFromPrincipal();
 
         DrugReservation dr = drugReservation;
+        dr.setReservationNumber(big);
         dr.setPatient(pat);
-        dr.setDrug(this.drugService.findByCode(code));
+        dr.setPharmacy(ph);
+        dr.setDrug(this.drugService.findById(drugId));
         dr.setDateOfReservation(LocalDate.now());
         dr.setTakingDrugDate(ldt);
+
+        boolean exist = this.reservationService.reservationAlreadyExists(dr);
+        if (exist) {
+            model.addAttribute("patient", pat);
+            return new ModelAndView("views/alreadyExist");
+        }
+        this.drugService.decrementQuantity(drugId);
         this.reservationService.saveDR(dr);
 
+        this.reservationService.sendEmail(dr);
 
-        return new ModelAndView("redirect:/drugs/allDrugs/");
+        return new ModelAndView("redirect:/drugs/allDrugs");
 
     }
+
+    @GetMapping("/")
+    public ModelAndView showReservations(Model model) throws Exception {
+        model.addAttribute("patient", this.userService.getPatientFromPrincipal());
+        model.addAttribute("reservations", reservationService.findAll());
+
+        return new ModelAndView("views/reservations");
+    }
+
 }

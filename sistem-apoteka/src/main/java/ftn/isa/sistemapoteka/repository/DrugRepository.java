@@ -1,6 +1,7 @@
 package ftn.isa.sistemapoteka.repository;
 
 import ftn.isa.sistemapoteka.model.Drug;
+import ftn.isa.sistemapoteka.model.DrugReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,4 @@ public interface DrugRepository extends JpaRepository<Drug,Long> {
     @Query(value="SELECT * FROM Drug d where lower(d.name) like lower(concat('%', ?1, '%')) or lower(d.producer) like lower(concat('%', ?1, '%')) ",
             nativeQuery = true)
     List<Drug> findByKeyword(@Param("keyword") String keyword);
-
-
 }

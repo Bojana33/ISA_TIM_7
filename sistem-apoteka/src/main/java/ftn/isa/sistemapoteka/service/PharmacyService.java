@@ -22,5 +22,7 @@ public interface PharmacyService {
     List<Pharmacy> orderByRatingDesc();
 
     List<Pharmacy> findAllThatContainsDrug(Drug drug);
+
+    Pharmacy findByName(String phName) throws Exception;
     //List<Pharmacy> findAllWithAvailablePharmacists(LocalDateTime );
 }

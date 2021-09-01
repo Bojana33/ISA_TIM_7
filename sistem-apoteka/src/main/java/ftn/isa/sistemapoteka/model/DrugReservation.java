@@ -8,9 +8,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,8 +22,11 @@ import java.util.Date;
 public class DrugReservation implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private BigInteger reservationNumber;
 
     @Column
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -37,5 +42,10 @@ public class DrugReservation implements Serializable {
     @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id", nullable = true, referencedColumnName = "id")
     private Patient patient;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "pharmacy_id")
+    private Pharmacy pharmacy;
 
 }

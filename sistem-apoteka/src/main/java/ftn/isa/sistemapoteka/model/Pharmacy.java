@@ -21,7 +21,7 @@ public class Pharmacy implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(unique = true)
     private String name;
 
     @Column
@@ -52,6 +52,10 @@ public class Pharmacy implements Serializable {
 
     @OneToMany(mappedBy = "pharmacy",targetEntity = Appointment.class)
     private Set<Appointment> appointments = new HashSet<>();
+
+    @OneToOne(mappedBy = "pharmacy", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private DrugReservation drugReservation;
 
     public Pharmacy(String name, String address) {
         this.name = name;

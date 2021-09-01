@@ -82,4 +82,20 @@ public class DrugServiceImpl implements DrugService {
 
         return forUpdate;
     }
+
+    @Override
+    public Drug findById(Long id) throws Exception {
+        if (!this.drugRepository.findById(id).isPresent()) { throw new Exception("No such value(drug service)"); }
+
+        return this.drugRepository.findById(id).get();
+    }
+
+    @Override
+    public void decrementQuantity(Long drugId) throws Exception {
+        Drug forUpdate = findById(drugId);
+        int newQuantity = forUpdate.getQuantity()-1;
+        forUpdate.setQuantity(newQuantity);
+
+        this.drugRepository.save(forUpdate);
+    }
 }
