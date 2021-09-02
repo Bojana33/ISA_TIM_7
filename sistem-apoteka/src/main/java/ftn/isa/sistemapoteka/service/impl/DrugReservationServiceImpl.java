@@ -57,6 +57,11 @@ public class DrugReservationServiceImpl implements DrugReservationService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        this.drugReservationRepository.deleteById(id);
+    }
+
+    @Override
     public DrugReservation saveDR(DrugReservation dr) {
         return this.drugReservationRepository.save(dr);
     }
@@ -66,7 +71,7 @@ public class DrugReservationServiceImpl implements DrugReservationService {
         List<DrugReservation> all = this.drugReservationRepository.findAll();
         boolean exists = false;
         for (DrugReservation dr : all) {
-            if ((dr.getPatient() == drugReservation.getPatient()) &&
+            if ((!dr.isDeleted()) && (dr.getPatient() == drugReservation.getPatient()) &&
                     (dr.getPharmacy() == drugReservation.getPharmacy()) &&
                     (dr.getDrug() == drugReservation.getDrug()) &&
                     (dr.getDateOfReservation().isAfter(drugReservation.getDateOfReservation().minusDays(5)))) {
@@ -88,5 +93,21 @@ public class DrugReservationServiceImpl implements DrugReservationService {
         body = body + dr.getTakingDrugDate().toString();
         String topic= "Drug reservation";
         this.emailService.sendEmail(to, body, topic);
+    }
+
+    @Override
+    public boolean canBeCanceled(DrugReservation reservation) {
+        boolean cancel = true;
+        LocalDate oneDayBeforeReservation = reservation.getTakingDrugDate().minusDays(1);
+        if (LocalDate.now().isAfter(oneDayBeforeReservation)) {
+            cancel = false;
+        }
+
+        return cancel;
+    }
+
+    @Override
+    public List<DrugReservation> findAllByDeleted(boolean deleted) {
+        return this.drugReservationRepository.findAllByDeleted(deleted);
     }
 }

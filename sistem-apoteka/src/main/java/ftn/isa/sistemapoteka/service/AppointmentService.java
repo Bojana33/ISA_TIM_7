@@ -24,4 +24,8 @@ public interface AppointmentService {
 
     void cancelAppointment(Appointment appointment, Pharmacy pharmacy,
                            Long patientId) throws Exception;
+
+    boolean canBeCanceled(Long appId) throws Exception;
+
+    void sendEmail(Appointment ap) throws Exception;
 }

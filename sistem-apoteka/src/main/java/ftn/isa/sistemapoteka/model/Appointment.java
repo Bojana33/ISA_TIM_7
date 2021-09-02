@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -28,9 +30,11 @@ public class Appointment implements Serializable {
     private Double price;
 
     @Column
-    private LocalDateTime date;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate date;
 
     @Column
+    @DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
     private LocalDateTime startingTime;
 
     @Column

@@ -1,5 +1,6 @@
 package ftn.isa.sistemapoteka.service.impl;
 
+import ftn.isa.sistemapoteka.email.EmailService;
 import ftn.isa.sistemapoteka.model.Appointment;
 import ftn.isa.sistemapoteka.model.Patient;
 import ftn.isa.sistemapoteka.model.Pharmacy;
@@ -8,6 +9,8 @@ import ftn.isa.sistemapoteka.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -17,13 +20,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private UserServiceImpl userService;
     private PharmacyServiceImpl pharmacyService;
+    private EmailService emailService;
 
     @Autowired
     public AppointmentServiceImpl(AppointmentRepository appointmentRepository, UserServiceImpl userService,
-                                  PharmacyServiceImpl pharmacyService) {
+                                  PharmacyServiceImpl pharmacyService, EmailService emailService) {
         this.appointmentRepository = appointmentRepository;
         this.userService = userService;
         this.pharmacyService = pharmacyService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -100,13 +105,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<Appointment> findScheduledByPatient(Long id) {
-        return this.appointmentRepository.findScheduledByPatient(id);
-    }
+        List<Appointment> all= this.appointmentRepository.findScheduledByPatient(id);
+        List<Appointment> activeOnes= new ArrayList<>();;
 
-/*    @Override
-    public List<Appointment> findAllScheduled() {
-        return this.appointmentRepository.findAllScheduled();
-    }*/
+        for (Appointment app: all) {
+            if (app.getStartingTime().isBefore(LocalDateTime.now())) {
+                activeOnes.add(app);
+            }
+        }
+        return activeOnes;
+    }
 
     @Override
     public List<Appointment> findAllByPharmacy(Long phId) {
@@ -115,7 +123,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<Appointment> findAllByPharmacyAndAdvising(Long phId, Boolean advising) {
-        return this.appointmentRepository.findAllByPharmacyAndAdvising(phId, advising);
+        List<Appointment> all = this.appointmentRepository.findAllByPharmacyAndAdvising(phId, advising);
+        List<Appointment> activeOnes= new ArrayList<>();;
+
+        for (Appointment app: all) {
+            if (app.getStartingTime().isAfter(LocalDateTime.now().minusHours(1))) {
+                activeOnes.add(app);
+            }
+        }
+
+        return activeOnes;
     }
 
     @Override
@@ -131,16 +148,38 @@ public class AppointmentServiceImpl implements AppointmentService {
         app.remove(a);
         pat.setAppointments(app);
 
-        a.setPatient(null);
-
         Set<Appointment> app1 = ph.getAppointments();
         app1.remove(a);
         ph.setAppointments(app1);
 
+        a.setPatient(null);
         a.setScheduled(false);
 
         this.userService.updateAppointments(pat);
         this.pharmacyService.updateAppointments(ph);
         update(a);
+    }
+
+    @Override
+    public boolean canBeCanceled(Long appId) throws Exception {
+        boolean cancel = true;
+        Appointment app = findById(appId);
+        LocalDateTime oneDayBeforeReservation = app.getStartingTime().minusDays(1);
+
+        if (LocalDateTime.now().isAfter(oneDayBeforeReservation)) {
+            cancel = false;
+        }
+        return cancel;
+    }
+
+    @Override
+    public void sendEmail(Appointment ap) throws Exception {
+        String to = this.userService.getPatientFromPrincipal().getEmail().toString();
+        String topic = "Appointment with dermatologist";
+        String body = "You successfully scheduled appointment!\n\nAppointment date and time: "
+                + ap.getStartingTime().toString() + "\nDuration: " + ap.getDurationInMinutes().toString()
+                + " minutes\nDermatologist: " + ap.getDermatologist().getFullName();
+
+        this.emailService.sendEmail(to, body, topic);
     }
 }

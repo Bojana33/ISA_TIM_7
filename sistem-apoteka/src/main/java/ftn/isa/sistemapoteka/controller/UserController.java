@@ -63,6 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/allergyTriggers")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView showAllergies(@PathVariable Long id, Model model) throws Exception{
         Patient patient = this.userService.findPatientById(id);
         if(patient == null) { throw new Exception("Patient does not exist."); }

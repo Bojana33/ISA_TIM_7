@@ -22,4 +22,5 @@ public interface PharmacyRepository extends JpaRepository<Pharmacy, Long> {
     List<Pharmacy> findByOrderByNameDesc();
     List<Pharmacy> findByOrderByAverageRatingAsc();
     List<Pharmacy> findByOrderByAverageRatingDesc();
+
 }

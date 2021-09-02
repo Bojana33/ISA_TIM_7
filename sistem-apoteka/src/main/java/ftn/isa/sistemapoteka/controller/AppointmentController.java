@@ -36,7 +36,7 @@ public class AppointmentController {
 
     @GetMapping("/{id}/timeSlots")
     @PreAuthorize("hasRole('PATIENT')")
-    public ModelAndView getTimeSlotsforDermatologist(@PathVariable Long id, Model model) throws Exception{
+    public ModelAndView getTimeSlotsForDermatologist(@PathVariable Long id, Model model) throws Exception{
         model.addAttribute("appointments", this.appointmentService.findAllByPharmacyAndAdvising(id,false));
         model.addAttribute("pharmacy", this.pharmacyService.findById(id));
         model.addAttribute("principal", this.userService.getPatientFromPrincipal());
@@ -54,25 +54,35 @@ public class AppointmentController {
         Appointment app = this.appointmentService.findById(appId);
 
         this.appointmentService.makeAppointment(app, ph, patId);
-
+        this.appointmentService.sendEmail(app);
         return new ModelAndView("redirect:/appointments/" + phId + "/timeSlots");
     }
 
     @GetMapping("/{phId}/cancelAppointment/{appId}/{patId}")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView cancelAppointmentWithDermatologist(@PathVariable("phId") Long phId,
-                                                           @PathVariable("appId") Long appId,
+                                                           @PathVariable("appId") Long appId, Model model,
                                                            @PathVariable("patId") Long patId) throws Exception {
 
         Pharmacy ph = this.pharmacyService.findById(phId);
         Appointment app = this.appointmentService.findById(appId);
 
+        model.addAttribute("patient", this.userService.getPatientFromPrincipal());
         // TODO: proveri da li je istekao tok za otkazivanje
+        // NE RADI
+        boolean cancel = this.appointmentService.canBeCanceled(appId);
+        if (!cancel) {
+            model.addAttribute("appointment", true);
+            return new ModelAndView("views/reservationCancelError");
+        }
+
         this.appointmentService.cancelAppointment(app, ph, patId);
 
-        return new ModelAndView("redirect:/appointments/scheduledAppointments/" + ph.getId());
+        return new ModelAndView("redirect:/appointments/scheduledAppointments/" + patId.toString());
     }
 
     @GetMapping("/scheduledAppointments/{id}")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView getScheduledAppointments(@PathVariable Long id, Model model) throws Exception {
 
         List<Appointment> scheduled = this.appointmentService.findScheduledByPatient(id);
@@ -80,21 +90,6 @@ public class AppointmentController {
         model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
         return new ModelAndView("views/scheduledAppointments");
-    }
-
-    @GetMapping("/chooseTime")
-    public ModelAndView chooseTimeForAdvising(Model model, LocalDateTime dateTime) throws Exception{
-        List<Pharmacy> pharmacies = new ArrayList<>();
-        if (dateTime != null) {
-            //pharmacies = this.pharmacyService.findAllWithAvailablePharmacists(dateTime);
-            model.addAttribute("lista", pharmacies);
-        } else {
-            model.addAttribute("lista", pharmacies);
-        }
-
-        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
-
-        return new ModelAndView("views/enterAppointmentTime");
     }
 
 }

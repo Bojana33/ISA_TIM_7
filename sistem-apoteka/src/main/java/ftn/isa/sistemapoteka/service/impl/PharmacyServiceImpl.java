@@ -1,6 +1,7 @@
 package ftn.isa.sistemapoteka.service.impl;
 
 import ftn.isa.sistemapoteka.model.Drug;
+import ftn.isa.sistemapoteka.model.Pharmacist;
 import ftn.isa.sistemapoteka.model.Pharmacy;
 import ftn.isa.sistemapoteka.repository.PharmacyRepository;
 import ftn.isa.sistemapoteka.service.PharmacyService;

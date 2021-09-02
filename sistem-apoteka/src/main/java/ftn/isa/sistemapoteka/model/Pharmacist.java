@@ -17,8 +17,10 @@ import java.util.Set;
 @AllArgsConstructor
 public class Pharmacist extends User {
 
-    @ManyToOne(targetEntity = Pharmacy.class)
-    private Pharmacy pharmacy;
+    @ManyToMany(targetEntity = Pharmacy.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "PharmacyPharmacist", joinColumns = @JoinColumn(name = "pharmacist_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))
+    private Set<Pharmacy> pharmacies = new HashSet<>();
 
     @Column
     private Double averageRating;

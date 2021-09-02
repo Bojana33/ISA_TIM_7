@@ -10,6 +10,7 @@ public interface DrugReservationService {
     List<DrugReservation> findAll();
 
     DrugReservation save(DrugReservation drugReservation) throws Exception;
+    void deleteById(Long id);
 
     /*void makeReservationHardcodeDate(DrugReservation drugReservation, Patient patient,
                                      Long drugCode) throws Exception;*/
@@ -19,4 +20,8 @@ public interface DrugReservationService {
     Boolean reservationAlreadyExists(DrugReservation drugReservation) throws Exception;
 
     void sendEmail(DrugReservation dr) throws Exception;
+
+    boolean canBeCanceled(DrugReservation reservation);
+
+    List<DrugReservation> findAllByDeleted(boolean deleted);
 }

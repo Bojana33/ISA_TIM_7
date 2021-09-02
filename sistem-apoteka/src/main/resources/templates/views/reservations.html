@@ -75,7 +75,7 @@
             <th>Pharmacy:</th>
             <th>Date of reservation:</th>
             <th>Drug taking date:</th>
-            <th></th>
+            <th sec:authorize="hasRole('PATIENT')"></th>
         </tr>
         <tr th:each="reservation:${reservations}">
             <td th:text="${reservation.getDrug().getName()}"></td>
@@ -84,7 +84,7 @@
             <td th:text="${reservation.pharmacy.getName()}"></td>
             <td th:text="${reservation.dateOfReservation}"></td>
             <td th:text="${reservation.takingDrugDate}"></td>
-            <td><a action="#">Cancel</a></td>
+            <td sec:authorize="hasRole('PATIENT')"><a th:href="@{'/drugReservations/cancel/__${reservation.id}__'}">Cancel</a></td>
         </tr>
     </table>
 </div>

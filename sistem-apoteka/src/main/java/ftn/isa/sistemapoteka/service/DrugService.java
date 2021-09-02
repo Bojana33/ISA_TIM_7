@@ -21,4 +21,5 @@ public interface DrugService {
     Drug findById(Long id) throws Exception;
 
     void decrementQuantity(Long drugId) throws Exception;
+    void incrementQuantity(Long drugId) throws Exception;
 }

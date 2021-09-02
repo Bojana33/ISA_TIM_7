@@ -25,8 +25,11 @@ public class DrugReservation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(unique = true)
     private BigInteger reservationNumber;
+
+    @Column
+    private boolean deleted = false;
 
     @Column
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -43,9 +46,7 @@ public class DrugReservation implements Serializable {
     @JoinColumn(name = "patient_id", nullable = true, referencedColumnName = "id")
     private Patient patient;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "pharmacy_id")
+    @OneToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY, orphanRemoval = true)
     private Pharmacy pharmacy;
 
 }

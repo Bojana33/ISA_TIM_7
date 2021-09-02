@@ -98,4 +98,13 @@ public class DrugServiceImpl implements DrugService {
 
         this.drugRepository.save(forUpdate);
     }
+
+    @Override
+    public void incrementQuantity(Long drugId) throws Exception {
+        Drug forUpdate = findById(drugId);
+        int newQuantity = forUpdate.getQuantity()+1;
+        forUpdate.setQuantity(newQuantity);
+
+        this.drugRepository.save(forUpdate);
+    }
 }

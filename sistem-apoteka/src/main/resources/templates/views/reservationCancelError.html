@@ -60,10 +60,14 @@
 </div></br></br>
 
 
-  <div>
-    <h4>You already made reservation for this drug in this pharmacy. </h4>
-    <h4>You must wait 5 days from first reservation to make reservation of the same drug in this pharmacy.</h4>
+<div>
+  <div th:if="${appointment == true}">
+    <h4>You can not cancel drug reservation, but you can pick drug tomorrow.</h4>
   </div>
+  <div th:if="${appointment == false}">
+    <h4>You can not cancel appointment.</h4>
+  </div>
+</div>
 
 
 <!-- Optional JavaScript -->
