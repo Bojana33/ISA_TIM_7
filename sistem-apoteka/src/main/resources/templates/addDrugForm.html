@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link href="css/materialize.min.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+
+    <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>Add Drug</title>
+</head>
+<body>
+<div class="container center-align">
+    <div class="center-align">
+        <h1>Add Drug</h1>
+        <form method="post" th:action="@{/drugs/addDrug/submit}" th:object="${drug}">
+            <br><label for="name">Name:</label>
+            <input id="name" th:field="*{name}" type="text"/>
+            <br><label for="code">Code:</label>
+            <input id="code" th:field="*{code}" type="number"/>
+            <br><label for="producer">Producer:</label>
+            <input id="producer" th:field="*{producer}" type="text"/>
+            <br><label for="additionalNote">Additional Note:</label>
+            <input id="additionalNote" th:field="*{additionalNote}" type="text"/>
+            <br><label for="loyaltyPoints">Loyalty Points:</label>
+            <input id="loyaltyPoints" th:field="*{loyaltyPoints}" type="number"/>
+            <br><label for="quantity">Quantity:</label>
+            <input id="quantity" th:field="*{quantity}" type="number"/>
+
+            <div class="form-group">
+                <label for="drugType">Type:</label>
+                <select class="form-control" id="drugType" th:field="*{drugType}">
+                    <option value="">Select a type</option>
+                    <option th:each="drugTypeOpt : ${T(ftn.isa.sistemapoteka.model.DrugType).values()}"
+                            th:text="${drugTypeOpt.getDisplayName()}"
+                            th:value="${drugTypeOpt}"></option>
+                </select>
+            </div>
+            <br>
+
+            <div class="form-group">
+                <label for="drugShape">Shape:</label>
+                <select class="form-control" id="drugShape" th:field="*{drugShape}">
+                    <option name="drugShape" value="">Select a shape</option>
+                    <option name="drugShape"
+                            th:each="drugShapeOpt : ${T(ftn.isa.sistemapoteka.model.DrugShape).values()}"
+                            th:text="${drugShapeOpt.getDisplayName()}"
+                            th:value="${drugShapeOpt}"></option>
+                </select>
+            </div>
+            <br>
+
+            <div class="form-group">
+                <label>On Prescription:</label>
+                <input checked name="onPrescription" th:field="*{onPrescription}" type="radio" value="1">Yes
+                <input name="onPrescription" th:field="*{onPrescription}" type="radio" value="0">No
+            </div>
+
+            <br>
+            <h4>Drug Specification</h4>
+            <br><label for="contraindications">Contraindications:</label>
+            <input id="contraindications" th:field="*{contraindications}" type="text"/>
+            <br><label for="structure">Structure:</label>
+            <input id="structure" th:field="*{structure}" type="text"/>
+            <br><label for="state">Daily Intake:</label>
+            <input id="state" th:field="*{dailyIntake}" type="number"/>
+            <div class="form-group">
+                <button class="btn btn-block btn-success" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

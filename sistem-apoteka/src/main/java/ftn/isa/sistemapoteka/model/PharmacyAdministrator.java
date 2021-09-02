@@ -1,10 +1,18 @@
 package ftn.isa.sistemapoteka.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Setter
+@Getter
+@AllArgsConstructor
+
 @DiscriminatorValue("pharmacy_administrator")
 public class PharmacyAdministrator extends User {
 
@@ -13,6 +21,9 @@ public class PharmacyAdministrator extends User {
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private Set<OrderForm> created = new HashSet<>();
+
+   /* @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
+    private Set<Days> vacationRequests = new HashSet<>();*/
 
     public Pharmacy getPharmacy() {
         return pharmacy;

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -21,14 +22,23 @@ public class OrderFormServiceImpl implements OrderFormService {
     private DrugService drugService;
 
     @Autowired
-    public OrderFormServiceImpl(OrderFormRepository orderFormRepository){
+    public OrderFormServiceImpl(OrderFormRepository orderFormRepository) {
         this.orderFormRepository = orderFormRepository;
     }
 
     @Override
+    public List<OrderForm> findAllOrderForms() {
+        return null;
+    }
+
+    @Override
+    public OrderForm findOne(Long id) {
+        return null;
+    }
+
+    @Override
     public OrderForm saveOrderForm(OrderForm orderForm) {
-        if(orderForm.getOfferDueDate().isBefore(LocalDateTime.now()))
-        {
+        if (orderForm.getOfferDueDate().isBefore(LocalDateTime.now())) {
             throw new IllegalStateException("Rok mora biti kasniji");
         }
         Set<Drug> drugsOF = orderForm.getDrugs();
@@ -61,6 +71,7 @@ public class OrderFormServiceImpl implements OrderFormService {
     @Override
     public Set<Offer> getOffers(OrderForm orderForm) {
         return orderForm.getOffers();
+
     }
 
     @Override
@@ -80,7 +91,7 @@ public class OrderFormServiceImpl implements OrderFormService {
         }
 
         emailSender.send(offer.getSupplier().getEmail(), buildEmail(offer.getOrderForm(), offer));
-        return null;
+        return offer;
     }
 
     @Override

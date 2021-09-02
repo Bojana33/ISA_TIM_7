@@ -1,128 +1,137 @@
 package ftn.isa.sistemapoteka.controller;
 
-import ftn.isa.sistemapoteka.model.PharmacyAdministrator;
-import ftn.isa.sistemapoteka.model.User;
-import ftn.isa.sistemapoteka.model.UserRequest;
-import ftn.isa.sistemapoteka.model.UserTokenState;
-import ftn.isa.sistemapoteka.security.auth.JwtAuthenticationRequest;
-import ftn.isa.sistemapoteka.service.impl.CustomUserDetailsService;
+import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
+import ftn.isa.sistemapoteka.dto.UserDTO;
 import ftn.isa.sistemapoteka.exception.ResourceConflictException;
-import ftn.isa.sistemapoteka.security.TokenUtils;
+import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/auth")
 public class AuthenticationController {
 
-    private TokenUtils tokenUtils;
-
-    private AuthenticationManager authenticationManager;
-
-    private CustomUserDetailsService userDetailsService;
-
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
 
     @Autowired
-    public AuthenticationController(TokenUtils tokenUtils,
-                                    AuthenticationManager authenticationManager,
-                                    CustomUserDetailsService userDetailsService,
-                                    UserServiceImpl userService){
-        this.tokenUtils = tokenUtils;
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
+    public AuthenticationController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
-    //endpoint za logovanje
-    @PostMapping("/login")
-    public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
-                                                                    HttpServletResponse response) {
+    @GetMapping("/login")
+    public ModelAndView loginForm(Model model) {
+        UserDTO user = new UserDTO();
+        model.addAttribute("user", user);
+        return new ModelAndView("login");
+    }
 
-        //
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
-                        authenticationRequest.getPassword()));
+//    //endpoint za logovanje
+//    @PostMapping("/login-submit")
+//    public ModelAndView login_submit(@Valid @ModelAttribute UserDTO user, HttpServletRequest request) throws Exception{
+//
+//        User u = this.userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
+//
+//        if (u.getEnabled()==false){
+//            throw new Exception("Your account is not activated, please check your email!");
+//        }
+//
+//        if (u == null) {
+//            throw new Exception("User with this credentials doesn't exist.");
+//        }
+//
+//
+//        if (u.getIsFirstLogin()){
+//            u.setIsFirstLogin(false);
+//            return new ModelAndView("redirect:/auth/change-password");
+//        }
+//        if (u instanceof Patient){
+//            return new ModelAndView("redirect:/user/patient/home");
+//        } else if(u instanceof SystemAdministrator){
+//            return new ModelAndView("redirect:/user/sys-admin/home");
+//        } else if (u instanceof Supplier){
+//            return new ModelAndView("redirect:/user/supplier/home");
+//        }
+//        else {
+//            return new ModelAndView("redirect:/auth/home");
+//        }
+//    }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    @GetMapping("/change-password")
+    public ModelAndView changePasswordForm(Model model) {
+        ChangePasswordAfterFirstLoginDTO changePasswordAfterFirstLoginDTO = new ChangePasswordAfterFirstLoginDTO();
+        model.addAttribute(changePasswordAfterFirstLoginDTO);
+        return new ModelAndView("change-password");
+    }
 
-        User user = (User) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user.getUsername());
-        int expiresIn = tokenUtils.getExpiredIn();
+    @PostMapping("/change-password/submit")
+    public ModelAndView cps(@ModelAttribute("changePasswordAfterFirstLoginDTO") @Valid ChangePasswordAfterFirstLoginDTO changePasswordAfterFirstLoginDTO, Authentication auth, BindingResult bindingResult) {
 
-        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+        User user = this.userService.findByEmail(auth.getName());
+        this.userService.changePasswordAfterFirstLogin(user, changePasswordAfterFirstLoginDTO);
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("redirect:/auth/change-password");
+        }
+        if (user instanceof Patient) {
+            return new ModelAndView("redirect:/user/patient/home");
+        } else if (user instanceof SystemAdministrator) {
+            return new ModelAndView("redirect:/user/sys-admin/home");
+        } else if (user instanceof Supplier) {
+            return new ModelAndView("redirect:/user/supplier/home");
+        } else {
+            return new ModelAndView("redirect:/auth/home");
+        }
+    }
+
+
+    @GetMapping("/home")
+    public ModelAndView home() {
+        return new ModelAndView("home");
+    }
+
+    @GetMapping("/logout")
+    public ModelAndView logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return new ModelAndView("redirect:/auth/home");
     }
 
     // Endpoint za registraciju novog korisnika
-    @PostMapping("/signup")
-    public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
+    @GetMapping("/signup")
+    public ModelAndView registrationForm(Model model) {
+        UserRequest userRequest = new UserRequest();
+        model.addAttribute(userRequest);
+        return new ModelAndView("registration");
+    }
+
+    @PostMapping("/signup/submit")
+    public ModelAndView addUser(@ModelAttribute("userRequest") @Valid UserRequest userRequest, BindingResult result) {
 
         User existUser = this.userService.findByEmail(userRequest.getEmail());
         if (existUser != null) {
             throw new ResourceConflictException(userRequest.getId(), "Email already exists");
         }
+        if (result.hasErrors()) {
+            return new ModelAndView("redirect:/auth/signup");
+        }
+        this.userService.savePatient(userRequest);
 
-        User user = this.userService.savePatient(userRequest);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/registeredUsers/user/{userId}").buildAndExpand(user.getId()).toUri());
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ModelAndView("redirect:/auth/home");
     }
 
     @GetMapping(path = "confirm")
     public String confirm(@RequestParam("token") String token){
         return userService.confirmToken(token);
-    }
-
-    // U slucaju isteka vazenja JWT tokena, endpoint koji se poziva da se token osvezi
-    @PostMapping(value = "/refresh")
-    public ResponseEntity<UserTokenState> refreshAuthenticationToken(HttpServletRequest request) {
-
-        String token = tokenUtils.getToken(request);
-        String username = this.tokenUtils.getUsernameFromToken(token);
-        User user = (User) this.userDetailsService.loadUserByUsername(username);
-
-        if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            String refreshedToken = tokenUtils.refreshToken(token);
-            int expiresIn = tokenUtils.getExpiredIn();
-
-            return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn));
-        } else {
-            UserTokenState userTokenState = new UserTokenState();
-            return ResponseEntity.badRequest().body(userTokenState);
-        }
-    }
-
-    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('PATIENT','SYS_ADMIN','PHARMACIST','PHARMACY_ADMIN','DERMATOLOGIST','SUPPLIER')")
-    public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
-        userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
-
-        Map<String, String> result = new HashMap<>();
-        result.put("result", "success");
-        return ResponseEntity.accepted().body(result);
-    }
-
-    static class PasswordChanger {
-        public String oldPassword;
-        public String newPassword;
     }
 
 }

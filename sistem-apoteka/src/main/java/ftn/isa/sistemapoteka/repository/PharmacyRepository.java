@@ -9,4 +9,5 @@ public interface PharmacyRepository extends JpaRepository<Pharmacy, Long> {
 
     Pharmacy getById(Long id);
 
+    Pharmacy findByName(String name);
 }

@@ -35,8 +35,21 @@ public class DrugServiceImpl implements DrugService {
 
     @Override
     public Drug saveDrug(Drug drug) {
-        this.drugRepository.save(drug);
-        return drug;
+        Drug d = new Drug();
+        d.setName(drug.getName());
+        d.setCode(drug.getCode());
+        d.setDrugType(drug.getDrugType());
+        d.setContraindications(drug.getContraindications());
+        d.setStructure(drug.getStructure());
+        d.setDailyIntake(drug.getDailyIntake());
+        d.setDrugShape(drug.getDrugShape());
+        d.setAdditionalNote(drug.getAdditionalNote());
+        d.setLoyaltyPoints(drug.getLoyaltyPoints());
+        d.setProducer(drug.getProducer());
+        d.setOnPrescription(drug.getOnPrescription());
+        d.setQuantity(drug.getQuantity());
+        this.drugRepository.save(d);
+        return d;
     }
 
     @Override
@@ -60,7 +73,7 @@ public class DrugServiceImpl implements DrugService {
         {
             return false;
         }
-        Set<DrugPricePeriod> drugPricePeriods = this.drugPricePeriodRepository.getAll();
+        List<DrugPricePeriod> drugPricePeriods = this.drugPricePeriodRepository.findAll();
         boolean passed = true;
         for (DrugPricePeriod d :
                 drugPricePeriods) {

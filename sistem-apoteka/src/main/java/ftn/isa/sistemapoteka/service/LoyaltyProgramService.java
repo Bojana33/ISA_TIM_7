@@ -4,7 +4,7 @@ import ftn.isa.sistemapoteka.model.LoyaltyProgram;
 
 public interface LoyaltyProgramService {
 
-    LoyaltyProgram saveLP(LoyaltyProgram loyaltyProgram) throws Exception;
-
     LoyaltyProgram getLP(Long id);
+
+    LoyaltyProgram updateLP(LoyaltyProgram loyaltyProgram) throws Exception;
 }

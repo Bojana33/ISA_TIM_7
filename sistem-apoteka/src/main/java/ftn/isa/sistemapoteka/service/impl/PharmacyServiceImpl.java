@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ import java.util.Set;
 public class PharmacyServiceImpl implements PharmacyService {
 
     private final PharmacyRepository pharmacyRepository;
+
 
     private ConsultationRepository consultationRepository;
     private UserRepository userRepository;
@@ -33,8 +35,24 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public Pharmacy save(Pharmacy pharmacy) {
+    public Pharmacy save(Pharmacy pharmacy) throws Exception {
+        if (this.pharmacyRepository.findByName(pharmacy.getName()) != null) {
+            throw new Exception("Pharmacy with that name already exist!");
+        }
         return this.pharmacyRepository.save(pharmacy);
+    }
+
+    @Override
+    public Pharmacy update(Pharmacy pharmacy) {
+        Pharmacy p = pharmacyRepository.getById(pharmacy.getId());
+        p.setName(pharmacy.getName());
+        p.setAddress(pharmacy.getAddress());
+        p.setDescription(pharmacy.getDescription());
+        p.setDermatologists(pharmacy.getDermatologists());
+        p.setPharmacists(pharmacy.getPharmacists());
+        p.setDrugs(pharmacy.getDrugs());
+
+        return this.pharmacyRepository.save(p);
     }
 
     @Override
@@ -43,8 +61,14 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
+    public List<Pharmacy> findAll() {
+        return this.pharmacyRepository.findAll();
+    }
+
+
+    @Override
     public boolean removePharmacist(Pharmacy pharmacy, Pharmacist pharmacist) {
-        boolean ret = false;
+        boolean ret;
         if (this.consultationRepository.getConsultationsByPharmacist(pharmacist).size() > 0) {
             Set<Pharmacist> pharmacists = pharmacy.getPharmacists();
             ret = pharmacists.remove(pharmacist);
@@ -57,7 +81,7 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public List<Pharmacist> findPharmacistByName(Pharmacy pharmacy, String name) {
-        List<Pharmacist> pharmacists = null;
+        List<Pharmacist> pharmacists = new ArrayList<>();
         List<User> users = userRepository.findUserByFirstNameContaining(name);
         for (Pharmacist pharmacist :
                 pharmacy.getPharmacists()) {
@@ -69,7 +93,6 @@ public class PharmacyServiceImpl implements PharmacyService {
         }
         return pharmacists;
     }
-
     @Override
     public Pharmacist addPharmacist(Pharmacist pharmacist, Pharmacy pharmacy, LocalDate beggining, LocalDate end, LocalTime dayBeggining, LocalTime dayEnd) {
 
@@ -78,7 +101,7 @@ public class PharmacyServiceImpl implements PharmacyService {
         pharmacy.setPharmacists(pharmacists);
 
         Days d = new Days();
-        d.setUser(pharmacist);
+        d.setPharmacist(pharmacist);
         d.setBeggining(beggining);
         d.setDayBeggining(dayBeggining);
         d.setDayEnd(dayEnd);

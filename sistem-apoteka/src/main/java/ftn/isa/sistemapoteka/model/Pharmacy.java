@@ -28,6 +28,9 @@ public class Pharmacy implements Serializable {
     private String address;
 
     @Column
+    private String description;
+
+    @Column
     private Double averageRating = 0.0;
 
     @ElementCollection
@@ -50,12 +53,15 @@ public class Pharmacy implements Serializable {
     @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
     private Set<PharmacyAdministrator> pharmacyAdministrators = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Drug> drugs = new HashSet<>();
 
-    public Pharmacy(String name, String address, Double averageRating) {
+    @OneToOne(mappedBy = "pharmacy", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private PharmacyReport pharmacyReport;
+
+    public Pharmacy(String name, String address) {
         this.name = name;
         this.address = address;
-        this.averageRating = averageRating;
     }
 }

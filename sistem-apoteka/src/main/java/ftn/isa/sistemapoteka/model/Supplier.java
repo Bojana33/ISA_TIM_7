@@ -1,26 +1,28 @@
 package ftn.isa.sistemapoteka.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
+import lombok.Setter;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
-@DiscriminatorValue("Supplier")
-@AllArgsConstructor
+@DiscriminatorValue("supplier")
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Supplier extends User {
 
-    @ManyToMany
-    //@JoinTable(name = "Ord")
-    private Set<OrderForm> orderForms = new HashSet<>();
+//    @ManyToMany
+//    //@JoinTable(name = "Ord")
+//    private Set<OrderForm> orderForms = new HashSet<>();
 
-    public Supplier(String email, String password, String firstName, String lastName, String city, String residence, String state, String phoneNumber, Boolean enabled, Collection<? extends GrantedAuthority> authorities) {
-    }
+    @ElementCollection
+    @MapKeyColumn(name = "drug_code")
+    @Column(name = "quantity")
+    private Map<Long, Integer> drugs = new HashMap<>();
 }

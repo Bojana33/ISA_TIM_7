@@ -1,14 +1,14 @@
 package ftn.isa.sistemapoteka.service.impl;
 
+import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.repository.UserRepository;
-import ftn.isa.sistemapoteka.service.AuthorityService;
 import ftn.isa.sistemapoteka.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,9 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder;
-
-    private AuthorityService authService;
+    //private PasswordEncoder passwordEncoder;
 
     private ConfirmationTokenServiceImpl confirmationTokenService;
 
@@ -34,11 +32,15 @@ public class UserServiceImpl implements UserService {
 
     private LoyaltyProgramServiceImpl loyaltyProgramService;
 
-
+    @Autowired
+    public UserServiceImpl(EmailSender emailSender) {
+        this.emailSender = emailSender;
+    }
 
     @Override
     public User findByEmail(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email);
+        User u = userRepository.findByEmail(email);
+        return u;
     }
 
     public User findById(Long id) throws AccessDeniedException {
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
         LoyaltyProgram loyaltyProgram = this.loyaltyProgramService.getLP(1L);
         Patient u = new Patient();
         u.setEmail(userRequest.getEmail());
-        u.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        u.setPassword(userRequest.getPassword());
         u.setFirstName(userRequest.getFirstName());
         u.setLastName(userRequest.getLastName());
         u.setCity(userRequest.getCity());
@@ -63,8 +65,7 @@ public class UserServiceImpl implements UserService {
         u.setPhoneNumber(userRequest.getPhoneNumber());
         u.setEnabled(false); //setujemo na true kada korisnik potvrdi registraciju preko emaila
 
-        List<Authority> auth = authService.findByName("ROLE_PATIENT");
-        u.setAuthorities(auth);
+        u.setUserRole(UserRole.PATIENT);
 
         u = this.userRepository.save(u);
 
@@ -78,31 +79,36 @@ public class UserServiceImpl implements UserService {
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
         String link = "http://localhost:8081/myPharmacy/auth/confirm?token=" + token;
-        emailSender.send(userRequest.getEmail(),buildEmail(userRequest.getFirstName(),link));
+        emailSender.send(userRequest.getEmail(), buildEmail(userRequest.getFirstName(), link));
         return u;
     }
 
-    public UserCategory defineUserCategory(Patient patient,LoyaltyProgram loyaltyProgram){
-        if (patient.getLoyaltyPoints() >= loyaltyProgram.getRegularPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getSilverPoints()){
-            return UserCategory.REGULAR;
+    public void defineUserCategory(Patient patient) {
+        LoyaltyProgram loyaltyProgram = this.loyaltyProgramService.getLP(1L);
+        if (patient.getLoyaltyPoints() == 0.0) {
+            patient.setUserCategory(UserCategory.NONE);
+        } else if (patient.getLoyaltyPoints() >= loyaltyProgram.getRegularPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getSilverPoints()) {
+            patient.setUserCategory(UserCategory.REGULAR);
+        } else if (patient.getLoyaltyPoints() >= loyaltyProgram.getSilverPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getGoldPoints()) {
+            patient.setUserCategory(UserCategory.SILVER);
+        } else if (patient.getLoyaltyPoints() >= loyaltyProgram.getGoldPoints()) {
+            patient.setUserCategory(UserCategory.GOLD);
+        } else {
+            patient.setUserCategory(UserCategory.NONE);
         }
-        if (patient.getLoyaltyPoints() >= loyaltyProgram.getSilverPoints() && patient.getLoyaltyPoints() < loyaltyProgram.getGoldPoints()){
-            return UserCategory.SILVER;
-        }
-        if (patient.getLoyaltyPoints() >=  loyaltyProgram.getGoldPoints()){
-            return UserCategory.GOLD;
-        }
-        return null;
+        this.userRepository.save(patient);
+
     }
 
-    public Integer discount(Patient patient, LoyaltyProgram loyaltyProgram){
-        if (patient.getUserCategory() == UserCategory.GOLD){
+    public Integer discount(Patient patient) {
+        LoyaltyProgram loyaltyProgram = this.loyaltyProgramService.getLP(1L);
+        if (patient.getUserCategory() == UserCategory.GOLD) {
             return loyaltyProgram.getDiscountGold();
         }
-        if (patient.getUserCategory() == UserCategory.SILVER){
+        if (patient.getUserCategory() == UserCategory.SILVER) {
             return loyaltyProgram.getDiscountSilver();
         }
-        if (patient.getUserCategory() == UserCategory.REGULAR){
+        if (patient.getUserCategory() == UserCategory.REGULAR) {
             return loyaltyProgram.getDiscountRegular();
         }
         return -1;
@@ -204,24 +210,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator, Long pharmId) {
+    public PharmacyAdministrator savePharmacyAdmin(PharmacyAdministrator pharmacyAdministrator) {
         pharmacyAdministrator.setEnabled(true);
-        pharmacyAdministrator.setPassword(passwordEncoder.encode(pharmacyAdministrator.getPassword()));
-        pharmacyAdministrator.setPharmacy(this.pharmacyService.findById(pharmId));
+        pharmacyAdministrator.setPassword(pharmacyAdministrator.getPassword());
+        pharmacyAdministrator.setIsFirstLogin(true);
 
-        List<Authority> auth = authService.findByName("ROLE_PHARMACY_ADMIN");
-        pharmacyAdministrator.setAuthorities(auth);
+        pharmacyAdministrator.setUserRole(UserRole.PHARMACY_ADMIN);
+
         this.userRepository.save(pharmacyAdministrator);
         return pharmacyAdministrator;
     }
 
+
     @Override
     public Supplier saveSupplier(Supplier supplier) {
         supplier.setEnabled(true);
-        supplier.setPassword(passwordEncoder.encode(supplier.getPassword()));
+        supplier.setPassword(supplier.getPassword());
+        supplier.setIsFirstLogin(true);
 
-        List<Authority> auth = authService.findByName("ROLE_SUPPLIER");
-        supplier.setAuthorities(auth);
+        supplier.setUserRole(UserRole.SUPPLIER);
+
         this.userRepository.save(supplier);
         return supplier;
     }
@@ -229,10 +237,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator) {
         systemAdministrator.setEnabled(true);
-        systemAdministrator.setPassword(passwordEncoder.encode(systemAdministrator.getPassword()));
+        systemAdministrator.setPassword(systemAdministrator.getPassword());
+        systemAdministrator.setIsFirstLogin(true);
 
-        List<Authority> auth = authService.findByName("ROLE_SYS_ADMIN");
-        systemAdministrator.setAuthorities(auth);
+        systemAdministrator.setUserRole(UserRole.SYS_ADMIN);
+
         this.userRepository.save(systemAdministrator);
         return systemAdministrator;
     }
@@ -240,19 +249,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public Dermatologist saveDermatologist(Dermatologist dermatologist) {
         dermatologist.setEnabled(true);
-        dermatologist.setPassword(passwordEncoder.encode(dermatologist.getPassword()));
+        dermatologist.setPassword(dermatologist.getPassword());
+        dermatologist.setIsFirstLogin(true);
 
-        List<Authority> auth = authService.findByName("ROLE_DERMATOLOGIST");
-        dermatologist.setAuthorities(auth);
+        dermatologist.setUserRole(UserRole.DERMATOLOGIST);
+
         this.userRepository.save(dermatologist);
         return dermatologist;
     }
 
     @Override
     public List<Dermatologist> showPharmacyDermatologists(Pharmacy pharmacy) {
-        Authority authority = new Authority();
-        authority.setName("ROLE_DERMATOLOGIST");
-        return this.userRepository.findUsersByAuthoritiesIsDermatologist(authority);
+
+        return (List<Dermatologist>) pharmacy.getDermatologists();
+
+    }
+
+    @Override
+    public List<Pharmacist> showPharmacyPharmacists(Pharmacy pharmacy) {
+
+        return (List<Pharmacist>) pharmacy.getPharmacists();
     }
 
     @Override
@@ -263,8 +279,55 @@ public class UserServiceImpl implements UserService {
         for (Dermatologist d :
                 dermatologists) {
             if (r + 0.5 > d.getAverageRating() && r - 0.5 < d.getAverageRating()) {
-
                 ret.add(d);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public List<Pharmacist> filterPharmacistByRating(Integer rating, Pharmacy pharmacy) {
+        List<Pharmacist> pharmacist = showPharmacyPharmacists(pharmacy);
+        List<Pharmacist> ret = new ArrayList<>();
+        Double r = Double.valueOf(rating);
+        for (Pharmacist d :
+                pharmacist) {
+            if (r + 0.5 > d.getAverageRating() && r - 0.5 < d.getAverageRating()) {
+                ret.add(d);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public List<Dermatologist> findDermatologistByNameOrSurname(String name, String surname, Pharmacy pharmacy) {
+        List<Dermatologist> dermatologists = showPharmacyDermatologists(pharmacy);
+        List<Dermatologist> matches = this.userRepository.findDermatologistsByFirstNameContainingAndLastNameContaining(name, surname);
+        List<Dermatologist> ret = new ArrayList<>();
+        for (Dermatologist d :
+                dermatologists) {
+            for (Dermatologist m :
+                    matches) {
+                if (d.getId().equals(m.getId())) {
+                    ret.add(d);
+                }
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public List<Pharmacist> findPharmacistByNameOrSurname(String name, String surname, Pharmacy pharmacy) {
+        List<Pharmacist> pharmacists = showPharmacyPharmacists(pharmacy);
+        List<Pharmacist> matches = this.userRepository.findPharmacistByFirstNameContainingAndLastNameContaining(name, surname);
+        List<Pharmacist> ret = new ArrayList<>();
+        for (Pharmacist d :
+                pharmacists) {
+            for (Pharmacist m :
+                    matches) {
+                if (d.getId().equals(m.getId())) {
+                    ret.add(d);
+                }
             }
         }
         return ret;
@@ -274,13 +337,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public Pharmacist savePharmacist(Pharmacist pharmacist) {
         pharmacist.setEnabled(true);
-        pharmacist.setPassword(passwordEncoder.encode(pharmacist.getPassword()));
-
-        List<Authority> auth = authService.findByName("ROLE_PHARMACIST");
-        pharmacist.setAuthorities(auth);
+        pharmacist.setPassword(pharmacist.getPassword());
+        pharmacist.setUserRole(UserRole.PHARMACIST);
 
         this.userRepository.save(pharmacist);
         return pharmacist;
+    }
+
+    @Override
+    public User findByEmailAndPassword(String email, String password) throws Exception {
+        User user = this.userRepository.findByEmailAndPassword(email, password);
+        if (user == null) {
+            throw new Exception("User with this credentials doesn't exist.");
+        }
+        return user;
+    }
+
+    @Override
+    public User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c) {
+        user.setPassword(c.getNewPassword());
+        this.userRepository.save(user);
+        return user;
     }
 
 

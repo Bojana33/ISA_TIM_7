@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link href="css/materialize.min.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <!-- Compiled and minified CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Drugs</title>
+</head>
+<body>
+<div class="container">
+    <h3>Drugs</h3>
+    <br>
+    <div class="row" sec:authorize="hasRole('SYS_ADMIN')">
+        <a th:href="${'/myPharmacy/drugs/addDrug'}">Add New Drug</a>
+    </div>
+    <br>
+    <div class="table">
+        <table id="drugs">
+            <tr>
+                <th sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')">Id:</th>
+                <th>Name:</th>
+                <th sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')">Code:</th>
+                <th>Type:</th>
+                <th>Rating</th>
+                <th>Drug Specification</th>
+                <th>Availability</th>
+            </tr>
+            <tr th:each="drug:${drugs}">
+                <td sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')"
+                    th:text="${drug.id}"></td>
+                <td th:text="${drug.name}"></td>
+                <td sec:authorize="hasAnyRole('SYS_ADMIN','PHARMACY_ADMIN','DERMATOLOGIST', 'PHARMACIST')"
+                    th:text="${drug.code}"></td>
+                <td th:text="${drug.drugType}"></td>
+                <td th:text="${drug.averageRating}"></td>
+                <td><a>Specification</a></td>
+                <td><a>Show Pharmacies</a></td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

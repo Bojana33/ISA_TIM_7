@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link href="css/materialize.min.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <!-- Compiled and minified CSS -->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>My Offers</title>
+</head>
+<body>
+<div class="container">
+    <h3>My Offers</h3>
+    <br>
+    <div>
+        <form method="post" th:action="@{/offers/filterOffers}" th:object="${offer}">
+            <div class="form-group">
+                <label for="offerStatus">Filter Offers By Status:</label>
+                <select class="form-control" id="offerStatus" th:field="*{offerStatus}">
+                    <option value="">Filter By Status</option>
+                    <option th:each="offerStatusOpt : ${T(ftn.isa.sistemapoteka.model.OfferStatus).values()}"
+                            th:text="${offerStatusOpt.getDisplayName()}"
+                            th:value="${offerStatusOpt}"></option>
+                </select>
+            </div>
+            <button id="button" type="submit">Search</button>
+        </form>
+    </div>
+    <br>
+    <div class="table">
+        <table id="orderForms">
+            <tr>
+                <th>Id:</th>
+                <th>Deliver Date Time:</th>
+                <th>Price:</th>
+                <th>Order Form Id:</th>
+                <th>Offer:</th>
+            </tr>
+            <tr th:each="offer:${offers}">
+                <td th:text="${offer.id}"></td>
+                <td th:text="${offer.deliver_due_date}"></td>
+                <td th:text="${offer.totalPrice}"></td>
+                <td th:text="${offer.orderForm.id}"></td>
+                <td><a th:href="${'/myPharmacy/offers/changeOffer/'+ offer.getId()}">Change Offer</a></td>
+
+            </tr>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>
