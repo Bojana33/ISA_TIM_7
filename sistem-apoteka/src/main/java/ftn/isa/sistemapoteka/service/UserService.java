@@ -4,6 +4,7 @@ import ftn.isa.sistemapoteka.dto.ChangePasswordAfterFirstLoginDTO;
 import ftn.isa.sistemapoteka.model.*;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserService {
@@ -31,4 +32,8 @@ public interface UserService {
     Patient updateAppointments(Patient patient) throws Exception;
     Patient removeAllergyTrigger(Patient patient, Drug drug) throws Exception;
     Patient getPatientFromPrincipal() throws Exception;
+
+    List<Pharmacist> findAvailablePharmacist(Long phId, LocalDateTime ldt) throws Exception;
+
+    Pharmacist findPharmacistById(Long phId) throws Exception;
 }

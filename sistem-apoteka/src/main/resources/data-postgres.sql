@@ -20,6 +20,8 @@ INSERT INTO users(first_name, last_name, email, password, residence, city, state
 VALUES('Milorad', 'Milenkovic', 'mile@mail.com', 'mile', 'Beograd', 'Beograd', 'Srbija', '011/600601', 'Pharmacist', true, false, 4);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role)
 VALUES('Branislav', 'Jovanovic', 'branislav@mail.com', 'branislav', 'Beograd', 'Beograd', 'Srbija', '011/600601', 'Pharmacist', true, false, 4);
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, is_first_login, user_role)
+VALUES('Ime', 'Prezime', 'mail@mail.com', 'sifra', 'Beograd', 'Beograd', 'Srbija', '011/600601', 'Pharmacist', true, false, 4);
 
 /*DRUGS*/
 INSERT INTO drug(code, name, contraindications, structure, daily_intake, reserved, producer, on_prescription, additional_note, loyalty_points, quantity, price, drug_type, drug_shape)
@@ -43,8 +45,8 @@ INSERT INTO drug(id, code, name, contraindications, structure, daily_intake, res
 VALUES (26, 218,'daktanol','crvenilo, svrab', 'struktura1', 2, FALSE , 'Proizvodjac2', TRUE , 'koristiti pre obroka', 10, 150, 384.99, 1, 3);
 
 /*PHARMACIES*/
-INSERT INTO pharmacy(name, address, average_rating) VALUES ('Jankovic', 'Strazilovska 31', 3.2);
-INSERT INTO pharmacy(name, address, average_rating) VALUES ('Jankovic2', 'Ive Lole Ribara 17a', 4.5);
+INSERT INTO pharmacy(name, address, average_rating, advising_price) VALUES ('Jankovic', 'Strazilovska 31', 3.2, 2800);
+INSERT INTO pharmacy(name, address, average_rating, advising_price) VALUES ('Jankovic2', 'Ive Lole Ribara 17a', 4.5, 3500);
 
 /*PHARMACY DOCTORS*/
 INSERT INTO pharmacy_dermatologists(pharmacy_id, dermatologists_id) VALUES (1,3);
@@ -54,16 +56,18 @@ INSERT INTO pharmacy_dermatologists(pharmacy_id, dermatologists_id) VALUES (2,4)
 
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacists_id) VALUES (1,6);
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacists_id) VALUES (1,7);
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacists_id) VALUES (1,8);
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacists_id) VALUES (2,5);
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacists_id) VALUES (2,8);
 /**/
-INSERT INTO pharm_derm(pharmacy_id, dermatologists_id) VALUES (1,3);
+/*INSERT INTO pharm_derm(pharmacy_id, dermatologists_id) VALUES (1,3);
 INSERT INTO pharm_derm(pharmacy_id, dermatologists_id) VALUES (1,4);
 INSERT INTO pharm_derm(pharmacy_id, dermatologists_id) VALUES (2,3);
 INSERT INTO pharm_derm(pharmacy_id, dermatologists_id) VALUES (2,4);
 
 INSERT INTO pharmacy_pharmacist(pharmacy_id, pharmacists_id) VALUES (1,6);
 INSERT INTO pharmacy_pharmacist(pharmacy_id, pharmacists_id) VALUES (1,7);
-INSERT INTO pharmacy_pharmacist(pharmacy_id, pharmacists_id) VALUES (2,5);
+INSERT INTO pharmacy_pharmacist(pharmacy_id, pharmacists_id) VALUES (2,5);*/
 
 /*PHARMACY_DRUGS*/
 
@@ -78,24 +82,26 @@ INSERT INTO pharmacy_drugs(pharmacy_id, drugs_id) VALUES (1,25);
 INSERT INTO pharmacy_drugs(pharmacy_id, drugs_id) VALUES (1,26);
 
 /*DERMATOLOGIST APPOINTMENTS*/
-INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time, scheduled, pharmacy_id, advising)
-VALUES (1, 10, 4500.0, 3, '20211010', 60, '20211010 11:30:00 AM', false, 1, false);
-INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time, scheduled, pharmacy_id, advising)
-VALUES (22, 10, 4500.0, 3, '20211110', 60, '20211110 11:30:00 AM', false, 1, false);
-INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
-VALUES (2, 8, 4000.0, 4, '20210911', 45,'20210911 08:00:00 AM', false, 1, false);
-INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
-VALUES (3, 8, 3000.0, 4, '20210511', 45,'20210511 08:00:00 AM', false, 2, false);
-INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
-VALUES (4, 8, 2100.0, 3, '20210902', 30,'20210902 08:00:00 AM', false, 2, false);
-INSERT INTO appointment(id, loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
-VALUES (5, 8, 3600.0, 3, '20210902', 80,'20211209 08:00:00 AM', false, 2, false);
+INSERT INTO appointment(loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time, scheduled, pharmacy_id, advising)
+VALUES (10, 4500.0, 3, '20211010', 60, '20211010 11:30:00 AM', false, 1, false);
+INSERT INTO appointment(loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time, scheduled, pharmacy_id, advising)
+VALUES (10, 4500.0, 3, '20211110', 60, '20211110 11:30:00 AM', false, 1, false);
+INSERT INTO appointment(loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
+VALUES (10, 4000.0, 4, '20210911', 45,'20210911 08:00:00 AM', false, 1, false);
+INSERT INTO appointment(loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
+VALUES (8, 3000.0, 4, '20210511', 45,'20210511 08:00:00 AM', false, 2, false);
+INSERT INTO appointment(loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
+VALUES (8, 2100.0, 3, '20210902', 30,'20210902 08:00:00 AM', false, 2, false);
+INSERT INTO appointment(loyalty_points, price, dermatologist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
+VALUES (8, 3600.0, 3, '20210902', 80,'20211209 08:00:00 AM', false, 2, false);
 
 /*PHARMACIST APPOINTMENTS*/
-INSERT INTO appointment(id, loyalty_points, price, pharmacist_id, date, duration_in_minutes, starting_time, scheduled, pharmacy_id, advising)
-VALUES (11, 10, 3700.0, 6, '20211010', 60, '20211010 11:30:00 AM', false, 1, true);
-INSERT INTO appointment(id, loyalty_points, price, pharmacist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
-VALUES (12, 15, 2500.0, 7, '20210911', 45,'20210911 08:00:00 AM', false, 1, true);
-INSERT INTO appointment(id, loyalty_points, price, pharmacist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
-VALUES (13, 8, 3000.0, 5, '20210511', 45,'20210511 08:00:00 AM', false, 2, true);
+/*INSERT INTO appointment(loyalty_points, price, pharmacist_id, date, duration_in_minutes, starting_time, scheduled, pharmacy_id, advising)
+VALUES (15, 3700.0, 6, '20211010', 60, '20211010 11:30:00 AM', false, 1, true);
+INSERT INTO appointment(loyalty_points, price, pharmacist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
+VALUES (15, 2500.0, 7, '20210911', 45,'20210911 08:00:00 AM', false, 1, true);
+INSERT INTO appointment(loyalty_points, price, pharmacist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
+VALUES (8, 3000.0, 5, '20210511', 45,'20210511 08:00:00 AM', false, 2, true);
+INSERT INTO appointment(loyalty_points, price, pharmacist_id, date, duration_in_minutes, starting_time,scheduled, pharmacy_id, advising)
+VALUES (8, 3000.0, 5, '20211211', 45,'20211211 08:00:00 AM', false, 2, true);*/
 

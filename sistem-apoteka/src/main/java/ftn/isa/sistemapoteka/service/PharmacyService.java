@@ -24,5 +24,7 @@ public interface PharmacyService {
     List<Pharmacy> findAllThatContainsDrug(Drug drug);
 
     Pharmacy findByName(String phName) throws Exception;
+
+    List<Pharmacy> findWithAvailablePharmacists(LocalDateTime ldt);
     //List<Pharmacy> findAllWithAvailablePharmacists(LocalDateTime );
 }

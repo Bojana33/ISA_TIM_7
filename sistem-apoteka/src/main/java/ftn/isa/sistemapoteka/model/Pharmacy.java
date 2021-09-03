@@ -28,6 +28,9 @@ public class Pharmacy implements Serializable {
     private String address;
 
     @Column
+    private Double advisingPrice = 2000.0;
+
+    @Column
     private Double averageRating = 0.0;
 
     @ElementCollection
@@ -52,10 +55,6 @@ public class Pharmacy implements Serializable {
 
     @OneToMany(mappedBy = "pharmacy",targetEntity = Appointment.class)
     private Set<Appointment> appointments = new HashSet<>();
-
-/*    @OneToOne(mappedBy = "pharmacy", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private DrugReservation drugReservation;*/
 
     public Pharmacy(String name, String address) {
         this.name = name;

@@ -28,4 +28,6 @@ public interface AppointmentService {
     boolean canBeCanceled(Long appId) throws Exception;
 
     void sendEmail(Appointment ap) throws Exception;
+
+    void sendEmailforAdvising(Appointment app) throws Exception;
 }

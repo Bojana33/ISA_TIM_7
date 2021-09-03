@@ -26,6 +26,7 @@ public class Pharmacist extends User {
     private Double averageRating;
 
     @ElementCollection
+    @Column
     private Set<Integer> ratings;
 
     @OneToMany(mappedBy = "pharmacist", targetEntity = Appointment.class ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)

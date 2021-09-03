@@ -45,9 +45,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment save(Appointment appointment) throws Exception{
-        if (this.appointmentRepository.findById(appointment.getId()).isPresent()){
-            throw new Exception("Appointment with that id already exist!");
-        }
+//        if (this.appointmentRepository.findById(appointment.getId()).isPresent()){
+//            throw new Exception("Appointment with that id already exist!");
+//        }
         return this.appointmentRepository.save(appointment);
     }
 
@@ -106,10 +106,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Appointment> findScheduledByPatient(Long id) {
         List<Appointment> all= this.appointmentRepository.findScheduledByPatient(id);
-        List<Appointment> activeOnes= new ArrayList<>();;
+        List<Appointment> activeOnes= new ArrayList<>();
 
         for (Appointment app: all) {
-            if (app.getStartingTime().isBefore(LocalDateTime.now())) {
+            if (app.getStartingTime().isAfter(LocalDateTime.now())) {
                 activeOnes.add(app);
             }
         }
@@ -179,6 +179,19 @@ public class AppointmentServiceImpl implements AppointmentService {
         String body = "You successfully scheduled appointment!\n\nAppointment date and time: "
                 + ap.getStartingTime().toString() + "\nDuration: " + ap.getDurationInMinutes().toString()
                 + " minutes\nDermatologist: " + ap.getDermatologist().getFullName();
+
+        this.emailService.sendEmail(to, body, topic);
+    }
+
+    @Override
+    public void sendEmailforAdvising(Appointment appointment) throws Exception {
+        Appointment ap = findById(appointment.getId());
+        String to = this.userService.getPatientFromPrincipal().getEmail().toString();
+        String topic = "Appointment with Pharmacist";
+        String body = "You successfully scheduled appointment!\n\nAppointment date and time: "
+                + ap.getStartingTime().toString() + "\nDuration: " + ap.getDurationInMinutes().intValue()
+                + " minutes\nPharmacist: " + ap.getPharmacist().getFullName() + "\nPrice: "
+                + ap.getPrice().toString() + " RSD";
 
         this.emailService.sendEmail(to, body, topic);
     }

@@ -7,17 +7,13 @@
 
     <!-- Bootstrap CSS -->
     <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
--->
+  -->
     <link rel="stylesheet" href="../../static/css/profileCSS.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
-    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css} "/>
-
-    <title>Appointment</title>
+    <title>Profile</title>
 </head>
 <body>
 
@@ -32,7 +28,8 @@
                         Appointments
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" th:href="${'/myPharmacy/appointments/allAppointments'}">Schedule appointment</a>
+                        <a class="dropdown-item" th:href="${'/myPharmacy/appointments/allAppointments'}">Schedule appointment with pharmacist</a>
+                        <a class="dropdown-item" th:href="${'/myPharmacy/pharmacies/all/allPharmacies'}">Schedule appointment with dermatologist</a>
                         <a class="dropdown-item" th:href="${'/myPharmacy/appointments/scheduledAppointments/__${principal.id}__'}">Scheduled appointments</a>
                         <a class="dropdown-item" href="#">Appointment history</a>
                     </div>
@@ -55,7 +52,7 @@
                 <li class="nav-item" sec:authorize="hasRole('PATIENT')">
                     <a class="nav-link" th:href="${'/myPharmacy/profile/p/__${principal.id}__'}">Profile</a>
                 </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
+                <li class="nav-item">
                     <a class="nav-link" th:href="${'/myPharmacy/auth/logout'}">Log out</a>
                 </li>
             </ul>
@@ -63,36 +60,11 @@
     </nav>
 </div></br></br>
 
-<div class="container mySpace">
-    <div class="center-align blue lighten-5">
-        <h1>Choose appointment time</h1> </br></br>
-        <form th:action="@{/appointments/chooseTime}" method="post">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="tab-content profile-tab" id="myTabContent">
-                        <div>
-                            <div>
-                                <div class="form-group">
-                                    <label for="date">Preferred date and time</br>(format example: 12/12/2021 08:30 AM)</label>
-                                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" name="preferredTime"
-                                               th:value="${preferredTime}" id="date" placeholder="21/12/2021 10:30 AM"/>
-                                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                </br></br>
-                            <input class="btn grey lighten-4 black-text" type="submit" value="Proceed">
-                        </div>
-                    </div>
-                </div>
-                </div></div>
-        </form>
-    </div>
+
+<div>
+    <h4>Appointment with pharmacist scheduled. </h4>
+    <h4>Check your email for details.</h4>
 </div>
-
-
 
 
 <!-- Optional JavaScript -->
@@ -100,39 +72,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/assets/moment/moment.min.js}"></script>
-<script th:src="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js}"></script>
-<script th:src="@{assets/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
-
-<!--<script>
-    $('.input-group.date').datepicker({
-        autoclose: true,
-        todayHighlight: true
-    });
-</script>-->
-
-<script>
-    $.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
-        icons: {
-            time: 'far fa-clock',
-            date: 'far fa-calendar',
-            up: 'fas fa-arrow-up',
-            down: 'fas fa-arrow-down',
-            previous: 'fas fa-chevron-left',
-            next: 'fas fa-chevron-right',
-            today: 'far fa-calendar-check-o',
-            clear: 'far fa-trash',
-            close: 'far fa-times'
-        } });
-
-    $('#datetimepicker1').datetimepicker({
-        format: 'DD/MM/YYYY h:mm A'
-    });
-</script>
 
 </body>
 </html>

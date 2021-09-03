@@ -34,7 +34,7 @@ public class Appointment implements Serializable {
     private LocalDate date;
 
     @Column
-    @DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
+    //@DateTimeFormat(pattern = "H:mm")
     private LocalDateTime startingTime;
 
     @Column

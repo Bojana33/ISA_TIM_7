@@ -6,6 +6,7 @@ import ftn.isa.sistemapoteka.email.EmailSender;
 import ftn.isa.sistemapoteka.email.EmailService;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.repository.PatientRepository;
+import ftn.isa.sistemapoteka.repository.PharmacistRepository;
 import ftn.isa.sistemapoteka.repository.UserRepository;
 import ftn.isa.sistemapoteka.service.UserService;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
     private EmailService emailService;
 
     private AuthenticationFacade facade;
+    private PharmacistRepository pharmacistRepository;
 
     @Override
     public User findByEmail(String email) {
@@ -363,6 +365,47 @@ public class UserServiceImpl implements UserService {
         String principal = this.facade.getPrincipalEmail();
 
         return findPatientByEmail(principal);
+    }
+
+    @Override
+    public List<Pharmacist> findAvailablePharmacist(Long phId, LocalDateTime ldt) throws Exception {
+        Pharmacy pharmacy = this.pharmacyService.findById(phId);
+        Set<Pharmacist> available = new HashSet<>();
+
+        for (Pharmacist pharmacist : pharmacy.getPharmacists()) {
+            // proveri da li je slobodan
+            // ne moze bilo gde da je zauzet u tome terminu
+            // ako nema zakazanih slobodan je
+            if (pharmacist.getAppointments().size() == 0) {
+                available.add(pharmacist);
+                continue;
+            }
+            for (Appointment appointment : pharmacist.getAppointments()) {
+                // proveri koja je apoteka
+                if (appointment.getPharmacy().getId() == pharmacy.getId()) {
+                    // proveri da li je predstojeci
+                    if (appointment.getStartingTime().isAfter(LocalDateTime.now())) {
+                        // proveri da li se ne poklapaju termini
+                        LocalDateTime halfAnHourBefore = appointment.getStartingTime().minusMinutes(30);
+                        LocalDateTime apEnd = appointment.getStartingTime().plusMinutes(appointment.getDurationInMinutes().intValue());
+                        if ((ldt.isBefore(halfAnHourBefore)) || (ldt.isAfter(apEnd))) {
+                            // proveri koja apoteka je u pitanju ???
+                            available.add(pharmacist);
+                        }
+                    }
+                }
+            }
+        }
+        List<Pharmacist> list = new ArrayList<>(available);
+        return list;
+    }
+
+    @Override
+    public Pharmacist findPharmacistById(Long phId) throws Exception {
+        if (!this.pharmacistRepository.findById(phId).isPresent()) {
+            throw new Exception("No such value (pharmacist)");
+        }
+        return this.pharmacistRepository.findById(phId).get();
     }
 
     @Override
