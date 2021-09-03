@@ -30,4 +30,19 @@ public class Dermatologist extends User {
     @JoinTable(name = "PharmDerm", joinColumns = @JoinColumn(name = "dermatologist_id", referencedColumnName = "id")
             , inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))
     private Set<Pharmacy> pharmacies = new HashSet<>();
+
+    public Double calculateRating(Integer newRating) {
+        this.ratings.add(newRating);
+        Double result = 0.0;
+        for (Integer r : ratings) {
+            result+=r;
+        }
+        result= result/ratings.size();
+
+        return result;
+    }
+
+    public void addRating(Integer rating) {
+        this.ratings.add(rating);
+    }
 }

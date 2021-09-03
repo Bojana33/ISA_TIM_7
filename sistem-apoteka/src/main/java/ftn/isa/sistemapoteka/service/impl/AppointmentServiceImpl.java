@@ -255,11 +255,39 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<Appointment> pastOnes = new ArrayList<Appointment>();
 
         for (Appointment app: all) {
-            if ((app.getStartingTime().isAfter(LocalDateTime.now())) && (Objects.equals(app.getPatient().getId(), patient.getId()))) {
+            if ((app.getStartingTime().isBefore(LocalDateTime.now())) && (Objects.equals(app.getPatient().getId(), patient.getId()))) {
                 pastOnes.add(app);
             }
         }
 
         return pastOnes;
+    }
+
+    @Override
+    public boolean patientHadAppointmentDerma() throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        List<Appointment> derma = this.appointmentRepository.getAllWithDermatologist();
+
+        for (Appointment a : derma) {
+            if (Objects.equals(patient.getId(), a.getPatient().getId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean patientHadAppointmentPharma() throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        List<Appointment> derma = this.appointmentRepository.getAllWithPharmacist();
+
+        for (Appointment a : derma) {
+            if (Objects.equals(patient.getId(), a.getPatient().getId())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

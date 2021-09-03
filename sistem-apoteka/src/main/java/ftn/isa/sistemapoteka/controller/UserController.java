@@ -3,6 +3,7 @@ package ftn.isa.sistemapoteka.controller;
 import ftn.isa.sistemapoteka.exception.ResourceConflictException;
 import ftn.isa.sistemapoteka.model.*;
 import ftn.isa.sistemapoteka.service.UserService;
+import ftn.isa.sistemapoteka.service.impl.AppointmentServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.DrugServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.PharmacyServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
@@ -24,12 +25,15 @@ public class UserController {
     private UserServiceImpl userService;
     private PharmacyServiceImpl pharmacyService;
     private DrugServiceImpl drugService;
+    private AppointmentServiceImpl appointmentService;
 
     @Autowired
-    public UserController(UserServiceImpl userService, PharmacyServiceImpl pharmacyService, DrugServiceImpl drugService) {
+    public UserController(UserServiceImpl userService, PharmacyServiceImpl pharmacyService,
+                          DrugServiceImpl drugService, AppointmentServiceImpl appointmentService) {
         this.pharmacyService = pharmacyService;
         this.userService = userService;
         this.drugService = drugService;
+        this.appointmentService = appointmentService;
     }
 
     @GetMapping("/index")
@@ -202,5 +206,17 @@ public class UserController {
         return new ModelAndView("views/supplier-home");
     }
 
+    /*@PreAuthorize("hasRole('PATIENT')")
+    @GetMapping("/rate/dermatologist/{id}")
+    public ModelAndView rateDerma(Model model) throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        boolean hadAppointment = this.appointmentService.patientHadAppointmentDerma();
+        if (!hadAppointment) {
+            throw new Exception("You cann not rate this doctor");
+        }
+        model.addAttribute("principal", patient);
+
+        return new ModelAndView("");
+    }*/
 
 }

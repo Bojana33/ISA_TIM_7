@@ -38,4 +38,7 @@ public interface AppointmentService {
 
     List<Appointment> getUpcomingWithDermatologist() throws Exception;
     List<Appointment> getPastOnesWithDermatologist() throws Exception;
+
+    boolean patientHadAppointmentDerma() throws Exception;
+    boolean patientHadAppointmentPharma() throws Exception;
 }
