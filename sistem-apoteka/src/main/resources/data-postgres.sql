@@ -38,11 +38,11 @@ insert into supplier_drugs(supplier_id,quantity,drug_code) values (3,11,111);
 insert into supplier_drugs(supplier_id,quantity,drug_code) values (3,15,112);
 
 insert into pharmacy(name,address) values ('apoteka','adresa');
-insert into pharmacy(name,address) values ('apoteka2','adresa2');
-insert into pharmacy(name,address) values ('apoteka3','adresa3');
+insert into pharmacy(name,address) values ('apoteka3','adresa2');
+insert into pharmacy(name,address) values ('apoteka2','adresa3');
 
 insert into pharmacy_drugs_quantity(pharmacy_id,drug_code,quantity) values (1,122,10);
-insert into pharmacy_drugs_quantity(pharmacy_id,drug_code,quantity) values (2,122,0);
+insert into pharmacy_drugs_quantity(pharmacy_id,drug_code,quantity) values (2,122,2);
 insert into pharmacy_drugs_quantity(pharmacy_id,drug_code,quantity) values (3,122,4);
 insert into pharmacy_drugs_quantity(pharmacy_id,drug_code,quantity) values (3,111,4);
 insert into pharmacy_drugs_quantity(pharmacy_id,drug_code,quantity) values (2,111,40);
@@ -53,8 +53,8 @@ insert into pharmacy_drugs(pharmacy_id,drug_code,price) values (3,122,1000.00);
 insert into pharmacy_drugs(pharmacy_id,drug_code,price) values (3,111,1000.00);
 insert into pharmacy_drugs(pharmacy_id,drug_code,price) values (2,111,1050.00);
 
-insert into drug_reservation(date_of_reservation, taking_drug_date, drug_id, patient_id, pharmacy_id) values ('2021-08-26', '2021-09-03', 1, 4, 1);
-insert into drug_reservation(date_of_reservation, taking_drug_date, drug_id, patient_id, pharmacy_id) values ('2021-08-26', '2021-09-03', 1, 4, 2);
+insert into drug_reservation(date_of_reservation, taking_drug_date, drug_id, patient_id, pharmacy_id) values ('2021-08-26', '2021-09-03', 1, 4, 3);
+insert into drug_reservation(date_of_reservation, taking_drug_date, drug_id, patient_id, pharmacy_id) values ('2021-08-26', '2021-09-03', 3, 4, 3);
 
 insert into consultation(date_time, loyalty_points, price, patient_id, pharmacist_id, pharmacy_id) values ('2021-08-26', 20.00, 1000.00, 4, 5, 3);
 insert into appointment(date_time, loyalty_points, price, patient_id, dermatologist_id, pharmacy_id) values ('2021-08-26', 20.00, 1000.00, 4, 6, 2);

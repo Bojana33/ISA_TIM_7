@@ -29,4 +29,10 @@ public interface PharmacyRepository extends JpaRepository<Pharmacy, Long> {
     List<Pharmacy> findDistinctByDrugReservationsOrConsultations(DrugReservation drugReservation, Consultation consultation);
 
     List<Pharmacy> findDistinctByConsultationsOrAppointments(Consultation consultation, Appointment appointment);
+
+    List<Pharmacy> findByOrderByNameAsc();
+
+    List<Pharmacy> findByOrderByAddressAsc();
+
+    List<Pharmacy> findByOrderByAverageRatingAsc();
 }

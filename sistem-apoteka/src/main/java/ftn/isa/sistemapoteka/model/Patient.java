@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class Patient extends User {
     private Set<eRecipe> eRecipes = new HashSet<>();
 
     @OneToMany(mappedBy = "patient", targetEntity = DrugReservation.class)
-    private Set<DrugReservation> drugReservations = new HashSet<>();
+    private List<DrugReservation> drugReservations = new ArrayList<>();
 
     @Column
     private UserCategory userCategory = UserCategory.NONE;

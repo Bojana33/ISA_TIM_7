@@ -9,7 +9,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -24,17 +26,16 @@ public class eRecipe implements Serializable {
     private Long id;
 
     @Column
-    @NotEmpty(message = "This field can not be empty!")
-    private Long code;
-
-    @Column
     private LocalDateTime dateOfIssue;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Drug> drugs = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Drug> drugs = new ArrayList<>();
 
     @ManyToOne(targetEntity = Patient.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id", nullable = false, referencedColumnName = "id")
     private Patient patient;
+
+    @ManyToOne(targetEntity = Pharmacy.class)
+    private Pharmacy pharmacy;
 
 }

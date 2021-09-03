@@ -63,6 +63,9 @@ public class Pharmacy implements Serializable {
     @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
     private Set<Appointment> appointments = new HashSet<>();
 
+    @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL)
+    List<eRecipe> eRecipes = new ArrayList<>();
+
     public Pharmacy(String name, String address) {
         this.name = name;
         this.address = address;

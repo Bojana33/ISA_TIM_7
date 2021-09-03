@@ -32,4 +32,14 @@ public interface PharmacyService {
 
     List<Pharmacy> findByConsultationsOrAppointments(Consultation consultation,Appointment appointment);
 
+    List<Pharmacy> findByPatientDrugs(List<Long> drugs);
+
+    Pharmacy update(Pharmacy pharmacy);
+
+    List<Pharmacy> sortByNameAsc();
+
+    List<Pharmacy> sortByAddressAsc();
+
+    List<Pharmacy> sortByAverageRatingAsc();
+
 }

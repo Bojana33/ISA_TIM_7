@@ -58,6 +58,18 @@
             <br>
 
             <div class="form-group">
+                <label for="drugShape">Choose replacement drugs:</label>
+                <select class="form-control" th:field="*{replacementDrugs}" multiple="multiple" >
+                    <option th:each="drug : ${drugs}"
+                    th:field="*{replacementDrugs}"
+                    th:value="${drug.id}"
+                    th:text="${drug.name} + ' ' + ${drug.code}">Drug name and drug code
+                    </option>
+                </select>
+            </div>
+            <br>
+
+            <div class="form-group">
                 <label>On Prescription:</label>
                 <input name="onPrescription" type="radio" th:field="*{onPrescription}" value="1" checked>Yes
                 <input name="onPrescription" type="radio" th:field="*{onPrescription}" value="0">No

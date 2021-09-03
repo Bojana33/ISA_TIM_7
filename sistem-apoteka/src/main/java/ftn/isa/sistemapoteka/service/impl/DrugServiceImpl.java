@@ -40,6 +40,7 @@ public class DrugServiceImpl implements DrugService {
         d.setProducer(drug.getProducer());
         d.setOnPrescription(drug.getOnPrescription());
         d.setQuantity(drug.getQuantity());
+        d.setReplacementDrugs(drug.getReplacementDrugs());
         this.drugRepository.save(d);
         return d;
     }

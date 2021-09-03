@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -64,8 +65,8 @@ public class Drug implements Serializable {
     @Column
     private Double price;
 
-    @ElementCollection
-    private Set<Long> replacementDrugs;
+    @OneToMany(targetEntity = Drug.class)
+    private List<Drug> replacementDrugs;
 
     @Column
     private DrugType drugType;
@@ -73,7 +74,7 @@ public class Drug implements Serializable {
     @Column
     private DrugShape drugShape;
 
-    public Drug(Long code, String name, String contraindications, String structure, int dailyIntake, Boolean reserved, String producer, Boolean onPrescription, String additionalNote, Integer loyaltyPoints, Integer quantity, Double price, DrugType drugType, DrugShape drugShape, Set<Long> replacementDrugs) {
+    public Drug(Long code, String name, String contraindications, String structure, int dailyIntake, Boolean reserved, String producer, Boolean onPrescription, String additionalNote, Integer loyaltyPoints, Integer quantity, Double price, DrugType drugType, DrugShape drugShape, List<Drug> replacementDrugs) {
         this.code = code;
         this.name = name;
         this.contraindications = contraindications;

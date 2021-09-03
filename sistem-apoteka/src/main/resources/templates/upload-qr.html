@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset= "UTF-8" >
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
@@ -14,23 +14,16 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <title>Patient</title>
+    <title>Upload QR code</title>
 </head>
 <body>
-<div class="center-block">
-    <h1 class="container center-align">Patient Home</h1>
-    <a th:href="${'/myPharmacy/auth/logout'}">Logout</a>
-    <br>
-    <a th:href="${'/myPharmacy/drugs/'}">Drugs</a>
-    <br>
-    <a th:href="${'/myPharmacy/pharmacies/allPharmacies'}">Pharmacies</a>
-    <br>
-    <a th:href="${'/myPharmacy/user/subscribedPharmacies'}">Subscribed Pharmacies</a>
-    <br>
-    <a th:href="${'/myPharmacy/complaints/complaintFor'}">Complaints</a>
-    <br>
-    <a th:href="${'/myPharmacy/eRecipes/uploadQR/' + patient.id}">eRecipe</a>
-</div>
+    <form th:action="@{/eRecipes/readQR/__${id}__}"  method="get">
+        <input type="file" accept="image/*" />
+        <div class="form-group">
+            <button type="submit" class="btn btn-block btn-success">Read QR code</button>
+        </div>
+    </form>
+
 
 </body>
 </html>

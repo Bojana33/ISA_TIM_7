@@ -63,7 +63,9 @@ public class UserController {
 
     @PreAuthorize("hasRole('PATIENT')")
     @GetMapping("/patient/home")
-    public ModelAndView patientHome(){
+    public ModelAndView patientHome(Model model, Authentication authentication){
+        Patient patient = (Patient) this.userService.findByEmail(authentication.getName());
+        model.addAttribute("patient", patient);
         return new ModelAndView("patient-home");
     }
 

@@ -44,6 +44,8 @@ public class DrugController {
     public ModelAndView addDrugForm(Model model){
         Drug drug = new Drug();
         model.addAttribute("drug",drug);
+        List<Drug> drugs = (List<Drug>) this.drugService.findAllDrugs();
+        model.addAttribute("drugs", drugs);
         return new ModelAndView("addDrugForm");
     }
 

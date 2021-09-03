@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Pharmacies</title>
+</head>
+<body>
+
+<table id="pharmacies">
+    <h4 class="center-align">Pharmacies</h4>
+<!--    <br>-->
+<!--    <div id="sortByName">-->
+<!--        <a th:href="${'/myPharmacy/eRecipes/sortByName/'+ drugCodes}">Sort By Name</a>-->
+<!--    </div>-->
+<!--    <br>-->
+<!--    <br>-->
+<!--    <div id="sortByAddress">-->
+<!--        <button onclick="location.href = '/myPharmacy/pharmacies/sortByAddress'">Sort By Address</button>-->
+<!--    </div>-->
+<!--    <br>-->
+<!--    <br>-->
+<!--    <div id="sortByAR">-->
+<!--        <button onclick="location.href = '/myPharmacy/pharmacies/sortByName/sortByAR'">Sort By Average Rate</button>-->
+<!--    </div>-->
+    <br>
+    <tr>
+        <th>Name:</th>
+        <th>Address:</th>
+        <th>Average Rating:</th>
+        <th>Price</th>
+        <th>Buy:</th>
+    </tr>
+    <tr th:each="pharmacy:${pharmacies}">
+        <td><a th:href="${'/myPharmacy/pharmacies/pharmacy/' + pharmacy.key.id}" th:text="${pharmacy.key.name}"> </a>
+        </td>
+        <td th:text="${pharmacy.key.address}"></td>
+        <td th:text="${pharmacy.key.averageRating}"></td>
+        <td th:text="${pharmacy.value}">
+
+
+        </td>
+        <td>
+            <form th:action="@{/eRecipes/buyDrugs/__${pharmacy.key.id}__/__${drugCodes}__}" method="post">
+                <button type="submit"> Buy</button>
+            </form>
+        </td>
+
+
+    </tr>
+</table>
+</body>
+</html>
