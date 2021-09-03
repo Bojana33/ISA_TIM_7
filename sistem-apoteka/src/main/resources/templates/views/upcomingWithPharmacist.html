@@ -26,12 +26,9 @@
                         Appointments
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Schedule with dermatologist</a>
-                        <a class="dropdown-item" href="#">Schedule with pharmacist</a>
-                        <a class="dropdown-item" href="#">Scheduled with dermatologist</a>
-                        <a class="dropdown-item" href="#">Scheduled with pharmacist</a>
-                        <a class="dropdown-item" href="#">Appointment history - dermatologist</a>
-                        <a class="dropdown-item" href="#">Appointment history - pharmacist</a>
+                        <a class="dropdown-item" href="#">Schedule appointment</a>
+                        <a class="dropdown-item" href="#">Scheduled appointments</a>
+                        <a class="dropdown-item" href="#">Appointment history</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -92,19 +89,23 @@
     <table id="pharmacies" width="90%">
         <tr>
             <th>Pharmacy name:</th>
-            <th>Patient name:</th>
+            <th th:if="${derma==false}">Pharmacist name:</th>
+            <th th:if="${derma==true}">Dermatologist name:</th>
             <th>Appointments start:</th>
             <th>Duration in minutes:</th>
             <th>Appointment price</th>
-            <th></th>
+            <th th:if="${(history == false) && (derma == false)}"></th>
+            <th th:if="${(history == false) && (derma == true)}"></th>
         </tr>
         <tr th:each="appointment:${appointments}">
             <td th:text="${appointment.pharmacy.getName()}"></td>
-            <td th:text="${appointment.patient.getFullName()}"></td>
+            <td th:if="${derma==false}" th:text="${appointment.pharmacist.getFullName()}"></td>
+            <td th:if="${derma==true}" th:text="${appointment.dermatologist.getFullName()}"></td>
             <td th:text="${appointment.startingTime}"></td>
             <td th:text="${appointment.durationInMinutes}"></td>
             <td th:text="${appointment.price}"></td>
-            <td><a th:href="@{'/appointments/__${appointment.pharmacy.getId()}__/cancelAppointment/__${appointment.id}__/__${principal.id}__'}">Cancel</a></td>
+            <td th:if="${(history == false) && (derma == false)}"><a th:href="@{'/appointments/pharmacist/cancel/__${appointment.id}__'}">Cancel</a></td>
+            <td th:if="${(history == false) && (derma == true)}"><a th:href="@{'/appointments/__${appointment.getPharmacy().getId()}__/cancelAppointment/__${appointment.id}__/__${principal.id}__'}">Cancel</a></td>
         </tr>
     </table>
 </div>

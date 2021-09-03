@@ -46,6 +46,9 @@ public class Appointment implements Serializable {
     @Column
     private Boolean advising;
 
+    @Column
+    private Boolean deleted = false;
+
     @ManyToOne(targetEntity = Dermatologist.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "dermatologist_id", nullable = true, referencedColumnName = "id")
     private Dermatologist dermatologist;

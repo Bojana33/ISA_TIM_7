@@ -30,4 +30,12 @@ public interface AppointmentService {
     void sendEmail(Appointment ap) throws Exception;
 
     void sendEmailforAdvising(Appointment app) throws Exception;
+
+    List<Appointment> getUpcomingWithPharmacist() throws Exception;
+    List<Appointment> getPastOnesWithPharmacist() throws Exception;
+
+    void deleteById(Long id);
+
+    List<Appointment> getUpcomingWithDermatologist() throws Exception;
+    List<Appointment> getPastOnesWithDermatologist() throws Exception;
 }

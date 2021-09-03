@@ -391,6 +391,14 @@ public class UserServiceImpl implements UserService {
                         if ((ldt.isBefore(halfAnHourBefore)) || (ldt.isAfter(apEnd))) {
                             // proveri koja apoteka je u pitanju ???
                             available.add(pharmacist);
+                        } else if (!(ldt.isBefore(halfAnHourBefore)) || (ldt.isAfter(apEnd))) {
+                            if (appointment.getDeleted()) {
+                                available.add(pharmacist);
+                            }
+                        } else if ((ldt.isBefore(halfAnHourBefore)) || !(ldt.isAfter(apEnd))) {
+                            if (appointment.getDeleted()) {
+                                available.add(pharmacist);
+                            }
                         }
                     }
                 }

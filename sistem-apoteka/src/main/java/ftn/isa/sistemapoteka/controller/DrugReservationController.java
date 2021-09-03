@@ -45,7 +45,6 @@ public class DrugReservationController {
 
         Drug drug = this.drugService.findByCode(code);
         DrugReservation dr = new DrugReservation();
-        //dr.setId(1L);
 
         model.addAttribute("reservation", dr);
         model.addAttribute("patient", this.userService.getPatientFromPrincipal());
@@ -86,7 +85,7 @@ public class DrugReservationController {
         }
         this.drugService.decrementQuantity(drugId);
         this.reservationService.saveDR(dr);
-        
+
         this.reservationService.sendEmail(dr);
 
         return new ModelAndView("redirect:/drugs/allDrugs");

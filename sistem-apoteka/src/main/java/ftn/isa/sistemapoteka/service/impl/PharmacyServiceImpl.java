@@ -115,6 +115,14 @@ public class PharmacyServiceImpl implements PharmacyService {
                         LocalDateTime apEnd = ap.getStartingTime().plusMinutes(ap.getDurationInMinutes().intValue());
                         if ((ldt.isBefore(halfAnHourBefore)) || (ldt.isAfter(apEnd))) {
                             filtered.add(ph);
+                        } else if (!(ldt.isBefore(halfAnHourBefore)) ||(ldt.isAfter(apEnd))) {
+                            if (ap.getDeleted()) {
+                                filtered.add(ph);
+                            }
+                        } else if ((ldt.isBefore(halfAnHourBefore)) || !(ldt.isAfter(apEnd))) {
+                            if (ap.getDeleted()) {
+                                filtered.add(ph);
+                            }
                         }
                     }
                 }

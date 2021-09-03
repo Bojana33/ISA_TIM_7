@@ -20,6 +20,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
     @Query(value = "SELECT * from Appointment app WHERE app.pharmacy_id = ?1 and app.advising = ?2", nativeQuery = true)
     List<Appointment> findAllByPharmacyAndAdvising(@Param("phId")Long id, @Param("advising") Boolean advising);
 
+    @Query(value ="SELECT * FROM Appointment app where app.deleted=false and app.scheduled=true and app.advising=true", nativeQuery = true)
+    List<Appointment> getAllWithPharmacist();
+    @Query(value ="SELECT * FROM Appointment app where app.deleted=false and app.scheduled=true and app.advising=false", nativeQuery = true)
+    List<Appointment> getAllWithDermatologist();
+
 /*    @Query(value = "SELECT * from Appointment app WHERE app.scheduled = true")
     List<Appointment> findAllScheduled();*/
 }

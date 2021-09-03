@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -69,6 +70,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         forUpdate.setPrice(appointment.getPrice());
         forUpdate.setLoyaltyPoints(appointment.getLoyaltyPoints());
         forUpdate.setScheduled(appointment.getScheduled());
+        forUpdate.setDeleted(appointment.getDeleted());
 
         return forUpdate;
     }
@@ -194,5 +196,70 @@ public class AppointmentServiceImpl implements AppointmentService {
                 + ap.getPrice().toString() + " RSD";
 
         this.emailService.sendEmail(to, body, topic);
+    }
+
+    @Override
+    public List<Appointment> getUpcomingWithPharmacist() throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        List<Appointment> all = this.appointmentRepository.getAllWithPharmacist();
+        List<Appointment> upComing = new ArrayList<Appointment>();
+
+        for (Appointment app: all) {
+            if ((app.getStartingTime().isAfter(LocalDateTime.now())) && (Objects.equals(app.getPatient().getId(), patient.getId()))) {
+                upComing.add(app);
+            }
+        }
+
+        return upComing;
+    }
+
+    @Override
+    public List<Appointment> getPastOnesWithPharmacist() throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        List<Appointment> all = this.appointmentRepository.getAllWithPharmacist();
+        List<Appointment> pastOnes = new ArrayList<Appointment>();
+
+        for (Appointment app: all) {
+            if ((app.getStartingTime().isBefore(LocalDateTime.now()) ) && (Objects.equals(app.getPatient().getId(), patient.getId()))) {
+                pastOnes.add(app);
+            }
+        }
+
+        return pastOnes;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        this.appointmentRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Appointment> getUpcomingWithDermatologist() throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        List<Appointment> all = this.appointmentRepository.getAllWithDermatologist();
+        List<Appointment> upComing = new ArrayList<Appointment>();
+
+        for (Appointment app: all) {
+            if ((app.getStartingTime().isAfter(LocalDateTime.now())) && (Objects.equals(app.getPatient().getId(), patient.getId()))) {
+                upComing.add(app);
+            }
+        }
+
+        return upComing;
+    }
+
+    @Override
+    public List<Appointment> getPastOnesWithDermatologist() throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        List<Appointment> all = this.appointmentRepository.getAllWithDermatologist();
+        List<Appointment> pastOnes = new ArrayList<Appointment>();
+
+        for (Appointment app: all) {
+            if ((app.getStartingTime().isAfter(LocalDateTime.now())) && (Objects.equals(app.getPatient().getId(), patient.getId()))) {
+                pastOnes.add(app);
+            }
+        }
+
+        return pastOnes;
     }
 }

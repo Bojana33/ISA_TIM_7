@@ -1,7 +1,9 @@
 package ftn.isa.sistemapoteka.controller;
 
-import ftn.isa.sistemapoteka.authFacade.AuthenticationFacade;
-import ftn.isa.sistemapoteka.model.*;
+import ftn.isa.sistemapoteka.model.Appointment;
+import ftn.isa.sistemapoteka.model.Patient;
+import ftn.isa.sistemapoteka.model.Pharmacist;
+import ftn.isa.sistemapoteka.model.Pharmacy;
 import ftn.isa.sistemapoteka.service.impl.AppointmentServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.PharmacyServiceImpl;
 import ftn.isa.sistemapoteka.service.impl.UserServiceImpl;
@@ -11,11 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -23,9 +23,9 @@ import java.util.Random;
 @RequestMapping("appointments")
 public class AppointmentController {
 
-    private AppointmentServiceImpl appointmentService;
-    private PharmacyServiceImpl pharmacyService;
-    private UserServiceImpl userService;
+    private final AppointmentServiceImpl appointmentService;
+    private final PharmacyServiceImpl pharmacyService;
+    private final UserServiceImpl userService;
 
     @Autowired
     public AppointmentController(AppointmentServiceImpl appointmentService, PharmacyServiceImpl pharmacyService,
@@ -69,8 +69,7 @@ public class AppointmentController {
         Appointment app = this.appointmentService.findById(appId);
 
         model.addAttribute("patient", this.userService.getPatientFromPrincipal());
-        // TODO: proveri da li je istekao tok za otkazivanje
-        // NE RADI
+
         boolean cancel = this.appointmentService.canBeCanceled(appId);
         if (!cancel) {
             model.addAttribute("appointment", true);
@@ -180,4 +179,68 @@ public class AppointmentController {
         return new ModelAndView("views/pharmaAppoSuccess");
     }
 
+    @GetMapping("/pharmacist/upcoming")
+    public ModelAndView showActiveAppWithPharmacist(Model model) throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        model.addAttribute("principal", patient);
+        model.addAttribute("derma", false);
+        model.addAttribute("history", false);
+        model.addAttribute("appointments", this.appointmentService.getUpcomingWithPharmacist());
+
+        return new ModelAndView("views/upcomingWithPharmacist");
+    }
+
+    @GetMapping("/pharmacist/history")
+    public ModelAndView showPastAppWithPharmacist(Model model) throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        model.addAttribute("history", true);
+        model.addAttribute("derma", false);
+        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
+        model.addAttribute("appointments", this.appointmentService.getPastOnesWithPharmacist());
+
+        return new ModelAndView("views/upcomingWithPharmacist");
+    }
+
+    @GetMapping("/pharmacist/cancel/{appId}")
+    public ModelAndView cancelAppWithPharmacist(@PathVariable("appId") Long appId, Model model) throws Exception {
+        Appointment toCancel = this.appointmentService.findById(appId);
+        Patient patient = this.userService.getPatientFromPrincipal();
+        model.addAttribute("principal", patient);
+        model.addAttribute("history", false);
+
+        boolean cancel = this.appointmentService.canBeCanceled(appId);
+        if (!cancel) {
+            model.addAttribute("appointment", true);
+            return new ModelAndView("views/reservationCancelError");
+        }
+
+        toCancel.setDeleted(true);
+        this.appointmentService.update(toCancel);
+
+        model.addAttribute("appointments", this.appointmentService.getUpcomingWithPharmacist());
+
+        return new ModelAndView("redirect:/appointments/pharmacist/upcoming");
+    }
+
+    @GetMapping("/dermatologist/history")
+    public ModelAndView showPastAppWithDermatologist(Model model) throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        model.addAttribute("history", true);
+        model.addAttribute("derma", true);
+        model.addAttribute("principal", this.userService.getPatientFromPrincipal());
+        model.addAttribute("appointments", this.appointmentService.getPastOnesWithDermatologist());
+
+        return new ModelAndView("views/upcomingWithPharmacist");
+    }
+
+    @GetMapping("/dermatologist/upcoming")
+    public ModelAndView showActiveAppWithDermatologist(Model model) throws Exception {
+        Patient patient = this.userService.getPatientFromPrincipal();
+        model.addAttribute("principal", patient);
+        model.addAttribute("derma", true);
+        model.addAttribute("history", false);
+        model.addAttribute("appointments", this.appointmentService.getUpcomingWithDermatologist());
+
+        return new ModelAndView("views/upcomingWithPharmacist");
+    }
 }
