@@ -78,7 +78,7 @@ public class AppointmentController {
 
         this.appointmentService.cancelAppointment(app, ph, patId);
 
-        return new ModelAndView("redirect:/appointments/scheduledAppointments/" + patId.toString());
+        return new ModelAndView("redirect:/appointments/dermatologist/upcoming");
     }
 
     @GetMapping("/scheduledAppointments/{id}")
@@ -93,6 +93,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/chooseTime")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView choose(Model model) throws Exception {
         model.addAttribute("principal", this.userService.getPatientFromPrincipal());
         model.addAttribute("preferredDate", LocalDate.now());
@@ -102,6 +103,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/chooseTime")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView chooseTime(Model model, @RequestParam("preferredTime") String preferredTime) {
 
 
@@ -114,6 +116,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/choosePharmacy")
+    @PreAuthorize("hasRole('PATIENT')")
     public  ModelAndView choosePharmacy(Model model, @RequestParam(value="preferredTime", required = false) String preferredTime) throws Exception {
         model.addAttribute("principal", this.userService.getPatientFromPrincipal());
 
@@ -128,6 +131,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/choosePharmacist")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView choosePharmacist(@RequestParam("pharmacyId") Long id,
                                          @RequestParam("preferredTime") String preferredTime, Model model) throws Exception {
         Pharmacy pharmacy = this.pharmacyService.findById(id);
@@ -151,6 +155,7 @@ public class AppointmentController {
     }
 
     @GetMapping ("/schedule/pharmacist")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView makeAppointmentPharmacists(@RequestParam("phId") Long phId, @RequestParam("pharmacyId") Long id,
                                                    Model model, @RequestParam("preferredTime") String preferredTime) throws Exception {
         Pharmacy pharmacy = this.pharmacyService.findById(id);
@@ -180,6 +185,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/pharmacist/upcoming")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView showActiveAppWithPharmacist(Model model) throws Exception {
         Patient patient = this.userService.getPatientFromPrincipal();
         model.addAttribute("principal", patient);
@@ -191,6 +197,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/pharmacist/history")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView showPastAppWithPharmacist(Model model) throws Exception {
         Patient patient = this.userService.getPatientFromPrincipal();
         model.addAttribute("history", true);
@@ -202,6 +209,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/pharmacist/cancel/{appId}")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView cancelAppWithPharmacist(@PathVariable("appId") Long appId, Model model) throws Exception {
         Appointment toCancel = this.appointmentService.findById(appId);
         Patient patient = this.userService.getPatientFromPrincipal();
@@ -223,6 +231,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/dermatologist/history")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView showPastAppWithDermatologist(Model model) throws Exception {
         Patient patient = this.userService.getPatientFromPrincipal();
         model.addAttribute("history", true);
@@ -234,6 +243,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/dermatologist/upcoming")
+    @PreAuthorize("hasRole('PATIENT')")
     public ModelAndView showActiveAppWithDermatologist(Model model) throws Exception {
         Patient patient = this.userService.getPatientFromPrincipal();
         model.addAttribute("principal", patient);

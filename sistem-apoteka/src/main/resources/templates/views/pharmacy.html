@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -28,9 +28,12 @@
                         Appointments
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Schedule appointment</a>
-                        <a class="dropdown-item" href="#">Scheduled appointments</a>
-                        <a class="dropdown-item" href="#">Appointment history</a>
+                        <a class="dropdown-item" th:href="@{'/pharmacies/allPharmacies'}">Schedule with dermatologist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/chooseTime'}">Schedule with pharmacist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/dermatologist/upcoming'}">Upcoming - dermatologist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/pharmacist/upcoming'}">Upcoming - pharmacist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/dermatologist/history'}">History - dermatologist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/pharmacist/history'}">History - pharmacist</a>
                     </div>
                 </li>
                 <li class="nav-item">
