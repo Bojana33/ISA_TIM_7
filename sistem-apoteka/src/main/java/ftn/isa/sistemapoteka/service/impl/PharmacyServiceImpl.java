@@ -5,6 +5,8 @@ import ftn.isa.sistemapoteka.repository.PharmacyRepository;
 import ftn.isa.sistemapoteka.service.PharmacyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -119,6 +121,7 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Pharmacy update(Pharmacy pharmacy) {
         Pharmacy p = this.pharmacyRepository.getById(pharmacy.getId());
         p.setSubscriptionedPatients(pharmacy.getSubscriptionedPatients());

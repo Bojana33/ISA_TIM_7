@@ -5,6 +5,8 @@ import ftn.isa.sistemapoteka.repository.LoyaltyProgramRepository;
 import ftn.isa.sistemapoteka.service.LoyaltyProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LoyaltyProgramServiceImpl implements LoyaltyProgramService {
@@ -22,6 +24,7 @@ public class LoyaltyProgramServiceImpl implements LoyaltyProgramService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public LoyaltyProgram updateLP(LoyaltyProgram loyaltyProgram) throws Exception {
         if (loyaltyProgram.getGoldPoints() < loyaltyProgram.getSilverPoints() || loyaltyProgram.getGoldPoints() < loyaltyProgram.getRegularPoints()){
             throw new Exception("Gold points must be greater than silver and regular points");

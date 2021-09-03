@@ -7,6 +7,9 @@ import ftn.isa.sistemapoteka.repository.ComplaintRepository;
 import ftn.isa.sistemapoteka.service.ComplaintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,6 +47,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Complaint updateComplaint(Complaint complaint) {
         Complaint c = this.complaintRepository.getOne(complaint.getId());
         c.setText(complaint.getText());
