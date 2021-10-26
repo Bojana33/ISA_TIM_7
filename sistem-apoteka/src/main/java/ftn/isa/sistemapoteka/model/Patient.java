@@ -1,0 +1,64 @@
+package ftn.isa.sistemapoteka.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.lang.NonNull;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@DiscriminatorValue("Patient")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Patient extends User {
+
+    @Column
+    private Double loyaltyPoints;
+
+    @ManyToMany(targetEntity = Drug.class)
+    @JoinTable(name = "Allergies", joinColumns = @JoinColumn(name = "Patient_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "Drug_id", referencedColumnName = "id"))
+    private Set<Drug> allergies = new HashSet<>();
+
+    @OneToMany(mappedBy = "patient",targetEntity = Appointment.class)
+    private Set<Appointment> appointments = new HashSet<>();
+
+    @OneToMany(mappedBy = "patient",targetEntity = Consultation.class)
+    private Set<Consultation> consultations = new HashSet<>();
+
+    @OneToMany(mappedBy = "patient", targetEntity = Complaint.class)
+    private Set<Complaint> complaints = new HashSet<>();
+
+    @OneToMany(mappedBy = "patient",targetEntity = eRecipe.class)
+    private Set<eRecipe> eRecipes = new HashSet<>();
+
+    @OneToMany(mappedBy = "patient", targetEntity = DrugReservation.class)
+    private Set<DrugReservation> drugReservations = new HashSet<>();
+
+    @Column
+    private UserCategory userCategory;
+
+    @Column
+    private Integer discount;
+
+    @ManyToMany
+    @JoinTable(name = "Subscriptions", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))
+    private Set<Pharmacy> subscriptions = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "AllergyTriggers", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "drug_id", referencedColumnName = "id"))
+    private Set<Drug> allergyTriggers = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "loyalty_program_id", referencedColumnName = "id")
+    private LoyaltyProgram loyaltyProgram;
+}

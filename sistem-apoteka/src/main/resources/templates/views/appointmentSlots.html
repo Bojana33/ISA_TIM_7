@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+-->
+    <link rel="stylesheet" href="../../static/css/profileCSS.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <title>appointment slots</title>
+</head>
+<body>
+
+<div class="container-fluid bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Apoteka Jankovic</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Appointments
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" th:href="@{'/pharmacies/allPharmacies'}">Schedule with dermatologist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/chooseTime'}">Schedule with pharmacist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/dermatologist/upcoming'}">Upcoming - dermatologist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/pharmacist/upcoming'}">Upcoming - pharmacist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/dermatologist/history'}">History - dermatologist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/pharmacist/history'}">History - pharmacist</a>
+                    </div>
+                </li>
+                <!--<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ePrescription
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">View all</a>
+                        <a class="dropdown-item" href="#">View history</a>
+                    </div>
+                </li>-->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/myPharmacy/pharmacies/allPharmacies'}">List of pharmacies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/myPharmacy/drugs/allDrugs'}">List of drugs</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="${'/myPharmacy/auth/login'}">Log in</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="${'/myPharmacy/auth/signup'}">Register</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('PATIENT')">
+                    <a class="nav-link" th:href="${'/myPharmacy/profile/p/__${principal.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="${'/myPharmacy/auth/logout'}">Log out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div> </br></br>
+
+<div class="container emp-profile">
+    <!--<form method="post">-->
+    <form th:object="${pharmacy}" method="get">
+        <div class="row">
+            <div class="col">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div id="profile">
+                        <div class="row">
+                            <div class="col">
+                                <label>Pharmacy name</label>
+                            </div>
+                            <div class="col">
+                                <p th:text="${pharmacy.name}"></p>
+                            </div>
+                        </div> </br></br>
+
+                        <!--TABELA SA TERMINIMA-->
+                        <div th:object="${appointments}">
+                            <table id="appointments" width="100%">
+                                <tr>
+                                    <th>Appointment start:</th>
+                                    <th>Appointment duration in minutes:</th>
+                                    <th>Dermatologist:</th>
+                                    <th>Pharmacy:</th>
+                                    <th>Price:</th>
+                                    <th></th>
+                                </tr>
+                                <tr th:each="appointment:${appointments}"  th:if="${appointment.scheduled == false}">
+                                    <td th:text="${appointment.startingTime}"></td>
+                                    <td th:text="${appointment.durationInMinutes}"></td>
+                                    <td th:text="${appointment.dermatologist.getFullName()}"></td>
+                                    <td th:text="${appointment.pharmacy.getName()}"></td>
+                                    <td th:text="${appointment.price}"></td>
+                                    <td><a th:href="${'/myPharmacy/appointments/__${pharmacy.id}__/schedule/__${appointment.id}__/__${principal.id}__'}">Schedule appointment</a></td>
+                                    <!--<td>
+                                        <form action="#" th:action="@{/myPharmacy/appointments/__${pharmacy.id}__/timeSlots/scheduleSuccess}" method="post">
+                                            <input type="submit" name="submit" value="test" class="link-button"/>
+                                        </form>
+                                    </td>-->
+                            </table>
+                        </div>
+
+                        </br></br></br>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>
